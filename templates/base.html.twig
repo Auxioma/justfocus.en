@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Tnews - News & Magazine HTML Template - Home Newspaper</title>
-        <meta name="author" content="Tnews">
         <meta name="description" content="Tnews - News & Magazine HTML Template">
         <meta name="keywords" content="Tnews - News & Magazine HTML Template">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -48,6 +47,12 @@
 
 
         {% block body %}{% endblock %}
+
+        <div class="scroll-top">
+            <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;"></path>
+            </svg>
+        </div>
 
         <script src="{{ asset('assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
         <script src="{{ asset('assets/js/slick.min.js') }}"></script>

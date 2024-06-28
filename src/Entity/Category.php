@@ -39,9 +39,16 @@ class Category
     #[ORM\Column]
     private ?bool $isOnline = true;
 
+    /**
+     * @var Collection<int, Articles>
+     */
+    #[ORM\ManyToMany(targetEntity: Articles::class, mappedBy: 'categories')]
+    private Collection $articles;
+
     public function __construct()
     {
         $this->subcategories = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,6 +173,33 @@ class Category
     public function setOnline(bool $isOnline): static
     {
         $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Articles>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Articles $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Articles $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            $article->removeCategory($this);
+        }
 
         return $this;
     }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Articles;
+use App\Entity\Category;
 
 class WordpressArticlesController extends AbstractController
 {
@@ -26,7 +27,7 @@ class WordpressArticlesController extends AbstractController
 
         // Pagination initiale
         $page = 1;
-        $perPage = 50; // Nombre d'articles à récupérer par page
+        $perPage = 5; // Nombre d'articles à récupérer par page
 
         do {
             try {
@@ -63,25 +64,38 @@ class WordpressArticlesController extends AbstractController
             }
         } while (!empty($articles));
 
-        // Vérifiez les articles récupérés (à supprimer après vérification)
-        dd($allArticles);
+        foreach ($allArticles as $article) {
+            $articleEntity = $this->entityManager
+                                ->getRepository(Articles::class)
+                                ->findOneBy(['id' => $article['id']]);
 
-        // Parcourir les articles récupérés et les sauvegarder en base de données
-        foreach ($allArticles as $articleData) {
-            $newArticle = new Articles();
-            $newArticle->setId($articleData['id']);
-            $newArticle->setTitle($articleData['title']['rendered']);
-            $newArticle->setSlug($articleData['slug']);
-            $newArticle->setDate(new \DateTime($articleData['date']));
-            $newArticle->setModified(new \DateTime($articleData['modified']));
-            $newArticle->setContent($articleData['content']['rendered']);
+            // verification si les modified date sont differentes
+            if ($articleEntity->getModified() != new \DateTime($article['modified'])) {
+                echo 'Article already up to date' . $articleEntity->getId();
+                // modification de l'article
+                $title = html_entity_decode($article['title']['rendered'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $content = html_entity_decode($article['content']['rendered'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                
+                $articleEntity->setTitle($title)
+                              ->setSlug($article['slug'])
+                              ->setDate(new \DateTime($article['date']))
+                              ->setModified(new \DateTime($article['modified']))
+                              ->setContent($content);
 
-            // Enregistrer l'article en base de données
-            $this->entityManager->persist($newArticle);
+                // Ajouter les catégories
+                $articleEntity->clearCategories(); // Suppression des anciennes catégories
+                foreach ($article['categories'] as $categoryId) {
+                    $category = $this->entityManager->getRepository(Category::class)->find($categoryId);
+                    if ($category) {
+                        $articleEntity->addCategory($category);
+                    }
+                }
+
+                $this->entityManager->persist($articleEntity);
+            }
+
+            $this->entityManager->flush();
         }
-
-        // Exécuter les requêtes SQL pour enregistrer les articles
-        $this->entityManager->flush();
 
         // Réponse HTTP 200 OK avec un message de succès
         return new Response('Articles imported successfully.');
