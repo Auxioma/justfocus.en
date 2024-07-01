@@ -12,9 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Synchronizes categories from the WordPress API.
- * I chose to synchronize categories from the WordPress API to the local database.
- * I use only for initial synchronization, so I don't need to worry about performance.
+ * Controller to synchronize categories from the WordPress API to the local database.
  */
 class CategoryWordpressController extends AbstractController
 {
@@ -24,6 +22,13 @@ class CategoryWordpressController extends AbstractController
     private HttpClientInterface $httpClient;
     private LoggerInterface $logger;
 
+    /**
+     * Constructor to inject dependencies.
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param HttpClientInterface    $httpClient
+     * @param LoggerInterface        $logger
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         HttpClientInterface $httpClient,
@@ -34,6 +39,11 @@ class CategoryWordpressController extends AbstractController
         $this->logger = $logger;
     }
 
+    /**
+     * Endpoint to synchronize categories.
+     *
+     * @return Response JSON response indicating success or failure.
+     */
     #[Route('/api/wordpress/category', name: 'app_api_category')]
     public function index(): Response
     {
@@ -48,10 +58,10 @@ class CategoryWordpressController extends AbstractController
     }
 
     /**
-     * Fetches categories from the WordPress API.
+     * Fetch categories from the WordPress API.
      *
-     * @return array
-     * @throws \Exception
+     * @return array Array of categories fetched from WordPress.
+     * @throws \Exception If there's an error fetching categories.
      */
     private function fetchCategories(): array
     {
@@ -65,10 +75,10 @@ class CategoryWordpressController extends AbstractController
     }
 
     /**
-     * Persists categories and their relationships.
+     * Persist categories and their relationships in the local database.
      *
-     * @param array $categories
-     * @throws \Exception
+     * @param array $categories Array of categories fetched from WordPress.
+     * @throws \Exception If there's an error saving categories.
      */
     private function persistCategories(array $categories): void
     {
@@ -84,9 +94,9 @@ class CategoryWordpressController extends AbstractController
     }
 
     /**
-     * Persists parent categories (those with parent = 0).
+     * Persist parent categories (categories with parent = 0).
      *
-     * @param array $categories
+     * @param array $categories Array of categories fetched from WordPress.
      */
     private function persistParentCategories(array $categories): void
     {
@@ -99,9 +109,9 @@ class CategoryWordpressController extends AbstractController
     }
 
     /**
-     * Persists child categories and sets their parent relationships.
+     * Persist child categories and set their parent relationships.
      *
-     * @param array $categories
+     * @param array $categories Array of categories fetched from WordPress.
      */
     private function persistChildCategories(array $categories): void
     {
@@ -118,10 +128,10 @@ class CategoryWordpressController extends AbstractController
     }
 
     /**
-     * Creates a Category entity from category data.
+     * Create a Category entity from category data.
      *
-     * @param array $categoryData
-     * @return Category
+     * @param array $categoryData Data of the category fetched from WordPress.
+     * @return Category The created Category entity.
      */
     private function createCategory(array $categoryData): Category
     {

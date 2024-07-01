@@ -8,18 +8,14 @@
             <div class="news-area">
                 <div class="title">Breaking News :</div>
                 <div class="news-wrap">
-                    <div class="row slick-marquee">
-
+                    <div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
                         {% for news in breaking %}
-
-                        <div class="col-auto">
-                            <a href="blog-details.html" class="breaking-news">
-                                {{ news.title }}
-                            </a>
-                        </div>
-
+                            <div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+                                <a href="blog-details.html" class="breaking-news" itemprop="url">
+                                    <span itemprop="headline">{{ news.title }}</span>
+                                </a>
+                            </div>
                         {% endfor %}
-
                     </div>
                 </div>
             </div>
@@ -28,54 +24,40 @@
     <section class="space">
         <div class="container">
             <div class="row">
-                <div class="col-xl-3">
-                    <div class="row gy-4">
-                        <div class="col-xl-12 col-sm-6 border-blog">
-                            <div class="blog-style1">
-                                <div class="blog-img">
-                                    <img src="assets/img/blog/blog_1_5.jpg" alt="blog image">
-                                    <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                                </div>
-                                <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">{{ slider[0].title|u.truncate(50) }}</a></h3>
-                                <div class="blog-meta">
-                                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[0].date|date('d M Y') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-12 col-sm-6 border-blog">
-                            <div class="blog-style1">
-                                <div class="blog-img">
-                                    <img src="assets/img/blog/blog_1_6.jpg" alt="blog image">
-                                    <a data-theme-color="#4E4BD0" href="blog.html" class="category">Sports</a>
-                                </div>
-                                <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">{{ slider[1].title|u.truncate(50) }}</a></h3>
-                                <div class="blog-meta">
-                                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[1].date|date('d M Y') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<div class="col-xl-3">
+    <div class="row gy-4">
+        {% for slide in slider[:2] %}
+        <div class="col-xl-12 col-sm-6 border-blog">
+            <div class="blog-style1">
+                <div class="blog-img">
+                    <img src="{{ slide.image }}" alt="blog image">
+                    <a data-theme-color="{{ slide.category_color }}" href="blog.html" class="category">{{ slide.category }}</a>
                 </div>
-                <div class="col-xl-6 mt-4 mt-xl-0">
-                    <div class="">
-                        <div class="blog-style1 style-big">
-                            <div class="blog-img">
-                                <img src="assets/img/blog/blog_2_1.jpg" alt="blog image">
-                                <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                            </div>
-                            <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">
-                            {{ slider[2].title|u.truncate(75) }}
-                            </a></h3>
-                            <div class="blog-meta">
-                                <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
-                            </div>
-                        </div>
-                    </div>
+                <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">{{ slide.title|u.truncate(50) }}</a></h3>
+                <div class="blog-meta">
+                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
+                    <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slide.date|date('d M Y') }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-                </div>
+<div class="col-xl-6 mt-4 mt-xl-0">
+    <div class="blog-style1 style-big">
+        <div class="blog-img">
+            <img src="{{ slider[2].image }}" alt="blog image">
+            <a data-theme-color="{{ slider[2].category_color }}" href="blog.html" class="category">{{ slider[2].category }}</a>
+        </div>
+        <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">{{ slider[2].title|u.truncate(75) }}</a></h3>
+        <div class="blog-meta">
+            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
+            <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
+        </div>
+    </div>
+</div>
+
                 <div class="col-xl-3 mt-35 mt-xl-0">
                     <div class="nav tab-menu indicator-active" role="tablist">
                         <button class="tab-btn active" id="nav-one-tab" data-bs-toggle="tab" data-bs-target="#nav-one" type="button" role="tab" aria-controls="nav-one" aria-selected="true">Top News</button>

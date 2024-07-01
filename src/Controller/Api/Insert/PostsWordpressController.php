@@ -3,7 +3,9 @@
 namespace App\Controller\Api\Insert;
 
 use App\Entity\User;
+use App\Entity\Media;
 use App\Entity\Articles;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -13,14 +15,38 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Controller to fetch and insert WordPress posts.
+ */
 class PostsWordpressController extends AbstractController
 {
+    /**
+     * WordPress API endpoint URL.
+     */
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/posts';
+
+    /**
+     * HTTP client to make requests.
+     */
     private $client;
+
+    /**
+     * Entity manager for database operations.
+     */
     private $entityManager;
+
+    /**
+     * Cache service for caching API responses.
+     */
     private $cache;
 
-    // Constructor to inject dependencies
+    /**
+     * Constructor to inject dependencies.
+     *
+     * @param HttpClientInterface    $client         HTTP client service.
+     * @param EntityManagerInterface $entityManager  Entity manager service.
+     * @param CacheInterface         $cache          Cache service.
+     */
     public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager, CacheInterface $cache)
     {
         $this->client = $client;
@@ -28,7 +54,11 @@ class PostsWordpressController extends AbstractController
         $this->cache = $cache;
     }
 
-    // Route to fetch and insert WordPress posts
+    /**
+     * Endpoint to fetch and insert WordPress posts.
+     *
+     * @return Response JSON response indicating success or failure.
+     */
     #[Route('/api/wordpress/posts', name: 'app_api_posts')]
     public function index(): Response
     {
@@ -47,7 +77,38 @@ class PostsWordpressController extends AbstractController
         }
     }
 
-    // Method to get posts from WordPress API
+    /**
+     * Fetch all posts from the WordPress API.
+     *
+     * @return array Array of posts fetched from WordPress.
+     * @throws \Exception If there's an error fetching posts.
+     */
+    private function getAllPosts(): array
+    {
+        $allPosts = [];
+        $page = 1;
+        $perPage = 25;
+
+        do {
+            // Fetch posts for the current page
+            $posts = $this->getPosts($perPage, $page);
+            // Merge current page posts with all posts
+            $allPosts = array_merge($allPosts, $posts);
+            $page++;
+        } while (count($posts) === $perPage); // Continue fetching while full page of posts is returned
+
+        return $allPosts;
+    }
+
+    /**
+     * Fetch posts from WordPress API for a specific page.
+     *
+     * @param int $perPage Number of posts per page.
+     * @param int $page    Page number to fetch.
+     *
+     * @return array Array of posts fetched from WordPress.
+     * @throws \Exception If there's an error fetching posts.
+     */
     private function getPosts(int $perPage = 100, int $page = 1): array
     {
         $response = $this->client->request('GET', self::WORDPRESS_API_URL, [
@@ -65,25 +126,13 @@ class PostsWordpressController extends AbstractController
         return $response->toArray();
     }
 
-    // Method to fetch all posts from WordPress API
-    private function getAllPosts(): array
-    {
-        $allPosts = [];
-        $page = 1;
-        $perPage = 100;
-
-        do {
-            // Fetch posts for the current page
-            $posts = $this->getPosts($perPage, $page);
-            // Merge current page posts with all posts
-            $allPosts = array_merge($allPosts, $posts);
-            $page++;
-        } while (count($posts) === $perPage); // Continue fetching while full page of posts is returned
-
-        return $allPosts;
-    }
-
-    // Method to insert fetched posts into the database
+    /**
+     * Insert fetched posts into the database.
+     *
+     * @param array $posts Array of posts fetched from WordPress.
+     *
+     * @return void
+     */
     private function insertPosts(array $posts): void
     {
         foreach ($posts as $post) {
@@ -104,8 +153,11 @@ class PostsWordpressController extends AbstractController
 
             // Get the categories
             if (isset($post['categories'])) {
-                foreach ($post['categories'] as $category) {
-                    $article->addCategory($category);
+                foreach ($post['categories'] as $categoryId) {
+                    $category = $this->entityManager->getRepository(Category::class)->find($categoryId);
+                    if ($category) {
+                        $article->addCategory($category);
+                    }
                 }
             }
 
@@ -114,6 +166,33 @@ class PostsWordpressController extends AbstractController
                 $user = $this->entityManager->getRepository(User::class)->find($post['author']);
                 if ($user) {
                     $article->setUser($user);
+                }
+            }
+
+            // Get the featured image
+            if (isset($post['featured_media'])) {
+                $featuredMedia = $this->client->request('GET', 'https://justfocus.fr/wp-json/wp/v2/media/' . $post['featured_media']);
+                if ($featuredMedia->getStatusCode() === 200) {
+
+                    $media = $featuredMedia->toArray();
+
+                    // Check if the media already exists to avoid duplicates
+                    $existingMedia = $this->entityManager->getRepository(Media::class)->find($media['id']);
+                    if ($existingMedia) {
+                        continue;
+                    }
+                    
+                    // Create new media entity and set its properties
+                    $mediaEntity = new Media();
+                    $mediaEntity->setId($media['id']);
+                    $mediaEntity->setDate(new \DateTime($media['date']));
+                    $mediaEntity->setModified(new \DateTime($media['modified']));
+                    $mediaEntity->setSlug($media['slug']);
+                    $mediaEntity->setGuid($media['guid']['rendered']);
+                    $mediaEntity->setTitle($media['title']['rendered']);
+                    $mediaEntity->setPost($article);
+
+                    $this->entityManager->persist($mediaEntity);
                 }
             }
             
