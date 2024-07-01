@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Insert;
 
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
