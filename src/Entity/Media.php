@@ -29,7 +29,7 @@ class Media
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\ManyToOne(inversedBy: 'media')]
+    #[ORM\ManyToOne(inversedBy: 'media', cascade: ['persist'])]
     private ?Articles $post = null;
 
     public function getId(): ?int

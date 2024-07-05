@@ -30,9 +30,6 @@ class Category
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     private ?self $parent = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $meta = null;
-
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $subcategories;
 
@@ -44,6 +41,9 @@ class Category
      */
     #[ORM\ManyToMany(targetEntity: Articles::class, mappedBy: 'categories')]
     private Collection $articles;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slugSql = null;
 
     public function __construct()
     {
@@ -123,18 +123,6 @@ class Category
         return $this;
     }
 
-    public function getMeta(): ?array
-    {
-        return $this->meta;
-    }
-
-    public function setMeta(?array $meta): self
-    {
-        $this->meta = $meta;
-
-        return $this;
-    }
-
     /**
      * @return Collection|self[]
      */
@@ -200,6 +188,18 @@ class Category
         if ($this->articles->removeElement($article)) {
             $article->removeCategory($this);
         }
+
+        return $this;
+    }
+
+    public function getSlugSql(): ?string
+    {
+        return $this->slugSql;
+    }
+
+    public function setSlugSql(string $slugSql): static
+    {
+        $this->slugSql = $slugSql;
 
         return $this;
     }

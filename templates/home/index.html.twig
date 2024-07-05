@@ -3,7 +3,7 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-	<div>
+    <div>
         <div class="container">
             <div class="news-area">
                 <div class="title">Breaking News :</div>
@@ -24,40 +24,30 @@
     <section class="space">
         <div class="container">
             <div class="row">
-<div class="col-xl-3">
-    <div class="row gy-4">
-        {% for slide in slider[:2] %}
-        <div class="col-xl-12 col-sm-6 border-blog">
-            <div class="blog-style1">
-                <div class="blog-img">
-                    <img src="{{ slide.image }}" alt="blog image">
-                    <a data-theme-color="{{ slide.category_color }}" href="blog.html" class="category">{{ slide.category }}</a>
+                <div class="col-xl-3">
+                    <div class="row gy-4">
+                        {% for slide in slider[:2] %}
+                            <div class="col-xl-12 col-sm-6 border-blog">
+                                {% include '_partials/_mignature/_blog_item.html.twig' with { 'item': slide, 'truncate': 50, 'maxHeight': 187 } %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">{{ slide.title|u.truncate(50) }}</a></h3>
-                <div class="blog-meta">
-                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                    <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slide.date|date('d M Y') }}</a>
+                <div class="col-xl-6 mt-4 mt-xl-0">
+                    <div class="blog-style1 style-big">
+                        <div class="blog-img">
+                            <img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="max-height:490px">
+                            <a data-theme-color="#FF9500" href="blog.html" class="category">
+                                {{ slider[2].categories[0].name }}
+                            </a>
+                        </div>
+                        <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">{{ slider[2].title|u.truncate(75) }}</a></h3>
+                        <div class="blog-meta">
+                            <a href="author.html"><i class="far fa-user"></i>{{ slider[2].user.pseudo}}</a>
+                            <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<div class="col-xl-6 mt-4 mt-xl-0">
-    <div class="blog-style1 style-big">
-        <div class="blog-img">
-            <img src="{{ slider[2].image }}" alt="blog image">
-            <a data-theme-color="{{ slider[2].category_color }}" href="blog.html" class="category">{{ slider[2].category }}</a>
-        </div>
-        <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">{{ slider[2].title|u.truncate(75) }}</a></h3>
-        <div class="blog-meta">
-            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-            <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
-        </div>
-    </div>
-</div>
-
                 <div class="col-xl-3 mt-35 mt-xl-0">
                     <div class="nav tab-menu indicator-active" role="tablist">
                         <button class="tab-btn active" id="nav-one-tab" data-bs-toggle="tab" data-bs-target="#nav-one" type="button" role="tab" aria-controls="nav-one" aria-selected="true">Top News</button>
@@ -67,56 +57,50 @@
                         <!-- Single item -->
                         <div class="tab-pane fade show active" id="nav-one" role="tabpanel" aria-labelledby="nav-one-tab">
                             <div class="row gy-4">
-                                
                                 {% for news in breaking %}
-
                                     <div class="col-xl-12 col-md-6 border-blog">
                                         <div class="blog-style2">
                                             <div class="blog-img">
-                                                <img src="assets/img/blog/blog_3_1.jpg" alt="blog image">
+                                                <img src="{{ news.media|first.guid }}" heigh="100" alt="blog image" style="max-height:100px">
                                             </div>
                                             <div class="blog-content">
-                                                <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
+                                                <a data-theme-color="#FF9500" href="blog.html" class="category">
+                                                    {{ news.categories[0].name }}
+                                                </a>
                                                 <h3 class="box-title-18"><a class="hover-line" href="blog-details.html">
-                                                {{ news.title|u.truncate(40) }}
-                                                </a></h3>
+                                                        {{ news.title|u.truncate(30) }}
+                                                    </a></h3>
                                                 <div class="blog-meta">
                                                     <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ news.date|date('d M Y') }}</a>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 {% endfor %}
-
-
                             </div>
                         </div>
-                        <!-- Single item -->
                         <div class="tab-pane fade" id="nav-two" role="tabpanel" aria-labelledby="nav-two-tab">
                             <div class="row gy-4">
-
                                 {% for slider in slider %}
-                                <div class="col-xl-12 col-md-6 border-blog">
-                                    <div class="blog-style2">
-                                        <div class="blog-img">
-                                            <img src="assets/img/blog/blog_3_3.jpg" alt="blog image">
-                                        </div>
-                                        <div class="blog-content">
-                                            <a data-theme-color="#00D084" href="blog.html" class="category">Life Style</a>
-                                            <h3 class="box-title-18"><a class="hover-line" href="blog-details.html">
-                                            {{ slider.title|u.truncate(40) }}
-                                            </a></h3>
-                                            <div class="blog-meta">
-                                                <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider.date|date('d M Y') }}</a>
+                                    <div class="col-xl-12 col-md-6 border-blog">
+                                        <div class="blog-style2">
+                                            <div class="blog-img">
+                                                <img src="{{ slider.media|first.guid }}" alt="blog image" style="max-height:100px">
+                                            </div>
+                                            <div class="blog-content">
+                                                <a data-theme-color="#00D084" href="blog.html" class="category">
+                                                    {{ slider.categories[0].name }}
+                                                </a>
+                                                <h3 class="box-title-18"><a class="hover-line" href="blog-details.html">
+                                                        {{ slider.title|u.truncate(30) }}
+                                                    </a></h3>
+                                                <div class="blog-meta">
+                                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ slider.date|date('d M Y') }}</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
                                 {% endfor %}
-
                             </div>
                         </div>
                     </div>
@@ -128,7 +112,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col">
-                    <h2 class="sec-title has-line">Cimema</h2>
+                    <h2 class="sec-title has-line">Cinema</h2>
                 </div>
                 <div class="col-auto">
                     <div class="sec-btn">
@@ -140,325 +124,83 @@
                 </div>
             </div>
             <div class="row th-carousel" id="blog-slide1" data-slide-show="4" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="2">
-                <div class="col-sm-6 col-xl-4">
-                    <div class="blog-style1">
-                        <div class="blog-img">
-                            <img src="assets/img/blog/blog_1_1.jpg" alt="blog image">
-                            <a data-theme-color="#00D084" href="blog.html" class="category">Lifestyle</a>
-                        </div>
-                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Balance harmony and joy in Every lifestyle.</a></h3>
-                        <div class="blog-meta">
-                            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                            <a href="blog.html"><i class="fal fa-calendar-days"></i>27 Mar, 2023</a>
-                        </div>
+                {% for movie in cinema %}
+                    <div class="col-sm-6 col-xl-4">
+                        {% include '_partials/_mignature/_blog_item.html.twig' with { 'item': movie, 'truncate': 35, 'maxHeight': 187 } %}
                     </div>
-                </div>
-                <div class="col-sm-6 col-xl-4">
-                    <div class="blog-style1">
-                        <div class="blog-img">
-                            <img src="assets/img/blog/blog_1_2.jpg" alt="blog image">
-                            <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                        </div>
-                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Power to the people for a Better future!</a></h3>
-                        <div class="blog-meta">
-                            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                            <a href="blog.html"><i class="fal fa-calendar-days"></i>30 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-4">
-                    <div class="blog-style1">
-                        <div class="blog-img">
-                            <img src="assets/img/blog/blog_1_3.jpg" alt="blog image">
-                            <a data-theme-color="#E7473C" href="blog.html" class="category">Fitness</a>
-                        </div>
-                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Fitness the key to vitality and Well-being.</a></h3>
-                        <div class="blog-meta">
-                            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                            <a href="blog.html"><i class="fal fa-calendar-days"></i>24 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-4">
-                    <div class="blog-style1">
-                        <div class="blog-img">
-                            <img src="assets/img/blog/blog_1_4.jpg" alt="blog image">
-                            <a data-theme-color="#00D084" href="blog.html" class="category">Health</a>
-                        </div>
-                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Embrace bump and Victory volleyball style.</a></h3>
-                        <div class="blog-meta">
-                            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                            <a href="blog.html"><i class="fal fa-calendar-days"></i>26 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-4">
-                    <div class="blog-style1">
-                        <div class="blog-img">
-                            <img src="assets/img/blog/blog_1_5.jpg" alt="blog image">
-                            <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                        </div>
-                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Leadership for the People By the people</a></h3>
-                        <div class="blog-meta">
-                            <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                            <a href="blog.html"><i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                        </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+<section class="space">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="sec-title has-line">Music</h2>
+            </div>
+            <div class="col-auto">
+                <div class="sec-btn">
+                    <div class="filter-menu filter-menu-active1">
+                        <button data-filter=".game" class="tab-btn active" type="button">Actualité</button>
+                        <button data-filter=".robotic" class="tab-btn" type="button">Critique</button>
+                        <button data-filter=".electric" class="tab-btn" type="button">Événement</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!--==============================
-Blog Area  
-==============================-->
-    <section class="space">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h2 class="sec-title has-line">Technology News</h2>
-                </div>
-                <div class="col-auto">
-                    <div class="sec-btn">
-                        <div class="filter-menu filter-menu-active1">
-                            <button data-filter=".game" class="tab-btn active" type="button">Games</button>
-                            <button data-filter=".robotic" class="tab-btn" type="button">Robotic</button>
-                            <button data-filter=".electric" class="tab-btn" type="button">Electric</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="filter-active-cat1">
-                <div class="row filter-item active-filter game">
+        <div class="filter-active-cat1">
+            {% for category, items in {'game': musique, 'robotic': critiques, 'electric': evenements} %}
+                <div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
                     <div class="col-xl-6 mb-35 mb-xl-0">
-                        <div class="">
-                            <div class="blog-style1 style-big">
-                                <div class="blog-img">
-                                    <img src="assets/img/blog/blog_2_2.jpg" alt="blog image">
-                                    <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                </div>
-                                <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">Following the Moon, they are in Close space. choose the best</a></h3>
-                                <div class="blog-meta">
-                                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                                </div>
+                        <div class="blog-style1 style-big">
+                            {% set item = items[0] %}
+                            <div class="blog-img">
+                                <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
+                                <a data-theme-color="#007BFF" href="blog.html" class="category">
+                                    {{ item.categories[0].name|default('Default Category') }}
+                                </a>
+                            </div>
+                            <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">
+                                {{ item.title|u.truncate(30)|default('Default Title') }}
+                                </a></h3>
+                            <div class="blog-meta">
+                                <a href="author.html"><i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
+                                <a href="blog.html"><i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-xl-6">
                         <div class="row gy-4">
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_7.jpg" alt="blog image">
-                                        <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Game on! Stay ahead with Sports updates</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>14 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_8.jpg" alt="blog image">
-                                        <a data-theme-color="#FF9500" href="blog.html" class="category">Electric</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Electrify your world, embrace Sustainable energy.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>19 Mar, 2023</a>
+                            {% for item in items[1:5] %}
+                                <div class="col-xl-6 col-sm-6 border-blog two-column">
+                                    <div class="blog-style1">
+                                        <div class="blog-img">
+                                            <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="187" width="288" style="height:187px;width:288px">
+                                            <a data-theme-color="#007BFF" href="blog.html" class="category">
+                                                {{ item.categories[0].name|default('Default Category') }}
+                                            </a>
+                                        </div>
+                                        <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">{{ item.title|u.truncate(40)|default('Default Title') }}</a></h3>
+                                        <div class="blog-meta">
+                                            <a href="author.html"><i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
+                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>14 Mar, 2023</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_9.jpg" alt="blog image">
-                                        <a data-theme-color="#00D084" href="blog.html" class="category">Game</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Level up your world, embrace Gaming passion</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>30 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_10.jpg" alt="blog image">
-                                        <a data-theme-color="#4E4BD0" href="blog.html" class="category">Robotic</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Robotic precision, shaping a World of possibilities.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>15 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-                <div class="row filter-item robotic">
-                    <div class="col-xl-6 mb-35 mb-xl-0">
-                        <div class="">
-                            <div class="blog-style1 style-big">
-                                <div class="blog-img">
-                                    <img src="assets/img/blog/blog_2_2.jpg" alt="blog image">
-                                    <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                </div>
-                                <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">Following the Moon, they are in Close space. choose the best</a></h3>
-                                <div class="blog-meta">
-                                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>26 Mar, 2023</a>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="row gy-4">
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_6.jpg" alt="blog image">
-                                        <a data-theme-color="#4E4BD0" href="blog.html" class="category">Sports</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Game on! Stay ahead withn Sports updates</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>12 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_7.jpg" alt="blog image">
-                                        <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Game on! Stay ahead with Sports updates</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>10 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_8.jpg" alt="blog image">
-                                        <a data-theme-color="#FF9500" href="blog.html" class="category">Electric</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Electrify your world, embrace Sustainable energy.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>13 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_9.jpg" alt="blog image">
-                                        <a data-theme-color="#00D084" href="blog.html" class="category">Game</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Level up your world, embrace Gaming passion</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>11 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row filter-item electric">
-                    <div class="col-xl-6 mb-35 mb-xl-0">
-                        <div class="">
-                            <div class="blog-style1 style-big">
-                                <div class="blog-img">
-                                    <img src="assets/img/blog/blog_2_2.jpg" alt="blog image">
-                                    <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                </div>
-                                <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">Following the Moon, they are in Close space. choose the best</a></h3>
-                                <div class="blog-meta">
-                                    <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                    <a href="blog.html"><i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="row gy-4">
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_5.jpg" alt="blog image">
-                                        <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Leadership for the People By the people</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>12 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_6.jpg" alt="blog image">
-                                        <a data-theme-color="#4E4BD0" href="blog.html" class="category">Sports</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Game on! Stay ahead withn Sports updates</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>10 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_7.jpg" alt="blog image">
-                                        <a data-theme-color="#007BFF" href="blog.html" class="category">Technology</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Game on! Stay ahead with Sports updates</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>16 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-sm-6 border-blog two-column">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_8.jpg" alt="blog image">
-                                        <a data-theme-color="#FF9500" href="blog.html" class="category">Electric</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Electrify your world, embrace Sustainable energy.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>21 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
+
     <div class="container">
         <a href="https://themeforest.net/user/themeholy/portfolio">
             <img src="assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
         </a>
-    </div><!--==============================
-Blog Area  
-==============================-->
+    </div>
     <section class="space">
         <div class="container">
             <div class="row">
@@ -738,7 +480,7 @@ Blog Area
             </div>
         </div>
     </div><!--==============================
-Blog Area  
+Blog Area
 ==============================-->
     <section class="space">
         <div class="container">
@@ -1162,5 +904,5 @@ Blog Area
     </div><!--==============================
 	Footer Area
 ==============================-->
-    
+
 {% endblock %}

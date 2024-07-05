@@ -15,10 +15,14 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        //dd($this->article->findBy([], ['id' => 'DESC'], 5));
+        //dd($this->article->findByCategory('critiques-musique'));
         return $this->render('home/index.html.twig', [
             'breaking' => $this->article->findBy([], ['modified' => 'DESC'], 4),
             'slider'   => $this->article->findBy([], ['id' => 'DESC'], 4),
+            'cinema'   => $this->article->findByCategory('cinema'), 
+            'musique'  => $this->article->findByCategory('actualites-musique'),
+            'critiques' => $this->article->findByCategory('critiques-musique'),
+            'evenements' => $this->article->findByCategory('evenements-musique'),
         ]);
     }
 }
