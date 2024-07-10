@@ -141,6 +141,7 @@ class CategoryWordpressController extends AbstractController
         $category->setDescription($categoryData['description']);
         $category->setName($categoryData['name']);
         $category->setSlug($categoryData['slug']);
+        $category->setSlugSql($categoryData['slug']);
         
         return $category;
     }
