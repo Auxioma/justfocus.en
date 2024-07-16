@@ -15,7 +15,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        //dd($this->article->findByCategory('critiques-musique'));
+       // dd($this->article->findByCategory('tv-shows'));
+
         return $this->render('home/index.html.twig', [
             'breaking' => $this->article->findBy([], ['modified' => 'DESC'], 4),
             'slider'   => $this->article->findBy([], ['id' => 'DESC'], 4),
@@ -23,6 +24,13 @@ class HomeController extends AbstractController
             'musique'  => $this->article->findByCategory('actualites-musique'),
             'critiques' => $this->article->findByCategory('critiques-musique'),
             'evenements' => $this->article->findByCategory('evenements-musique'),
-        ]);
+            'more' => $this->article->findByCategory('manga-anime'),
+            'theatres' => $this->article->findByCategory('theatre-scene'),
+            'dramas' => $this->article->findByCategory('dramas'),
+            'voyage' => $this->article->findByCategory('voyage'),
+            'tvshows' => $this->article->findByCategory('tv-shows'),
+            'movies' => $this->article->findByCategory('movies'),  
+            'books' => $this->article->findByCategory('books'),
+        ]); 
     }
 }
