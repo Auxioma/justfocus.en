@@ -46,6 +46,9 @@ class Articles
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?User $User = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $visit = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -193,6 +196,18 @@ class Articles
     public function setUser(?User $User): static
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getVisit(): ?string
+    {
+        return $this->visit;
+    }
+
+    public function setVisit(?string $visit): static
+    {
+        $this->visit = $visit;
 
         return $this;
     }
