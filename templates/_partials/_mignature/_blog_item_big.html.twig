@@ -1,0 +1,15 @@
+{% apply spaceless %}
+<div class="blog-style1 style-big">
+    <div class="blog-img">
+        <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:{{ maxHeight }}px">
+        <a data-theme-color="#FF9500" href="blog.html" class="category">
+            {{ item.categories[0].name }}
+        </a>
+    </div>
+    <h3 class="box-title-30"><a class="hover-line" href="blog-details.html">{{ item.title|u.truncate(truncate) }}</a></h3>
+    <div class="blog-meta">
+        <a href="author.html"><i class="far fa-user"></i>{{ item.user.pseudo }}</a>
+        <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
+    </div>
+</div>
+{% endapply %}

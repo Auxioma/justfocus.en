@@ -65,27 +65,7 @@
 							<div class="row gy-4">
 								{% for news_item in breaking %}
 									<div class="col-xl-12 col-md-6 border-blog">
-										<div class="blog-style2">
-											<div class="blog-img">
-												<img src="{{ news_item.media|first.guid }}" height="100" alt="blog image" style="max-height:100px">
-											</div>
-											<div class="blog-content">
-												<a data-theme-color="#FF9500" href="blog.html" class="category">
-													{{ news_item.categories[0].name }}
-												</a>
-												<h3 class="box-title-18">
-													<a class="hover-line" href="blog-details.html">
-														{{ news_item.title|u.truncate(30) }}
-													</a>
-												</h3>
-												<div class="blog-meta">
-													<a href="blog.html">
-														<i class="fal fa-calendar-days"></i>
-														{{ news_item.date|date('d M Y') }}
-													</a>
-												</div>
-											</div>
-										</div>
+										{% include '_partials/_mignature/_blog_item_small.html.twig' with { 'item': news_item, 'truncate': 30, 'maxHeight': 100 } %}
 									</div>
 								{% endfor %}
 							</div>
@@ -94,27 +74,7 @@
 							<div class="row gy-4">
 								{% for slider_item in slider %}
 									<div class="col-xl-12 col-md-6 border-blog">
-										<div class="blog-style2">
-											<div class="blog-img">
-												<img src="{{ slider_item.media|first.guid }}" alt="blog image" style="max-height:100px">
-											</div>
-											<div class="blog-content">
-												<a data-theme-color="#00D084" href="blog.html" class="category">
-													{{ slider_item.categories[0].name }}
-												</a>
-												<h3 class="box-title-18">
-													<a class="hover-line" href="blog-details.html">
-														{{ slider_item.title|u.truncate(30) }}
-													</a>
-												</h3>
-												<div class="blog-meta">
-													<a href="blog.html">
-														<i class="fal fa-calendar-days"></i>
-														{{ slider_item.date|date('d M Y') }}
-													</a>
-												</div>
-											</div>
-										</div>
+										{% include '_partials/_mignature/_blog_item_small.html.twig' with { 'item': slider_item, 'truncate': 30, 'maxHeight': 100 } %}
 									</div>
 								{% endfor %}
 							</div>
@@ -240,22 +200,7 @@
 								<div class="row gy-4">
 									{% for article in articles[0:3] %}
 										<div class="col-xl-12 col-md-6 border-blog">
-											<div class="blog-style2">
-												<div class="blog-img">
-													<img src="{{ article.media|first.guid|default('default.jpg') }}" alt="blog image" width="100" height="100" style="height:100px;width:100px">
-												</div>
-												<div class="blog-content">
-													<a data-theme-color="#4E4BD0" href="blog.html" class="category">{{ article.categories[0].name|default('Default Category') }}</a>
-													<h3 class="box-title-20">
-														<a class="hover-line" href="blog-details.html">{{ article.title|u.truncate(40)|default('Default Title') }}</a>
-													</h3>
-													<div class="blog-meta">
-														<a href="blog.html">
-															<i class="fal fa-calendar-days"></i>
-															{{ article.date|date('d M Y') }}</a>
-													</div>
-												</div>
-											</div>
+											{% include '_partials/_mignature/_blog_item_small.html.twig' with { 'item': article, 'truncate': 30, 'maxHeight': 100 } %}
 										</div>
 									{% endfor %}
 								</div>
@@ -456,22 +401,7 @@
 								<div class="row gy-4">
 									{% for randomise in randomise %}
 										<div class="col-xl-12 col-md-6 border-blog">
-											<div class="blog-style2">
-												<div class="blog-img">
-													<img src="{{ randomise.media|first.guid|default('default.jpg') }}" alt="blog image" style="height:100px;width:100px">
-												</div>
-												<div class="blog-content">
-													<a data-theme-color="#007BFF" href="blog.html" class="category">{{ randomise.categories[0].name|default('Default Category') }}</a>
-													<h3 class="box-title-18">
-														<a class="hover-line" href="blog-details.html">{{ randomise.title|u.truncate(40)|default('Default Title') }}</a>
-													</h3>
-													<div class="blog-meta">
-														<a href="blog.html">
-															<i class="fal fa-calendar-days"></i>
-															{{ randomise.date|date('d M Y') }}</a>
-													</div>
-												</div>
-											</div>
+											{% include '_partials/_mignature/_blog_item_small.html.twig' with { 'item': randomise, 'truncate': 30, 'maxHeight': 100 } %}
 										</div>
 									{% endfor %}
 								</div>
