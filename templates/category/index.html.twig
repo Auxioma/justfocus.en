@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!
+{% endblock %}
+
+{% block body %}
+	<div class="breadcumb-wrapper">
+		<div class="container">
+			<ul class="breadcumb-menu">
+				<li>
+					<a href="home-newspaper.html">Home</a>
+				</li>
+				<li>Blog Three Column Sidebar</li>
+			</ul>
+		</div>
+	</div>
+	<!--==============================
+	Team Area  
+	==============================-->
+	<section class="space-top space-extra-bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-xxl-9 col-lg-8">
+					<div class="row gy-30">
+						{% for item in pagination %}
+							<div class="col-sm-6" itemscope itemtype="http://schema.org/NewsArticle">
+								<div class="blog-style7">
+									<div class="blog-img">
+										<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="height:300px;width:436px" height="300" width="436">
+										<a data-theme-color="#6234AC" href="blog.html" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+									</div>
+									<div class="blog-meta">
+										<a href="author.html" itemprop="author" itemscope itemtype="http://schema.org/Person">
+											<i class="far fa-user"></i>
+											<span itemprop="name">{{ item.user.pseudo|default('Default Author') }}</span>
+										</a>
+										<meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
+										<a href="blog.html">
+											<i class="fal fa-calendar-days"></i>
+											<time itemprop="dateModified" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time>
+										</a>
+									</div>
+									<h3 class="box-title-24">
+										<a class="hover-line" href="blog-details.html" itemprop="headline">{{ item.title|u.truncate(40)|default('Default Title') }}</a>
+									</h3>
+									<meta itemprop="mainEntityOfPage" content="blog-details.html">
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="th-pagination mt-40">
+						{{ knp_pagination_render(pagination) }}
+					</div>
+				</div>
+				<div class="col-xxl-3 col-lg-4 sidebar-wrap">
+					<aside class="sidebar-area">
+						<div class="widget widget_search  ">
+							<form class="search-form">
+								<input type="text" placeholder="Enter Keyword">
+								<button type="submit">
+									<i class="far fa-search"></i>
+								</button>
+							</form>
+						</div>
+						<div class="widget widget_categories">
+							<h3 class="widget_title">Categories</h3>
+							<ul>
+								{% for categorie in categories %}
+									<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_sous_category', {'category': categorie.parent.slug, 'slug': categorie.slug}) }}" itemprop="item">
+											<span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
+										</a>
+										<meta itemprop="position" content="{{ loop.index }}">
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<div class="widget">
+							<div class="widget-ads">
+								<a href="https://themeforest.net/user/themeholy/portfolio">
+									<img class="w-100" src="/assets/img/ads/siderbar_ads_1.jpg" alt="ads">
+								</a>
+							</div>
+						</div>
+						<div class="widget widget_tag_cloud">
+							<h3 class="widget_title">Popular Tags</h3>
+							<div class="tagcloud">
+								<a href="blog.html">Sports</a>
+								<a href="blog.html">Politics</a>
+								<a href="blog.html">Business</a>
+								<a href="blog.html">Music</a>
+								<a href="blog.html">Food</a>
+								<a href="blog.html">Technology</a>
+								<a href="blog.html">Travels</a>
+								<a href="blog.html">Health</a>
+								<a href="blog.html">Fashions</a>
+								<a href="blog.html">Animal</a>
+								<a href="blog.html">Weather</a>
+								<a href="blog.html">Movies</a>
+							</div>
+						</div>
+						<div class="widget">
+							<div class="widget-ads">
+								<a href="https://themeforest.net/user/themeholy/portfolio">
+									<img class="w-100" src="/assets/img/ads/siderbar_ads_1.jpg" alt="ads">
+								</a>
+							</div>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

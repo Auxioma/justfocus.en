@@ -72,11 +72,11 @@
                                 <ul>
                                     {% for categorie in categories %}
                                         <li class="menu-item-has-children" itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                            <a href="home-newspaper.html" itemprop="name">{{ categorie.name }}</a>
+                                            <a href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="name">{{ categorie.name }}</a>
                                             <ul class="sub-menu">
                                                 {% for subcategorie in categorie.subcategories %}
                                                     <li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                                        <a href="home-newspaper.html" itemprop="name">{{ subcategorie.name }}</a>
+                                                        <a href="{{ path('app_sous_category', {'category': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
