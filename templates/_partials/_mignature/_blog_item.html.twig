@@ -1,27 +1,27 @@
 {% apply spaceless %}
-<div itemscope itemtype="https://schema.org/NewsArticle">
-    <div class="blog-style1">
-        <div class="blog-img">
-            <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:{{ maxHeight }}px">
-            <a data-theme-color="#FF9500" href="{{ path('app_articles', {'slug': item.slug, 'souscategorie': item.categories[0].slug, 'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'}) }}" class="category">
-                {% for category in item.categories %}
-                    {{ category.name }}
-                {% endfor %}
-            </a>
-        </div>
-        <h3 class="box-title-22">
-            <a class="hover-line" 
-                href="{{ path('app_articles', {
-                                'slug': item.slug, 
-                                'souscategorie': item.categories[0].slug, 
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                                }
-                            ) 
-                        }}" itemprop="headline">{{ item.title|u.truncate(truncate) }}</a></h3>
-        <div class="blog-meta">
-            <a href="author.html"><i class="far fa-user"></i><span itemprop="author">{{ item.user.pseudo }}</span></a>
-            <a href="blog.html"><i class="fal fa-calendar-days"></i><span itemprop="datePublished">{{ item.date|date('Y-m-d') }}</span></a>
+    <div itemscope itemtype="https://schema.org/NewsArticle">
+        <div class="blog-style1">
+            <div class="blog-img">
+                <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:{{ maxHeight }}px">
+                <a data-theme-color="#FF9500" href="{{ path('app_articles', {'slug': item.slug, 'souscategorie': item.categories[0].slug, 'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'}) }}" class="category">
+                    {% for category in item.categories %}
+                        {{ category.name }}
+                    {% endfor %}
+                </a>
+            </div>
+            <h3 class="box-title-22">
+                <a class="hover-line"
+                   href="{{ path('app_articles', {
+                       'slug': item.slug,
+                       'souscategorie': item.categories[0].slug,
+                       'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
+                   }
+                   )
+                   }}" itemprop="headline">{{ item.title|u.truncate(truncate) }}</a></h3>
+            <div class="blog-meta">
+                <a href="author.html"><i class="far fa-user"></i><span itemprop="author">{{ item.user.pseudo }}</span></a>
+                <a href="blog.html"><i class="fal fa-calendar-days"></i><span itemprop="datePublished">{{ item.date|date('Y-m-d') }}</span></a>
+            </div>
         </div>
     </div>
-</div>
 {% endapply %}

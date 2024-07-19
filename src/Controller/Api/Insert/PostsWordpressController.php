@@ -44,7 +44,7 @@ class PostsWordpressController extends AbstractController
             $categoryId = $category->getId();
 
             // Construire l'URL de l'API avec les paramètres nécessaires
-            $url = self::WORDPRESS_API_URL . '?categories=' . $categoryId . '&per_page=' . self::PER_PAGE;
+            $url = self::WORDPRESS_API_URL . '?categories=' . $categoryId . '&per_page=' . self::PER_PAGE . '&status=publish';
 
             // Effectuer la requête GET vers l'API WordPress
             $response = $this->client->request('GET', $url);
