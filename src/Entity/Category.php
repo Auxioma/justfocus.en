@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     #[ORM\Id]
-    // #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 
@@ -33,8 +33,8 @@ class Category
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $subcategories;
 
-    #[ORM\Column]
-    private ?bool $isOnline = true;
+    #[ORM\Column(type: 'boolean')]
+    private bool $isOnline;
 
     /**
      * @var Collection<int, Articles>
@@ -49,6 +49,7 @@ class Category
     {
         $this->subcategories = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->isOnline = true; // Set default value for isOnline
     }
 
     public function getId(): ?int
@@ -158,7 +159,7 @@ class Category
         return $this->isOnline;
     }
 
-    public function setOnline(bool $isOnline): static
+    public function setIsOnline(bool $isOnline): self
     {
         $this->isOnline = $isOnline;
 
@@ -173,7 +174,7 @@ class Category
         return $this->articles;
     }
 
-    public function addArticle(Articles $article): static
+    public function addArticle(Articles $article): self
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
@@ -183,7 +184,7 @@ class Category
         return $this;
     }
 
-    public function removeArticle(Articles $article): static
+    public function removeArticle(Articles $article): self
     {
         if ($this->articles->removeElement($article)) {
             $article->removeCategory($this);
@@ -197,7 +198,7 @@ class Category
         return $this->slugSql;
     }
 
-    public function setSlugSql(string $slugSql): static
+    public function setSlugSql(string $slugSql): self
     {
         $this->slugSql = $slugSql;
 
