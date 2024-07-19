@@ -9,10 +9,10 @@
 				<div class="title">Breaking News :</div>
 				<div class="news-wrap">
 					<div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
-						{% for news in breaking %}
+						{% for item in breaking %}
 							<div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-								<a href="blog-details.html" class="breaking-news" itemprop="url">
-									<span itemprop="headline">{{ news.title }}</span>
+								<a href="{{ path('app_articles', {'slug': item.slug, 'souscategorie': item.categories[0].slug, 'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'}) }}" class="breaking-news" itemprop="url">
+									<span itemprop="headline">{{ item.title }}</span>
 								</a>
 							</div>
 						{% endfor %}
@@ -26,9 +26,9 @@
 			<div class="row">
 				<div class="col-xl-3">
 					<div class="row gy-4">
-						{% for slide in slider[:2] %}
+						{% for item in slider[:2] %}
 							<div class="col-xl-12 col-sm-6 border-blog">
-								{% include '_partials/_mignature/_blog_item.html.twig' with { 'item': slide, 'truncate': 50, 'maxHeight': 187 } %}
+								{% include '_partials/_mignature/_blog_item.html.twig' with { 'item': item, 'truncate': 50, 'maxHeight': 187 } %}
 							</div>
 						{% endfor %}
 					</div>
@@ -37,12 +37,12 @@
 					<div class="blog-style1 style-big">
 						<div class="blog-img">
 							<img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="max-height:490px">
-							<a data-theme-color="#FF9500" href="blog.html" class="category">
+							<a data-theme-color="#FF9500" href="{{ path('app_articles', {'slug': slider[2].slug, 'souscategorie': slider[2].categories[0].slug, 'categorie': slider[2].categories[0].parent ? slider[2].categories[0].parent.slug : 'no-category'}) }}" class="category">
 								{{ slider[2].categories[0].name }}
 							</a>
 						</div>
 						<h3 class="box-title-30">
-							<a class="hover-line" href="blog-details.html">{{ slider[2].title|u.truncate(75) }}</a>
+							<a class="hover-line" href="{{ path('app_articles', {'slug': slider[2].slug, 'souscategorie': slider[2].categories[0].slug, 'categorie': slider[2].categories[0].parent ? slider[2].categories[0].parent.slug : 'no-category'}) }}">{{ slider[2].title|u.truncate(75) }}</a>
 						</h3>
 						<div class="blog-meta">
 							<a href="author.html">

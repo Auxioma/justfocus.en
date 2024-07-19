@@ -46,4 +46,10 @@ class CategoryController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+    #[Route('/{categorie}/{souscategorie}/{slug}', name: 'app_articles')]
+    public function articles(): Response
+    {
+        return $this->render('category/articles.html.twig');
+    }
 }
