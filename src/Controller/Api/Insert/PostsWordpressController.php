@@ -66,7 +66,7 @@ class PostsWordpressController extends AbstractController
                         continue;
                     }
 
-                    $existingArticle = $this->articlesRepository->findOneBy(['externalId' => $postData['id']]);
+                    $existingArticle = $this->articlesRepository->findOneBy(['id' => $postData['id']]);
 
                     if ($existingArticle) {
                         $this->updateArticle($existingArticle, $postData);
@@ -88,7 +88,7 @@ class PostsWordpressController extends AbstractController
 
     private function updateArticle(Articles $article, array $postData)
     {
-        
+
         $article->setTitle($postData['title']['rendered'] ?? 'No title');
         $article->setSlug($postData['slug'] ?? '');
         $article->setDate(new \DateTime($postData['date'] ?? 'now'));
