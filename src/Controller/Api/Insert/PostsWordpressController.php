@@ -88,6 +88,7 @@ class PostsWordpressController extends AbstractController
 
     private function updateArticle(Articles $article, array $postData)
     {
+        
         $article->setTitle($postData['title']['rendered'] ?? 'No title');
         $article->setSlug($postData['slug'] ?? '');
         $article->setDate(new \DateTime($postData['date'] ?? 'now'));
