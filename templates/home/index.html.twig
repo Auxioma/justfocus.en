@@ -3,7 +3,6 @@
 {% block title %}Just Focus{% endblock %}
 
 {% block body %}
-{% apply spaceless %}
 <div>
     <div class="container">
         <div class="news-area">
@@ -12,7 +11,15 @@
                 <div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
                     {% cache 'breaking_news' %}
                     {% for item in breaking %}
-                        {{ include('_partials/_mignature/_breaking_news_item.html.twig', { 'item': item }) }}
+                    <div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+                        <a href="{{ path('app_articles', {
+                            'slug': item.slug,
+                            'souscategorie': item.categories[0].slug,
+                            'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
+                        }) }}" class="breaking-news" itemprop="url">
+                            <span itemprop="headline">{{ item.title }}</span>
+                        </a>
+                    </div>
                     {% endfor %}
                     {% endcache %}
                 </div>
@@ -27,33 +34,36 @@
             <div class="col-xl-3">
                 <div class="row gy-4">
                     {% cache 'slider_first_two' %}
-                    {% for item in slider|slice(0, 2) %}
-                        <div class="col-xl-12 col-sm-6 border-blog">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 50, 'maxHeight': 187 }) }}
-                        </div>
+                    {% for item in slider[:2] %}
+                    <div class="col-xl-12 col-sm-6 border-blog">
+                        {% include '_partials/_mignature/_blog_item.html.twig' with {
+                            'item': item,
+                            'truncate': 50,
+                            'maxHeight': 187
+                        } %}
+                    </div>
                     {% endfor %}
                     {% endcache %}
                 </div>
             </div>
             <div class="col-xl-6 mt-4 mt-xl-0">
-                {% set main_slider_item = slider[2] %}
                 <div class="blog-style1 style-big">
                     <div class="blog-img">
-                        <img src="{{ main_slider_item.media|first.guid }}" alt="{{ main_slider_item.media|first.title }}" style="max-height:490px">
-                        <a data-theme-color="#FF9500" href="#" class="category">{{ main_slider_item.categories[0].name }}</a>
+                        <img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="max-height:490px">
+                        <a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
                     </div>
                     <h3 class="box-title-30">
                         <a class="hover-line" href="{{ path('app_articles', {
-                            'slug': main_slider_item.slug,
-                            'souscategorie': main_slider_item.categories[0].slug,
-                            'categorie': main_slider_item.categories[0].parent ? main_slider_item.categories[0].parent.slug : 'no-category'
-                        }) }}">{{ main_slider_item.title|u.truncate(75) }}</a>
+                            'slug': slider[2].slug,
+                            'souscategorie': slider[2].categories[0].slug,
+                            'categorie': slider[2].categories[0].parent ? slider[2].categories[0].parent.slug : 'no-category'
+                        }) }}">{{ slider[2].title|u.truncate(75) }}</a>
                     </h3>
                     <div class="blog-meta">
                         <a href="author.html">
-                            <i class="far fa-user"></i>{{ main_slider_item.user.pseudo }}</a>
+                            <i class="far fa-user"></i>{{ slider[2].user.pseudo }}</a>
                         <a href="blog.html">
-                            <i class="fal fa-calendar-days"></i>{{ main_slider_item.date|date('d M Y') }}</a>
+                            <i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
                     </div>
                 </div>
             </div>
@@ -65,28 +75,30 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-one" role="tabpanel" aria-labelledby="nav-one-tab">
                         <div class="row gy-4">
-                            {% cache 'top_news' %}
-                            {% for item in breaking|slice(0, 3) %}
-                                <div class="col-xl-12 col-md-6 border-blog" itemscope itemtype="http://schema.org/NewsArticle">
-                                    <meta itemprop="headline" content="{{ item.title }}">
-                                    <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                                    <meta itemprop="author" content="{{ item.user.pseudo }}">
-                                    {{ include('_partials/_mignature/_blog_item_small.html.twig', { 'item': item, 'truncate': 30, 'maxHeight': 100 }) }}
-                                </div>
+                            {% cache 'breaking_news_small' %}
+                            {% for news_item in breaking %}
+                            <div class="col-xl-12 col-md-6 border-blog">
+                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+                                    'item': news_item,
+                                    'truncate': 30,
+                                    'maxHeight': 100
+                                } %}
+                            </div>
                             {% endfor %}
                             {% endcache %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-two" role="tabpanel" aria-labelledby="nav-two-tab">
                         <div class="row gy-4">
-                            {% cache 'recent_news' %}
-                            {% for item in slider|slice(0, 3) %}
-                                <div class="col-xl-12 col-md-6 border-blog" itemscope itemtype="http://schema.org/NewsArticle">
-                                    <meta itemprop="headline" content="{{ item.title }}">
-                                    <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                                    <meta itemprop="author" content="{{ item.user.pseudo }}">
-                                    {{ include('_partials/_mignature/_blog_item_small.html.twig', { 'item': item, 'truncate': 30, 'maxHeight': 100 }) }}
-                                </div>
+                            {% cache 'slider_small' %}
+                            {% for slider_item in slider %}
+                            <div class="col-xl-12 col-md-6 border-blog">
+                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+                                    'item': slider_item,
+                                    'truncate': 30,
+                                    'maxHeight': 100
+                                } %}
+                            </div>
                             {% endfor %}
                             {% endcache %}
                         </div>
@@ -97,7 +109,7 @@
     </div>
 </section>
 
-<section class="space">
+<div>
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
@@ -106,30 +118,31 @@
             <div class="col-auto">
                 <div class="sec-btn">
                     <div class="icon-box">
-                        <button data-slick-prev="#cinema-slide" class="slick-arrow default">
+                        <button data-slick-prev="#blog-slide1" class="slick-arrow default">
                             <i class="far fa-arrow-left"></i>
                         </button>
-                        <button data-slick-next="#cinema-slide" class="slick-arrow default">
+                        <button data-slick-next="#blog-slide1" class="slick-arrow default">
                             <i class="far fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row th-carousel" id="cinema-slide" data-slide-show="4" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="2">
-            {% cache 'cinema' %}
-            {% for item in cinema %}
-                <div class="col-sm-6 col-xl-4" itemscope itemtype="http://schema.org/NewsArticle">
-                    <meta itemprop="headline" content="{{ item.title }}">
-                    <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                    <meta itemprop="author" content="{{ item.user.pseudo }}">
-                    {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 35, 'maxHeight': 187 }) }}
-                </div>
+        <div class="row th-carousel" id="blog-slide1" data-slide-show="4" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="2">
+            {% cache 'cinema_items' %}
+            {% for movie in cinema %}
+            <div class="col-sm-6 col-xl-4">
+                {% include '_partials/_mignature/_blog_item.html.twig' with {
+                    'item': movie,
+                    'truncate': 35,
+                    'maxHeight': 187
+                } %}
+            </div>
             {% endfor %}
             {% endcache %}
         </div>
     </div>
-</section>
+</div>
 
 <section class="space">
     <div class="container">
@@ -148,14 +161,11 @@
             </div>
         </div>
         <div class="filter-active-cat1">
-            <div class="row filter-item game active-filter">
-                {% set items = musique %}
+            {% for category, items in {'game': musique, 'robotic': critiques, 'electric': evenements} %}
+            <div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
                 <div class="col-xl-6 mb-35 mb-xl-0">
-                    <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/NewsArticle">
+                    <div class="blog-style1 style-big">
                         {% set item = items[0] %}
-                        <meta itemprop="headline" content="{{ item.title }}">
-                        <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                        <meta itemprop="author" content="{{ item.user.pseudo }}">
                         <div class="blog-img">
                             <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
                             <a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
@@ -181,113 +191,21 @@
                 </div>
                 <div class="col-xl-6">
                     <div class="row gy-4">
-                        {% cache 'music_items_game' %}
-                        {% for item in items|slice(1, 3) %}
-                        <div class="col-xl-6 col-sm-6 border-blog two-column" itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 50, 'maxHeight': 187 }) }}
+                        {% cache 'music_items_' ~ category %}
+                        {% for item in items[1:4] %}
+                        <div class="col-xl-6 col-sm-6 border-blog two-column">
+                            {% include '_partials/_mignature/_blog_item.html.twig' with {
+                                'item': item,
+                                'truncate': 50,
+                                'maxHeight': 187
+                            } %}
                         </div>
                         {% endfor %}
                         {% endcache %}
                     </div>
                 </div>
             </div>
-
-            <div class="row filter-item robotic">
-                {% set items = critiques %}
-                <div class="col-xl-6 mb-35 mb-xl-0">
-                    <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/NewsArticle">
-                        {% set item = items[0] %}
-                        <meta itemprop="headline" content="{{ item.title }}">
-                        <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                        <meta itemprop="author" content="{{ item.user.pseudo }}">
-                        <div class="blog-img">
-                            <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
-                            <a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
-                        </div>
-                        <h3 class="box-title-30">
-                            <a class="hover-line" href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">{{ item.title|u.truncate(30)|default('Default Title') }}</a>
-                        </h3>
-                        <div class="blog-meta">
-                            <a href="author.html">
-                                <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                            <a href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">
-                                <i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="row gy-4">
-                        {% cache 'music_items_robotic' %}
-                        {% for item in items|slice(1, 3) %}
-                        <div class="col-xl-6 col-sm-6 border-blog two-column" itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 50, 'maxHeight': 187 }) }}
-                        </div>
-                        {% endfor %}
-                        {% endcache %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="row filter-item electric">
-                {% set items = evenements %}
-                <div class="col-xl-6 mb-35 mb-xl-0">
-                    <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/NewsArticle">
-                        {% set item = items[0] %}
-                        <meta itemprop="headline" content="{{ item.title }}">
-                        <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                        <meta itemprop="author" content="{{ item.user.pseudo }}">
-                        <div class="blog-img">
-                            <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
-                            <a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
-                        </div>
-                        <h3 class="box-title-30">
-                            <a class="hover-line" href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">{{ item.title|u.truncate(30)|default('Default Title') }}</a>
-                        </h3>
-                        <div class="blog-meta">
-                            <a href="author.html">
-                                <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                            <a href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">
-                                <i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="row gy-4">
-                        {% cache 'music_items_electric' %}
-                        {% for item in items|slice(1, 3) %}
-                        <div class="col-xl-6 col-sm-6 border-blog two-column" itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 50, 'maxHeight': 187 }) }}
-                        </div>
-                        {% endfor %}
-                        {% endcache %}
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -302,50 +220,143 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-8">
-                <h2 class="sec-title has-line">JUSTFOCUS WEEKLY</h2>
-                <div class="filter-active">
-                    {% cache 'wanderlust' %}
-                    {% for item in wanderlust|slice(0, 4) %}
-                        <div itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 120, 'maxHeight': 200 }) }}
-                        </div>
+                <h2 class="sec-title has-line">Manga</h2>
+                <div class="row gy-4">
+                    {% cache 'manga_articles' %}
+                    {% for article in more[0:2] %}
+                    <div class="col-sm-6 border-blog two-column">
+                        {% include '_partials/_mignature/_blog_item.html.twig' with {
+                            'item': article,
+                            'truncate': 50,
+                            'maxHeight': 187
+                        } %}
+                    </div>
                     {% endfor %}
+                    {% endcache %}
+                </div>
+            </div>
+            <div class="col-xl-4 mt-35 mt-xl-0">
+                <div class="nav tab-menu indicator-active" role="tablist">
+                    <button class="tab-btn active" id="nav2-one-tab" data-bs-toggle="tab" data-bs-target="#nav2-one" type="button" role="tab" aria-controls="nav2-one" aria-selected="true">Théatre</button>
+                    <button class="tab-btn" id="nav2-two-tab" data-bs-toggle="tab" data-bs-target="#nav2-two" type="button" role="tab" aria-controls="nav2-two" aria-selected="false">Drama</button>
+                    <button class="tab-btn" id="nav2-three-tab" data-bs-toggle="tab" data-bs-target="#nav2-three" type="button" role="tab" aria-controls="nav2-three" aria-selected="false">Voyage</button>
+                </div>
+                <div class="tab-content">
+                    {% set sections = {'nav2-one': theatres, 'nav2-two': dramas, 'nav2-three': voyage} %}
+                    {% for id, articles in sections %}
+                    <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" id="{{ id }}" role="tabpanel" aria-labelledby="{{ id }}-tab">
+                        <div class="row gy-4">
+                            {% cache 'tab_section_' ~ id %}
+                            {% for article in articles[0:3] %}
+                            <div class="col-xl-12 col-md-6 border-blog">
+                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+                                    'item': article,
+                                    'truncate': 30,
+                                    'maxHeight': 100
+                                } %}
+                            </div>
+                            {% endfor %}
+                            {% endcache %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="space dark-theme bg-title-dark">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="sec-title has-line">Latest Video</h2>
+            </div>
+            <div class="col-auto">
+                <div class="sec-btn">
+                    <div class="icon-box">
+                        <button data-slick-prev="#blog-video-slide1" class="slick-arrow default">
+                            <i class="far fa-arrow-left"></i>
+                        </button>
+                        <button data-slick-next="#blog-video-slide1" class="slick-arrow default">
+                            <i class="far fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include('_partials/_mignature/video.html.twig') %}
+    </div>
+</div>
+
+<section class="space">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="sec-title has-line">JUSTFOCUS WEEKLY</h2>
+                    </div>
+                    <div class="col-auto">
+                        <div class="sec-btn">
+                            <div class="filter-menu filter-menu-active">
+                                <button data-filter="*" class="tab-btn active" type="button">All</button>
+                                <button data-filter=".cat1" class="tab-btn" type="button">Wanderlust</button>
+                                <button data-filter=".cat2" class="tab-btn" type="button">Movies</button>
+                                <button data-filter=".cat3" class="tab-btn" type="button">Books</button>
+                                <button data-filter=".cat4" class="tab-btn" type="button">TV Show</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-active">
+                    {% macro render_blog_items(items, category) %}
+                    {% for item in items %}
+                    <div class="border-blog2 filter-item {{ category }}">
+                        <div class="blog-style4">
+                            <div class="blog-img">
+                                <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="width:300px; height:200px">
+                            </div>
+                            <div class="blog-content">
+                                <a data-theme-color="#FF9500" href="blog.html" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+                                <h3 class="box-title-24">
+                                    <a class="hover-line" href="{{ path('app_articles', {
+                                        'slug': item.slug,
+                                        'souscategorie': item.categories[0].slug,
+                                        'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
+                                    }) }}">{{ item.title|u.truncate(120)|default('Default Title') }}</a>
+                                </h3>
+                                <p class="blog-text">{{ item.content|striptags|u.truncate(120)|default('Default Title') }}</p>
+                                <div class="blog-meta">
+                                    <a href="author.html">
+                                        <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
+                                    <a href="{{ path('app_articles', {
+                                        'slug': item.slug,
+                                        'souscategorie': item.categories[0].slug,
+                                        'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
+                                    }) }}">
+                                        <i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endmacro %}
+                    
+                    {% cache 'wanderlust' %}
+                    {{ _self.render_blog_items(wanderlust[0:4], 'cat1') }}
                     {% endcache %}
                     
                     {% cache 'movies' %}
-                    {% for item in movies|slice(0, 4) %}
-                        <div itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 120, 'maxHeight': 200 }) }}
-                        </div>
-                    {% endfor %}
+                    {{ _self.render_blog_items(movies[0:4], 'cat2') }}
                     {% endcache %}
                     
                     {% cache 'books' %}
-                    {% for item in books|slice(0, 4) %}
-                        <div itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 120, 'maxHeight': 200 }) }}
-                        </div>
-                    {% endfor %}
+                    {{ _self.render_blog_items(books[0:4], 'cat3') }}
                     {% endcache %}
                     
                     {% cache 'tvshows' %}
-                    {% for item in tvshows|slice(0, 4) %}
-                        <div itemscope itemtype="http://schema.org/NewsArticle">
-                            <meta itemprop="headline" content="{{ item.title }}">
-                            <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-                            <meta itemprop="author" content="{{ item.user.pseudo }}">
-                            {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': item, 'truncate': 120, 'maxHeight': 200 }) }}
-                        </div>
-                    {% endfor %}
+                    {{ _self.render_blog_items(tvshows[0:4], 'cat4') }}
                     {% endcache %}
                 </div>
             </div>
@@ -374,11 +385,12 @@
                             <div class="row gy-4">
                                 {% cache 'discover_random' %}
                                 {% for randomise in randomise %}
-                                <div class="col-xl-12 col-md-6 border-blog" itemscope itemtype="http://schema.org/NewsArticle">
-                                    <meta itemprop="headline" content="{{ randomise.title }}">
-                                    <meta itemprop="datePublished" content="{{ randomise.date|date('Y-m-d') }}">
-                                    <meta itemprop="author" content="{{ randomise.user.pseudo }}">
-                                    {{ include('_partials/_mignature/_blog_item_small.html.twig', { 'item': randomise, 'truncate': 30, 'maxHeight': 100 }) }}
+                                <div class="col-xl-12 col-md-6 border-blog">
+                                    {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+                                        'item': randomise,
+                                        'truncate': 30,
+                                        'maxHeight': 100
+                                    } %}
                                 </div>
                                 {% endfor %}
                                 {% endcache %}
@@ -388,11 +400,12 @@
                             <div class="row gy-4">
                                 {% cache 'discover_best' %}
                                 {% for bestof in bestof %}
-                                <div class="col-xl-12 col-md-6 border-blog" itemscope itemtype="http://schema.org/NewsArticle">
-                                    <meta itemprop="headline" content="{{ bestof.title }}">
-                                    <meta itemprop="datePublished" content="{{ bestof.date|date('Y-m-d') }}">
-                                    <meta itemprop="author" content="{{ bestof.user.pseudo }}">
-                                    {{ include('_partials/_mignature/_blog_item_small.html.twig', { 'item': bestof, 'truncate': 30, 'maxHeight': 100 }) }}
+                                <div class="col-xl-12 col-md-6 border-blog">
+                                    {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+                                        'item': bestof,
+                                        'truncate': 30,
+                                        'maxHeight': 100
+                                    } %}
                                 </div>
                                 {% endfor %}
                                 {% endcache %}
@@ -427,16 +440,16 @@
         <div class="row th-carousel" id="blog-slide3" data-slide-show="3" data-lg-slide-show="2" data-md-slide-show="2" data-sm-slide-show="1">
             {% cache 'discover_carousel' %}
             {% for discover in discover %}
-                <div class="col-sm-6 col-xl-4" itemscope itemtype="http://schema.org/NewsArticle">
-                    <meta itemprop="headline" content="{{ discover.title }}">
-                    <meta itemprop="datePublished" content="{{ discover.date|date('Y-m-d') }}">
-                    <meta itemprop="author" content="{{ discover.user.pseudo }}">
-                    {{ include('_partials/_mignature/_blog_item.html.twig', { 'item': discover, 'truncate': 50, 'maxHeight': 187 }) }}
-                </div>
+            <div class="col-sm-6 col-xl-4">
+                {% include '_partials/_mignature/_blog_item.html.twig' with {
+                    'item': discover,
+                    'truncate': 50,
+                    'maxHeight': 187
+                } %}
+            </div>
             {% endfor %}
             {% endcache %}
         </div>
     </div>
 </div>
-{% endapply %}
 {% endblock %}
