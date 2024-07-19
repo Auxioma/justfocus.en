@@ -49,10 +49,14 @@
                     </div>
                     <div class="col-lg-8 text-end">
                         <div class="header-ads">
-                            <a href="https://themeforest.net/user/themeholy/portfolio">
-                                <img class="light-img" src="assets/img/ads/ads_banner_1.jpg" alt="ads">
-                                <img class="dark-img" src="assets/img/ads/ads_banner_1_dark.jpg" alt="ads">
-                            </a>
+                            <ins class="adsbygoogle"
+                                style="display:inline-block;width:700px;height:60px"
+                                data-ad-client="ca-pub-0669489715091946"
+                                data-ad-slot="5326160941">
+                            </ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -69,6 +73,7 @@
                         </div>
                         <div class="col-auto">
                             <nav class="main-menu d-none d-lg-inline-block" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                                {% block menu %}
                                 <ul>
                                     {% for categorie in categories %}
                                         <li class="menu-item-has-children" itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
@@ -86,6 +91,7 @@
                                         <a href="contact.html" itemprop="name">Contact</a>
                                     </li>
                                 </ul>
+                                {% endblock %}
                             </nav>
                         </div>
                     </div>
