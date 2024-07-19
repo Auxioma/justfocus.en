@@ -1,0 +1,20 @@
+<div class="col-xl-12 col-md-6 border-blog" itemscope itemtype="http://schema.org/NewsArticle">
+                            <div class="blog-img" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+                                <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:490px">
+                                <meta itemprop="url" content="{{ item.media|first.guid }}">
+                            </div>
+                            <a href="#" class="category" itemprop="articleSection">{{ item.categories[0].name }}</a>
+                            <h3 class="box-title-30">
+                                <a class="hover-line" href="{{ path('app_articles', {
+                                    'slug': item.slug,
+                                    'souscategorie': item.categories[0].slug,
+                                    'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
+                                }) }}" itemprop="headline">{{ item.title|u.truncate(75) }}</a>
+                            </h3>
+                            <div class="blog-meta">
+                                <a href="author.html" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                                    <i class="far fa-user"></i><span itemprop="name">{{ item.user.pseudo }}</span></a>
+                                <a href="blog.html">
+                                    <i class="fal fa-calendar-days"></i><time itemprop="datePublished" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time></a>
+                            </div>
+                        </div>

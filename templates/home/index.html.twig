@@ -12,7 +12,7 @@
                 <div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
                     {% cache 'breaking_news' %}
                     {% for item in breaking %}
-                        {{ include('_partials/_breaking_news_item.html.twig', { 'item': item }) }}
+                        {{ include('_partials/_mignature/_breaking_news_item.html.twig', { 'item': item }) }}
                     {% endfor %}
                     {% endcache %}
                 </div>
