@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\ArticlesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
@@ -25,46 +25,31 @@ class HomeController extends AbstractController
     ];
 
     public function __construct(
-        private readonly ArticlesRepository $articleRepository
-    ) {}
+        private readonly ArticlesRepository $article
+    ){}
 
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        $categorizedArticles = $this->getCategorizedArticles();
+        // Fetch categorized articles
+        $categorizedArticles = [];
+        foreach (self::CATEGORIES as $key => $category) {
+            $categorizedArticles[$key] = $this->article->findByCategory($category);
+        }
 
-        $breaking = $this->articleRepository->findBy([], ['modified' => 'DESC'], 4);
-        $slider = $this->articleRepository->findBy([], ['id' => 'DESC'], 4);
-        $bestOf = $this->articleRepository->findBy([], ['visit' => 'DESC'], 4);
-        $discover = $this->articleRepository->findBy([], ['visit' => 'DESC'], 4);
-        $randomArticles = $this->articleRepository->RandomArticles();
+        // Fetch common queries
+        $breaking = $this->article->findBy([], ['modified' => 'DESC'], 4);
+        $slider = $this->article->findBy([], ['id' => 'DESC'], 4);
+        $bestof = $this->article->findBy([], ['visit' => 'DESC'], 4);
+        $discover = $this->article->findBy([], ['visit' => 'DESC'], 4);
+        $randomise = $this->article->RandomArticles();
 
         return $this->render('home/index.html.twig', array_merge([
             'breaking' => $breaking,
             'slider' => $slider,
-            'bestOf' => $bestOf,
+            'bestof' => $bestof,
             'discover' => $discover,
-            'randomArticles' => $randomArticles,
+            'randomise' => $randomise,
         ], $categorizedArticles));
-    }
-
-    /**
-     * Fetch articles categorized by the defined categories.
-     *
-     * @return array
-     */
-    private function getCategorizedArticles(): array
-    {
-        $categorizedArticles = [];
-        foreach (self::CATEGORIES as $key => $category) {
-            try {
-                $categorizedArticles[$key] = $this->articleRepository->findByCategory($category);
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Failed to fetch articles for category: ' . $category);
-                $categorizedArticles[$key] = [];
-            }
-        }
-
-        return $categorizedArticles;
     }
 }
