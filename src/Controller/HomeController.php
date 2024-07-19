@@ -9,31 +9,47 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
+    private const CATEGORIES = [
+        'cinema' => 'cinema',
+        'musique' => 'actualites-musique',
+        'critiques' => 'critiques-musique',
+        'evenements' => 'evenements-musique',
+        'more' => 'manga-anime',
+        'theatres' => 'theatre-scene',
+        'dramas' => 'dramas',
+        'voyage' => 'voyage',
+        'tvshows' => 'tv-shows',
+        'movies' => 'movies',
+        'books' => 'books',
+        'wanderlust' => 'wanderlust',
+    ];
+
     public function __construct(
         private readonly ArticlesRepository $article
     ){}
+
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', [
-            'breaking' => $this->article->findBy([], ['modified' => 'DESC'], 4),
-            'slider'   => $this->article->findBy([], ['id' => 'DESC'], 4),
-            'cinema'   => $this->article->findByCategory('cinema'), 
-            'musique'  => $this->article->findByCategory('actualites-musique'),
-            'critiques' => $this->article->findByCategory('critiques-musique'),
-            'evenements' => $this->article->findByCategory('evenements-musique'),
-            'more' => $this->article->findByCategory('manga-anime'),
-            'theatres' => $this->article->findByCategory('theatre-scene'),
-            'dramas' => $this->article->findByCategory('dramas'),
-            'voyage' => $this->article->findByCategory('voyage'),
-            'tvshows' => $this->article->findByCategory('tv-shows'),
-            'movies' => $this->article->findByCategory('movies'),  
-            'books' => $this->article->findByCategory('books'),
-            'wanderlust' => $this->article->findByCategory('wanderlust'),
-            'bestof' => $this->article->findBy([], ['visit' => 'DESC'], 4),
-            'discover' => $this->article->findBy([], ['visit' => 'DESC'], 4),
-            'randomise' => $this->article->RandomArticles(),
+        // Fetch categorized articles
+        $categorizedArticles = [];
+        foreach (self::CATEGORIES as $key => $category) {
+            $categorizedArticles[$key] = $this->article->findByCategory($category);
+        }
 
-        ]); 
+        // Fetch common queries
+        $breaking = $this->article->findBy([], ['modified' => 'DESC'], 4);
+        $slider = $this->article->findBy([], ['id' => 'DESC'], 4);
+        $bestof = $this->article->findBy([], ['visit' => 'DESC'], 4);
+        $discover = $this->article->findBy([], ['visit' => 'DESC'], 4);
+        $randomise = $this->article->RandomArticles();
+
+        return $this->render('home/index.html.twig', array_merge([
+            'breaking' => $breaking,
+            'slider' => $slider,
+            'bestof' => $bestof,
+            'discover' => $discover,
+            'randomise' => $randomise,
+        ], $categorizedArticles));
     }
 }
