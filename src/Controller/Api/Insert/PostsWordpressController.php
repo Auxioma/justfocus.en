@@ -14,7 +14,7 @@ use App\Repository\UserRepository;
 class PostsWordpressController extends AbstractController
 {
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/posts';
-    private const PER_PAGE = 100;
+    private const PER_PAGE = 5;
 
     private HttpClientInterface $client;
     private ArticlesRepository $articlesRepository;

@@ -1,441 +1,448 @@
 {% extends 'base.html.twig' %}
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 
-{% block title %}Just Focus{% endblock %}
+{% block title %}Just Focus
+{% endblock %}
 
 {% block body %}
 
-<div>
-    <div class="container">
-        <div class="news-area">
-            <div class="title">Breaking News :</div>
-            <div class="news-wrap">
-                <div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
-                    {% cache 'breaking_news' %}
-                    {% for item in breaking %}
-                    <div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-                        {{ macros.breaking_news_link(item) }}
-                    </div>
-                    {% endfor %}
-                    {% endcache %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div>
+		<div class="container">
+			<div class="news-area">
+				<div class="title">Breaking News :</div>
+				<div class="news-wrap">
+					<div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
+						{% cache 'breaking_news' %}
+						{% for item in breaking %}
+							<div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+								{{ macros.breaking_news_link(item) }}
+							</div>
+						{% endfor %}
+						{% endcache %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<section class="space">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-3">
-                <div class="row gy-4">
-                    {% cache 'slider_first_two' %}
-                    {% for item in slider[:2] %}
-                    <div class="col-xl-12 col-sm-6 border-blog">
-                        {% include '_partials/_mignature/_blog_item.html.twig' with {
+	<section class="space">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-3">
+					<div class="row gy-4">
+						{% cache 'slider_first_two' %}
+						{% for item in slider[:2] %}
+							<div class="col-xl-12 col-sm-6 border-blog">
+								{% include '_partials/_mignature/_blog_item.html.twig' with {
                             'item': item,
                             'truncate': 50,
                             'maxHeight': 187,
                             'width': 288,
                         } %}
-                    </div>
-                    {% endfor %}
-                    {% endcache %}
-                </div>
-            </div>
-            <div class="col-xl-6 mt-4 mt-xl-0">
-                <div class="blog-style1 style-big">
-                    <div class="blog-img">
-                        <img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="height:490px; width:600px">
-                        <a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
-                    </div>
-                    <h3 class="box-title-30">
-                        {{ macros.truncate_title(slider[2], 75) }}
-                    </h3>
-                    <div class="blog-meta">
-                        <a href="">
-                            <i class="far fa-user"></i>{{ slider[2].user.pseudo }}</a>
-                        <a href="">
-                            <i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 mt-35 mt-xl-0">
-                <div class="nav tab-menu indicator-active" role="tablist">
-                    <button class="tab-btn active" id="nav-one-tab" data-bs-toggle="tab" data-bs-target="#nav-one" type="button" role="tab" aria-controls="nav-one" aria-selected="true">Top News</button>
-                    <button class="tab-btn" id="nav-two-tab" data-bs-toggle="tab" data-bs-target="#nav-two" type="button" role="tab" aria-controls="nav-two" aria-selected="false">Recent News</button>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="nav-one" role="tabpanel" aria-labelledby="nav-one-tab">
-                        <div class="row gy-4">
-                            {% cache 'breaking_news_small' %}
-                            {% for news_item in breaking %}
-                            <div class="col-xl-12 col-md-6 border-blog">
-                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+							</div>
+						{% endfor %}
+						{% endcache %}
+					</div>
+				</div>
+				<div class="col-xl-6 mt-4 mt-xl-0">
+					<div class="blog-style1 style-big">
+						<div class="blog-img">
+							<img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="height:490px; width:600px">
+							<a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
+						</div>
+						<h3 class="box-title-30">
+							{{ macros.truncate_title(slider[2], 75) }}
+						</h3>
+						<div class="blog-meta">
+							<a href="">
+								<i class="far fa-user"></i>
+								{{ slider[2].user.pseudo }}</a>
+							<a href="">
+								<i class="fal fa-calendar-days"></i>
+								{{ slider[2].date|date('d M Y') }}</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 mt-35 mt-xl-0">
+					<div class="nav tab-menu indicator-active" role="tablist">
+						<button class="tab-btn active" id="nav-one-tab" data-bs-toggle="tab" data-bs-target="#nav-one" type="button" role="tab" aria-controls="nav-one" aria-selected="true">Top News</button>
+						<button class="tab-btn" id="nav-two-tab" data-bs-toggle="tab" data-bs-target="#nav-two" type="button" role="tab" aria-controls="nav-two" aria-selected="false">Recent News</button>
+					</div>
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="nav-one" role="tabpanel" aria-labelledby="nav-one-tab">
+							<div class="row gy-4">
+								{% cache 'breaking_news_small' %}
+								{% for news_item in breaking %}
+									<div class="col-xl-12 col-md-6 border-blog">
+										{% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': news_item,
                                     'truncate': 30,
                                     'maxHeight': 100,
                                     'width': 100
                                 } %}
-                            </div>
-                            {% endfor %}
-                            {% endcache %}
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="nav-two" role="tabpanel" aria-labelledby="nav-two-tab">
-                        <div class="row gy-4">
-                            {% cache 'slider_small' %}
-                            {% for slider_item in slider %}
-                            <div class="col-xl-12 col-md-6 border-blog">
-                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+									</div>
+								{% endfor %}
+								{% endcache %}
+							</div>
+						</div>
+						<div class="tab-pane fade" id="nav-two" role="tabpanel" aria-labelledby="nav-two-tab">
+							<div class="row gy-4">
+								{% cache 'slider_small' %}
+								{% for slider_item in slider %}
+									<div class="col-xl-12 col-md-6 border-blog">
+										{% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': slider_item,
                                     'truncate': 30,
                                     'maxHeight': 100,
                                     'width': 100
                                 } %}
-                            </div>
-                            {% endfor %}
-                            {% endcache %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+									</div>
+								{% endfor %}
+								{% endcache %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-<div>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="sec-title has-line">Cinema</h2>
-            </div>
-            <div class="col-auto">
-                <div class="sec-btn">
-                    <div class="icon-box">
-                        <button data-slick-prev="#blog-slide1" class="slick-arrow default">
-                            <i class="far fa-arrow-left"></i>
-                        </button>
-                        <button data-slick-next="#blog-slide1" class="slick-arrow default">
-                            <i class="far fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row th-carousel" id="blog-slide1" data-slide-show="4" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="2">
-            {% cache 'cinema_items' %}
-            {% for movie in cinema %}
-            <div class="col-sm-6 col-xl-4">
-                {% include '_partials/_mignature/_blog_item.html.twig' with {
+	<div>
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col">
+					<h2 class="sec-title has-line">Cinema</h2>
+				</div>
+				<div class="col-auto">
+					<div class="sec-btn">
+						<div class="icon-box">
+							<button data-slick-prev="#blog-slide1" class="slick-arrow default">
+								<i class="far fa-arrow-left"></i>
+							</button>
+							<button data-slick-next="#blog-slide1" class="slick-arrow default">
+								<i class="far fa-arrow-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row th-carousel" id="blog-slide1" data-slide-show="4" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="2">
+				{% cache 'cinema_items' %}
+				{% for movie in cinema %}
+					<div class="col-sm-6 col-xl-4">
+						{% include '_partials/_mignature/_blog_item.html.twig' with {
                     'item': movie,
                     'truncate': 35,
                     'maxHeight': 187,
                     'width': 288
                 } %}
-            </div>
-            {% endfor %}
-            {% endcache %}
-        </div>
-    </div>
-</div>
+					</div>
+				{% endfor %}
+				{% endcache %}
+			</div>
+		</div>
+	</div>
 
-<section class="space">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="sec-title has-line">Music</h2>
-            </div>
-            <div class="col-auto">
-                <div class="sec-btn">
-                    <div class="filter-menu filter-menu-active1">
-                        <button data-filter=".game" class="tab-btn active" type="button">Actualité</button>
-                        <button data-filter=".robotic" class="tab-btn" type="button">Critique</button>
-                        <button data-filter=".electric" class="tab-btn" type="button">Événement</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="filter-active-cat1">
-            {% for category, items in {'game': musique, 'robotic': critiques, 'electric': evenements} %}
-            <div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
-                <div class="col-xl-6 mb-35 mb-xl-0">
-                    <div class="blog-style1 style-big">
-                        {% set item = items[0] %}
-                        <div class="blog-img">
-                            <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
-                            <a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
-                        </div>
-                        <h3 class="box-title-30">
-                            {{ macros.truncate_title(slider[2], 75) }}
-                        </h3>
-                        <div class="blog-meta">
-                            <a href="">
-                                <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                            <a href="">
-                                <i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="row gy-4">
-                        {% cache 'music_items_' ~ category %}
-                        {% for item in items[1:4] %}
-                        <div class="col-xl-6 col-sm-6 border-blog two-column">
-                            {% include '_partials/_mignature/_blog_item.html.twig' with {
+	<section class="space">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col">
+					<h2 class="sec-title has-line">Music</h2>
+				</div>
+				<div class="col-auto">
+					<div class="sec-btn">
+						<div class="filter-menu filter-menu-active1">
+							<button data-filter=".game" class="tab-btn active" type="button">Actualité</button>
+							<button data-filter=".robotic" class="tab-btn" type="button">Critique</button>
+							<button data-filter=".electric" class="tab-btn" type="button">Événement</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="filter-active-cat1">
+				{% for category, items in {'game': musique, 'robotic': critiques, 'electric': evenements} %}
+					<div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
+						<div class="col-xl-6 mb-35 mb-xl-0">
+							<div class="blog-style1 style-big">
+								{% set item = items[0] %}
+								<div class="blog-img">
+									<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
+									<a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+								</div>
+								<h3 class="box-title-30">
+									{{ macros.truncate_title(slider[2], 75) }}
+								</h3>
+								<div class="blog-meta">
+									<a href="">
+										<i class="far fa-user"></i>
+										{{ item.user.pseudo|default('Default Author') }}</a>
+									<a href="">
+										<i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="row gy-4">
+								{% cache 'music_items_' ~ category %}
+								{% for item in items[1:4] %}
+									<div class="col-xl-6 col-sm-6 border-blog two-column">
+										{% include '_partials/_mignature/_blog_item.html.twig' with {
                                 'item': item,
                                 'truncate': 50,
                                 'maxHeight': 187,
                                 'width': 288
                             } %}
-                        </div>
-                        {% endfor %}
-                        {% endcache %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+									</div>
+								{% endfor %}
+								{% endcache %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
 
-<div class="container">
-    <a href="https://themeforest.net/user/themeholy/portfolio">
-        <img src="assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
-    </a>
-</div>
+	<div class="container">
+		<ins class="adsbygoogle" style="display:inline-block;width:1224px;height:100px" data-ad-client="ca-pub-0669489715091946" data-ad-slot="5326160941"></ins>
+		<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</div>
 
-<section class="space">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-8">
-                <h2 class="sec-title has-line">Manga</h2>
-                <div class="row gy-4">
-                    {% cache 'manga_articles' %}
-                    {% for article in more[0:2] %}
-                    <div class="col-sm-6 border-blog two-column">
-                        {% include '_partials/_mignature/_blog_item.html.twig' with {
+	<section class="space">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-8">
+					<h2 class="sec-title has-line">Manga</h2>
+					<div class="row gy-4">
+						{% cache 'manga_articles' %}
+						{% for article in more[0:2] %}
+							<div class="col-sm-6 border-blog two-column">
+								{% include '_partials/_mignature/_blog_item.html.twig' with {
                             'item': article,
                             'truncate': 50,
                             'maxHeight': 187,
                             'width': 288
                         } %}
-                    </div>
-                    {% endfor %}
-                    {% endcache %}
-                </div>
-            </div>
-            <div class="col-xl-4 mt-35 mt-xl-0">
-                <div class="nav tab-menu indicator-active" role="tablist">
-                    <button class="tab-btn active" id="nav2-one-tab" data-bs-toggle="tab" data-bs-target="#nav2-one" type="button" role="tab" aria-controls="nav2-one" aria-selected="true">Théatre</button>
-                    <button class="tab-btn" id="nav2-two-tab" data-bs-toggle="tab" data-bs-target="#nav2-two" type="button" role="tab" aria-controls="nav2-two" aria-selected="false">Drama</button>
-                    <button class="tab-btn" id="nav2-three-tab" data-bs-toggle="tab" data-bs-target="#nav2-three" type="button" role="tab" aria-controls="nav2-three" aria-selected="false">Voyage</button>
-                </div>
-                <div class="tab-content">
-                    {% set sections = {'nav2-one': theatres, 'nav2-two': dramas, 'nav2-three': voyage} %}
-                    {% for id, articles in sections %}
-                    <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" id="{{ id }}" role="tabpanel" aria-labelledby="{{ id }}-tab">
-                        <div class="row gy-4">
-                            {% cache 'tab_section_' ~ id %}
-                            {% for article in articles[0:3] %}
-                            <div class="col-xl-12 col-md-6 border-blog">
-                                {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+							</div>
+						{% endfor %}
+						{% endcache %}
+					</div>
+				</div>
+				<div class="col-xl-4 mt-35 mt-xl-0">
+					<div class="nav tab-menu indicator-active" role="tablist">
+						<button class="tab-btn active" id="nav2-one-tab" data-bs-toggle="tab" data-bs-target="#nav2-one" type="button" role="tab" aria-controls="nav2-one" aria-selected="true">Théatre</button>
+						<button class="tab-btn" id="nav2-two-tab" data-bs-toggle="tab" data-bs-target="#nav2-two" type="button" role="tab" aria-controls="nav2-two" aria-selected="false">Drama</button>
+						<button class="tab-btn" id="nav2-three-tab" data-bs-toggle="tab" data-bs-target="#nav2-three" type="button" role="tab" aria-controls="nav2-three" aria-selected="false">Voyage</button>
+					</div>
+					<div class="tab-content">
+						{% set sections = {'nav2-one': theatres, 'nav2-two': dramas, 'nav2-three': voyage} %}
+						{% for id, articles in sections %}
+							<div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" id="{{ id }}" role="tabpanel" aria-labelledby="{{ id }}-tab">
+								<div class="row gy-4">
+									{% cache 'tab_section_' ~ id %}
+									{% for article in articles[0:3] %}
+										<div class="col-xl-12 col-md-6 border-blog">
+											{% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': article,
                                     'truncate': 30,
                                     'maxHeight': 100,
                                     'width': 100
                                 } %}
-                            </div>
-                            {% endfor %}
-                            {% endcache %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+										</div>
+									{% endfor %}
+									{% endcache %}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-<div class="space dark-theme bg-title-dark">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="sec-title has-line">Latest Video</h2>
-            </div>
-            <div class="col-auto">
-                <div class="sec-btn">
-                    <div class="icon-box">
-                        <button data-slick-prev="#blog-video-slide1" class="slick-arrow default">
-                            <i class="far fa-arrow-left"></i>
-                        </button>
-                        <button data-slick-next="#blog-video-slide1" class="slick-arrow default">
-                            <i class="far fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include('_partials/_mignature/video.html.twig') %}
-    </div>
-</div>
+	<div class="space dark-theme bg-title-dark">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col">
+					<h2 class="sec-title has-line">Latest Video</h2>
+				</div>
+				<div class="col-auto">
+					<div class="sec-btn">
+						<div class="icon-box">
+							<button data-slick-prev="#blog-video-slide1" class="slick-arrow default">
+								<i class="far fa-arrow-left"></i>
+							</button>
+							<button data-slick-next="#blog-video-slide1" class="slick-arrow default">
+								<i class="far fa-arrow-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% include('_partials/_mignature/video.html.twig') %}
+		</div>
+	</div>
 
-<section class="space">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-9">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h2 class="sec-title has-line">JUSTFOCUS WEEKLY</h2>
-                    </div>
-                    <div class="col-auto">
-                        <div class="sec-btn">
-                            <div class="filter-menu filter-menu-active">
-                                <button data-filter="*" class="tab-btn active" type="button">All</button>
-                                <button data-filter=".cat1" class="tab-btn" type="button">Wanderlust</button>
-                                <button data-filter=".cat2" class="tab-btn" type="button">Movies</button>
-                                <button data-filter=".cat3" class="tab-btn" type="button">Books</button>
-                                <button data-filter=".cat4" class="tab-btn" type="button">TV Show</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="filter-active">
-                    {% macro render_blog_items(items, category) %}
-                    {% for item in items %}
-                    <div class="border-blog2 filter-item {{ category }}">
-                        <div class="blog-style4">
-                            <div class="blog-img">
-                                <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="width:300px; height:200px">
-                            </div>
-                            <div class="blog-content">
-                                <a data-theme-color="#FF9500" href="" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
-                                <h3 class="box-title-24">
-                                    {{ macros.truncate_title(item, 120) }}
-                                </h3>
-                                <p class="blog-text">{{ item.content|striptags|u.truncate(120)|default('Default Title') }}</p>
-                                <div class="blog-meta">
-                                    <a href="">
-                                        <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                                    <a href="">
-                                        <i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endmacro %}
-                    
-                    {% cache 'wanderlust' %}
-                    {{ _self.render_blog_items(wanderlust[0:4], 'cat1') }}
-                    {% endcache %}
-                    
-                    {% cache 'movies' %}
-                    {{ _self.render_blog_items(movies[0:4], 'cat2') }}
-                    {% endcache %}
-                    
-                    {% cache 'books' %}
-                    {{ _self.render_blog_items(books[0:4], 'cat3') }}
-                    {% endcache %}
-                    
-                    {% cache 'tvshows' %}
-                    {{ _self.render_blog_items(tvshows[0:4], 'cat4') }}
-                    {% endcache %}
-                </div>
-            </div>
-            <div class="col-xl-3 mt-35 mt-xl-0 mb-10 sidebar-wrap">
-                <div class="sidebar-area">
-                    <div class="widget mb-30">
-                        <div class="widget-ads">
-                            <a href="https://themeforest.net/user/themeholy/portfolio">
-                                <img class="w-100" src="assets/img/ads/siderbar_ads_1.jpg" alt="ads">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="widget newsletter-widget2 mb-30" data-bg-src="assets/img/bg/particle_bg_1.png">
-                        <h3 class="box-title-24">Subscribe Our Newsletter</h3>
-                        <form class="newsletter-form">
-                            <input class="form-control" type="email" placeholder="Enter Email" required="">
-                            <button type="submit" class="th-btn btn-fw">Subscribe Now</button>
-                        </form>
-                    </div>
-                    <div class="nav tab-menu indicator-active" role="tablist">
-                        <button class="tab-btn active" id="nav3-one-tab" data-bs-toggle="tab" data-bs-target="#nav3-one" type="button" role="tab" aria-controls="nav3-one" aria-selected="true">A découvrir</button>
-                        <button class="tab-btn" id="nav3-two-tab" data-bs-toggle="tab" data-bs-target="#nav3-two" type="button" role="tab" aria-controls="nav3-two" aria-selected="false">Meilleur articles</button>
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="nav3-one" role="tabpanel" aria-labelledby="nav3-one-tab">
-                            <div class="row gy-4">
-                                {% cache 'discover_random' %}
-                                {% for randomise in randomise %}
-                                <div class="col-xl-12 col-md-6 border-blog">
-                                    {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+	<section class="space">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-9">
+					<div class="row align-items-center">
+						<div class="col">
+							<h2 class="sec-title has-line">JUSTFOCUS WEEKLY</h2>
+						</div>
+						<div class="col-auto">
+							<div class="sec-btn">
+								<div class="filter-menu filter-menu-active">
+									<button data-filter="*" class="tab-btn active" type="button">All</button>
+									<button data-filter=".cat1" class="tab-btn" type="button">Wanderlust</button>
+									<button data-filter=".cat2" class="tab-btn" type="button">Movies</button>
+									<button data-filter=".cat3" class="tab-btn" type="button">Books</button>
+									<button data-filter=".cat4" class="tab-btn" type="button">TV Show</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="filter-active">
+						{% macro render_blog_items(items, category) %}
+							{% for item in items %}
+								<div class="border-blog2 filter-item {{ category }}">
+									<div class="blog-style4">
+										<div class="blog-img">
+											<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="width:300px; height:200px">
+										</div>
+										<div class="blog-content">
+											<a data-theme-color="#FF9500" href="" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+											<h3 class="box-title-24">
+												{{ macros.truncate_title(item, 120) }}
+											</h3>
+											<p class="blog-text">{{ item.content|striptags|u.truncate(120)|default('Default Title') }}</p>
+											<div class="blog-meta">
+												<a href="">
+													<i class="far fa-user"></i>
+													{{ item.user.pseudo|default('Default Author') }}</a>
+												<a href="">
+													<i class="fal fa-calendar-days"></i>
+													{{ item.date|date('d M Y') }}</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						{% endmacro %}
+
+						{% cache 'wanderlust' %}
+						{{ _self.render_blog_items(wanderlust[0:4], 'cat1') }}
+						{% endcache %}
+
+						{% cache 'movies' %}
+						{{ _self.render_blog_items(movies[0:4], 'cat2') }}
+						{% endcache %}
+
+						{% cache 'books' %}
+						{{ _self.render_blog_items(books[0:4], 'cat3') }}
+						{% endcache %}
+
+						{% cache 'tvshows' %}
+						{{ _self.render_blog_items(tvshows[0:4], 'cat4') }}
+						{% endcache %}
+					</div>
+				</div>
+				<div class="col-xl-3 mt-35 mt-xl-0 mb-10 sidebar-wrap">
+					<div class="sidebar-area">
+						<div class="widget mb-30">
+							<div class="widget-ads">
+								<a href="https://themeforest.net/user/themeholy/portfolio">
+									<img class="w-100" src="assets/img/ads/siderbar_ads_1.jpg" alt="ads">
+								</a>
+							</div>
+						</div>
+						<div class="widget newsletter-widget2 mb-30" data-bg-src="assets/img/bg/particle_bg_1.png">
+							<h3 class="box-title-24">Subscribe Our Newsletter</h3>
+							<form class="newsletter-form">
+								<input class="form-control" type="email" placeholder="Enter Email" required="">
+								<button type="submit" class="th-btn btn-fw">Subscribe Now</button>
+							</form>
+						</div>
+						<div class="nav tab-menu indicator-active" role="tablist">
+							<button class="tab-btn active" id="nav3-one-tab" data-bs-toggle="tab" data-bs-target="#nav3-one" type="button" role="tab" aria-controls="nav3-one" aria-selected="true">A découvrir</button>
+							<button class="tab-btn" id="nav3-two-tab" data-bs-toggle="tab" data-bs-target="#nav3-two" type="button" role="tab" aria-controls="nav3-two" aria-selected="false">Meilleur articles</button>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="nav3-one" role="tabpanel" aria-labelledby="nav3-one-tab">
+								<div class="row gy-4">
+									{% cache 'discover_random' %}
+									{% for randomise in randomise %}
+										<div class="col-xl-12 col-md-6 border-blog">
+											{% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                         'item': randomise,
                                         'truncate': 30,
                                         'maxHeight': 100,
                                         'width': 100
                                     } %}
-                                </div>
-                                {% endfor %}
-                                {% endcache %}
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="nav3-two" role="tabpanel" aria-labelledby="nav3-two-tab">
-                            <div class="row gy-4">
-                                {% cache 'discover_best' %}
-                                {% for bestof in bestof %}
-                                <div class="col-xl-12 col-md-6 border-blog">
-                                    {% include '_partials/_mignature/_blog_item_small.html.twig' with {
+										</div>
+									{% endfor %}
+									{% endcache %}
+								</div>
+							</div>
+							<div class="tab-pane fade" id="nav3-two" role="tabpanel" aria-labelledby="nav3-two-tab">
+								<div class="row gy-4">
+									{% cache 'discover_best' %}
+									{% for bestof in bestof %}
+										<div class="col-xl-12 col-md-6 border-blog">
+											{% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                         'item': bestof,
                                         'truncate': 30,
                                         'maxHeight': 100,
                                         'width': 100
                                     } %}
-                                </div>
-                                {% endfor %}
-                                {% endcache %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+										</div>
+									{% endfor %}
+									{% endcache %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-<div class="space-bottom">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="sec-title has-line">A découvrir</h2>
-            </div>
-            <div class="col-auto">
-                <div class="sec-btn">
-                    <div class="icon-box">
-                        <button data-slick-prev="#blog-slide3" class="slick-arrow default">
-                            <i class="far fa-arrow-left"></i>
-                        </button>
-                        <button data-slick-next="#blog-slide3" class="slick-arrow default">
-                            <i class="far fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row th-carousel" id="blog-slide3" data-slide-show="3" data-lg-slide-show="2" data-md-slide-show="2" data-sm-slide-show="1">
-            {% cache 'discover_carousel' %}
-            {% for discover in discover %}
-            <div class="col-sm-6 col-xl-4">
-                {% include '_partials/_mignature/_blog_item.html.twig' with {
+	<div class="space-bottom">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col">
+					<h2 class="sec-title has-line">A découvrir</h2>
+				</div>
+				<div class="col-auto">
+					<div class="sec-btn">
+						<div class="icon-box">
+							<button data-slick-prev="#blog-slide3" class="slick-arrow default">
+								<i class="far fa-arrow-left"></i>
+							</button>
+							<button data-slick-next="#blog-slide3" class="slick-arrow default">
+								<i class="far fa-arrow-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row th-carousel" id="blog-slide3" data-slide-show="3" data-lg-slide-show="2" data-md-slide-show="2" data-sm-slide-show="1">
+				{% cache 'discover_carousel' %}
+				{% for discover in discover %}
+					<div class="col-sm-6 col-xl-4">
+						{% include '_partials/_mignature/_blog_item.html.twig' with {
                     'item': discover,
                     'truncate': 50,
                     'maxHeight': 187,
                     'width': 288
                 } %}
-            </div>
-            {% endfor %}
-            {% endcache %}
-        </div>
-    </div>
-</div>
+					</div>
+				{% endfor %}
+				{% endcache %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

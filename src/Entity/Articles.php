@@ -49,10 +49,17 @@ class Articles
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $visit = null;
 
+    /**
+     * @var Collection<int, Tags>
+     */
+    #[ORM\ManyToMany(targetEntity: Tags::class, mappedBy: 'article')]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->media = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +215,33 @@ class Articles
     public function setVisit(?string $visit): static
     {
         $this->visit = $visit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tags>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tags $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tags $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeArticle($this);
+        }
 
         return $this;
     }
