@@ -1,3 +1,4 @@
+{% import '_partials/_macro/_url_articles.html.twig' as macros %}
 
 {% apply spaceless %}
     <div itemscope itemtype="https://schema.org/NewsArticle">
@@ -11,14 +12,8 @@
                 </a>
             </div>
             <h3 class="box-title-22">
-                <a class="hover-line"
-                   href="{{ path('app_articles', {
-                       'slug': item.slug,
-                       'souscategorie': item.categories[0].slug,
-                       'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                   }
-                   )
-                   }}" itemprop="headline">{{ item.title|u.truncate(truncate) }}</a></h3>
+                {{ macros.truncate_title(item, 50) }}
+            </h3>
             <div class="blog-meta">
                 <a href=""><i class="far fa-user"></i><span itemprop="author">{{ item.user.pseudo }}</span></a>
                 <a href=""><i class="fal fa-calendar-days"></i><span itemprop="datePublished">{{ item.date|date('Y-m-d') }}</span></a>

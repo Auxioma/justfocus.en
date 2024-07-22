@@ -2,14 +2,20 @@
 <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/Article">
     <div class="blog-img">
         <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:{{ maxHeight }}px" height="{{ maxHeight }}" itemprop="image">
-        <a data-theme-color="#FF9500" href="blog.html" class="category" itemprop="about">
+        <a data-theme-color="#FF9500" href="" class="category" itemprop="about">
             {{ item.categories[0].name }}
         </a>
     </div>
-    <h3 class="box-title-30" itemprop="headline"><a class="hover-line" href="blog-details.html">{{ item.title|u.truncate(truncate) }}</a></h3>
+    <h3 class="box-title-30" itemprop="headline">
+        <a class="hover-line" href="blog-details.html">
+            {{ item.title|u.truncate(truncate) }}
+        </a>
+    </h3>
+    
+    
     <div class="blog-meta" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <a href="author.html"><i class="far fa-user"></i><span itemprop="name">{{ item.user.pseudo }}</span></a>
-        <a href="blog.html"><i class="fal fa-calendar-days"></i><time itemprop="datePublished" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time></a>
+        <a href=""><i class="far fa-user"></i><span itemprop="name">{{ item.user.pseudo }}</span></a>
+        <a href=""><i class="fal fa-calendar-days"></i><time itemprop="datePublished" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time></a>
     </div>
     <meta itemprop="dateModified" content="{{ item.updatedAt|date('Y-m-d') }}">
     <meta itemprop="mainEntityOfPage" content="blog-details.html">

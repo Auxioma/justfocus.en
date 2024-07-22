@@ -1,6 +1,6 @@
 {% macro breaking_news_link(item) %}
     {% set last_category = item.categories|last %}
-    {% if last_category %}
+    {% if last_category.parent %}
         <a href="{{ path('app_articles', {
             'slug': item.slug,
             'souscategorie': last_category.slug,
@@ -13,7 +13,7 @@
 
 {% macro truncate_title(item, length) %}
     {% set last_category = item.categories|last %}
-    {% if last_category %}
+    {% if last_category.parent %}
         <a class="hover-line" href="{{ path('app_articles', {
             'slug': item.slug,
             'souscategorie': last_category.slug,
