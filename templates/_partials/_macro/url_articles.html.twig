@@ -1,0 +1,25 @@
+{% macro breaking_news_link(item) %}
+    {% set last_category = item.categories|last %}
+    {% if last_category %}
+        <a href="{{ path('app_articles', {
+            'slug': item.slug,
+            'souscategorie': last_category.slug,
+            'categorie': last_category.parent.slug
+        }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title }}</span>
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{% macro truncate_title(item, length) %}
+    {% set last_category = item.categories|last %}
+    {% if last_category %}
+        <a class="hover-line" href="{{ path('app_articles', {
+            'slug': item.slug,
+            'souscategorie': last_category.slug,
+            'categorie': last_category.parent.slug
+        }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title|u.truncate(length) }}</span>
+        </a>
+    {% endif %}
+{% endmacro %}

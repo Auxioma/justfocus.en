@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
+{% import '_partials/_macro/url_articles.html.twig' as macros %}
 
 {% block title %}Just Focus{% endblock %}
 
 {% block body %}
+
 <div>
     <div class="container">
         <div class="news-area">
@@ -12,13 +14,7 @@
                     {% cache 'breaking_news' %}
                     {% for item in breaking %}
                     <div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-                        <a href="{{ path('app_articles', {
-                            'slug': item.slug,
-                            'souscategorie': item.categories[0].slug,
-                            'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                        }) }}" class="breaking-news" itemprop="url">
-                            <span itemprop="headline">{{ item.title }}</span>
-                        </a>
+                        {{ macros.breaking_news_link(item) }}
                     </div>
                     {% endfor %}
                     {% endcache %}
@@ -53,11 +49,7 @@
                         <a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
                     </div>
                     <h3 class="box-title-30">
-                        <a class="hover-line" href="{{ path('app_articles', {
-                            'slug': slider[2].slug,
-                            'souscategorie': slider[2].categories[0].slug,
-                            'categorie': slider[2].categories[0].parent ? slider[2].categories[0].parent.slug : 'no-category'
-                        }) }}">{{ slider[2].title|u.truncate(75) }}</a>
+                        {{ macros.truncate_title(slider[2], 75) }}
                     </h3>
                     <div class="blog-meta">
                         <a href="author.html">
@@ -171,11 +163,7 @@
                             <a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
                         </div>
                         <h3 class="box-title-30">
-                            <a class="hover-line" href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">{{ item.title|u.truncate(30)|default('Default Title') }}</a>
+                            {{ macros.truncate_title(slider[2], 75) }}
                         </h3>
                         <div class="blog-meta">
                             <a href="author.html">
