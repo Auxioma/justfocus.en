@@ -1,15 +1,15 @@
+{% import '_partials/_macro/_url_articles.html.twig' as macros %}
+
 {% apply spaceless %}
 <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/Article">
     <div class="blog-img">
-        <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="max-height:{{ maxHeight }}px" height="{{ maxHeight }}" itemprop="image">
+        <img src="{{ item.media|first.guid }}" alt="{{ item.media|first.title }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }} width="{{ width }}" itemprop="image">
         <a data-theme-color="#FF9500" href="" class="category" itemprop="about">
             {{ item.categories[0].name }}
         </a>
     </div>
     <h3 class="box-title-30" itemprop="headline">
-        <a class="hover-line" href="blog-details.html">
-            {{ item.title|u.truncate(truncate) }}
-        </a>
+        {{ macros.truncate_title(item, 30) }}
     </h3>
     
     

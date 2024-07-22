@@ -25,30 +25,29 @@ class HomeController extends AbstractController
     ];
 
     public function __construct(
-        private readonly ArticlesRepository $article
+        private readonly ArticlesRepository $articleRepository
     ){}
 
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
         // Fetch categorized articles
-        $categorizedArticles = [];
-        foreach (self::CATEGORIES as $key => $category) {
-            $categorizedArticles[$key] = $this->article->findByCategory($category);
-        }
+        $categorizedArticles = array_map(
+            fn($category) => $this->articleRepository->findByCategory($category),
+            self::CATEGORIES
+        );
 
         // Fetch common queries
-        $breaking = $this->article->findBy([], ['modified' => 'DESC'], 4);
-        $slider = $this->article->findBy([], ['id' => 'DESC'], 4);
-        $bestof = $this->article->findBy([], ['visit' => 'DESC'], 4);
-        $discover = $this->article->findBy([], ['visit' => 'DESC'], 4);
-        $randomise = $this->article->RandomArticles();
+        $breaking = $this->articleRepository->findBy([], ['modified' => 'DESC'], 4);
+        $slider = $this->articleRepository->findBy([], ['id' => 'DESC'], 4);
+        $bestofAndDiscover = $this->articleRepository->findBy([], ['visit' => 'DESC'], 4);
+        $randomise = $this->articleRepository->RandomArticles();
 
         return $this->render('home/index.html.twig', array_merge([
             'breaking' => $breaking,
             'slider' => $slider,
-            'bestof' => $bestof,
-            'discover' => $discover,
+            'bestof' => $bestofAndDiscover,
+            'discover' => $bestofAndDiscover,
             'randomise' => $randomise,
         ], $categorizedArticles));
     }

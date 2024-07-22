@@ -35,7 +35,8 @@
                         {% include '_partials/_mignature/_blog_item.html.twig' with {
                             'item': item,
                             'truncate': 50,
-                            'maxHeight': 187
+                            'maxHeight': 187,
+                            'width': 288,
                         } %}
                     </div>
                     {% endfor %}
@@ -45,16 +46,16 @@
             <div class="col-xl-6 mt-4 mt-xl-0">
                 <div class="blog-style1 style-big">
                     <div class="blog-img">
-                        <img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="max-height:490px">
+                        <img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="height:490px; width:600px">
                         <a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
                     </div>
                     <h3 class="box-title-30">
                         {{ macros.truncate_title(slider[2], 75) }}
                     </h3>
                     <div class="blog-meta">
-                        <a href="author.html">
+                        <a href="">
                             <i class="far fa-user"></i>{{ slider[2].user.pseudo }}</a>
-                        <a href="blog.html">
+                        <a href="">
                             <i class="fal fa-calendar-days"></i>{{ slider[2].date|date('d M Y') }}</a>
                     </div>
                 </div>
@@ -73,7 +74,8 @@
                                 {% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': news_item,
                                     'truncate': 30,
-                                    'maxHeight': 100
+                                    'maxHeight': 100,
+                                    'width': 100
                                 } %}
                             </div>
                             {% endfor %}
@@ -88,7 +90,8 @@
                                 {% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': slider_item,
                                     'truncate': 30,
-                                    'maxHeight': 100
+                                    'maxHeight': 100,
+                                    'width': 100
                                 } %}
                             </div>
                             {% endfor %}
@@ -127,7 +130,8 @@
                 {% include '_partials/_mignature/_blog_item.html.twig' with {
                     'item': movie,
                     'truncate': 35,
-                    'maxHeight': 187
+                    'maxHeight': 187,
+                    'width': 288
                 } %}
             </div>
             {% endfor %}
@@ -166,13 +170,9 @@
                             {{ macros.truncate_title(slider[2], 75) }}
                         </h3>
                         <div class="blog-meta">
-                            <a href="author.html">
+                            <a href="">
                                 <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                            <a href="{{ path('app_articles', {
-                                'slug': item.slug,
-                                'souscategorie': item.categories[0].slug,
-                                'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                            }) }}">
+                            <a href="">
                                 <i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
                         </div>
                     </div>
@@ -185,7 +185,8 @@
                             {% include '_partials/_mignature/_blog_item.html.twig' with {
                                 'item': item,
                                 'truncate': 50,
-                                'maxHeight': 187
+                                'maxHeight': 187,
+                                'width': 288
                             } %}
                         </div>
                         {% endfor %}
@@ -216,7 +217,8 @@
                         {% include '_partials/_mignature/_blog_item.html.twig' with {
                             'item': article,
                             'truncate': 50,
-                            'maxHeight': 187
+                            'maxHeight': 187,
+                            'width': 288
                         } %}
                     </div>
                     {% endfor %}
@@ -240,7 +242,8 @@
                                 {% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                     'item': article,
                                     'truncate': 30,
-                                    'maxHeight': 100
+                                    'maxHeight': 100,
+                                    'width': 100
                                 } %}
                             </div>
                             {% endfor %}
@@ -306,23 +309,15 @@
                                 <img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="width:300px; height:200px">
                             </div>
                             <div class="blog-content">
-                                <a data-theme-color="#FF9500" href="blog.html" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+                                <a data-theme-color="#FF9500" href="" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
                                 <h3 class="box-title-24">
-                                    <a class="hover-line" href="{{ path('app_articles', {
-                                        'slug': item.slug,
-                                        'souscategorie': item.categories[0].slug,
-                                        'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                                    }) }}">{{ item.title|u.truncate(120)|default('Default Title') }}</a>
+                                    {{ macros.truncate_title(item, 120) }}
                                 </h3>
                                 <p class="blog-text">{{ item.content|striptags|u.truncate(120)|default('Default Title') }}</p>
                                 <div class="blog-meta">
-                                    <a href="author.html">
+                                    <a href="">
                                         <i class="far fa-user"></i>{{ item.user.pseudo|default('Default Author') }}</a>
-                                    <a href="{{ path('app_articles', {
-                                        'slug': item.slug,
-                                        'souscategorie': item.categories[0].slug,
-                                        'categorie': item.categories[0].parent ? item.categories[0].parent.slug : 'no-category'
-                                    }) }}">
+                                    <a href="">
                                         <i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
                                 </div>
                             </div>
@@ -377,7 +372,8 @@
                                     {% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                         'item': randomise,
                                         'truncate': 30,
-                                        'maxHeight': 100
+                                        'maxHeight': 100,
+                                        'width': 100
                                     } %}
                                 </div>
                                 {% endfor %}
@@ -392,7 +388,8 @@
                                     {% include '_partials/_mignature/_blog_item_small.html.twig' with {
                                         'item': bestof,
                                         'truncate': 30,
-                                        'maxHeight': 100
+                                        'maxHeight': 100,
+                                        'width': 100
                                     } %}
                                 </div>
                                 {% endfor %}
@@ -432,7 +429,8 @@
                 {% include '_partials/_mignature/_blog_item.html.twig' with {
                     'item': discover,
                     'truncate': 50,
-                    'maxHeight': 187
+                    'maxHeight': 187,
+                    'width': 288
                 } %}
             </div>
             {% endfor %}

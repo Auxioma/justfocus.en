@@ -1,15 +1,19 @@
+{% import '_partials/_macro/_url_articles.html.twig' as macros %}
+
 {% apply spaceless %}
     <div class="blog-style2">
         <div class="blog-img">
-            <img src="{{ item.media|first.guid }}" alt="blog image" style="max-height:{{ maxHeight }}px">
+            <img src="{{ item.media|first.guid }}" alt="blog image" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }} width="{{ width }}">
         </div>
         <div class="blog-content">
             <a data-theme-color="#FF9500" href="blog.html" class="category">
                 {{ item.categories[0].name }}
             </a>
-            <h3 class="box-title-18"><a class="hover-line" href="blog-details.html">{{ item.title|u.truncate(truncate) }}</a></h3>
+            <h3 class="box-title-18">
+                {{ macros.truncate_title(item, 30) }}
+            </h3>
             <div class="blog-meta">
-                <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
+                <a href=""><i class="fal fa-calendar-days"></i>{{ item.date|date('d M Y') }}</a>
             </div>
         </div>
     </div>
