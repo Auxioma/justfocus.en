@@ -48,6 +48,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/{categorie}/{souscategorie}/{slug}', name: 'app_articles')]
+    #[Route('/{categorie}/{slug}', name: 'app_articles_without_souscategory')]
     public function articles(): Response
     {
         return $this->render('category/articles.html.twig');
