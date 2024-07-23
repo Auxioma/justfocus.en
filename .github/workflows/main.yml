@@ -20,4 +20,4 @@ jobs:
       - name: deploy
         run: 
           sshpass -e ssh -o  stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }} -p 5022
-          "cd public_html/ && git pull && php composer.phar install && php bin/console d:s:u --force && php bin/console cache:clear"
+          "cd public_html/ && git pull && php composer.phar dump-env dev && php composer.phar install && php bin/console d:s:u --force && php composer.phar dump-env prod && php bin/console cache:clear"

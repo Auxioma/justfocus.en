@@ -4,6 +4,7 @@ namespace App\Controller\Api\Insert;
 
 use App\Entity\Media;
 use App\Repository\ArticlesRepository;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MediaWordpressController extends AbstractController
 {
     #[Route('/api/media/', name: 'api_media_wordpress')]
-    public function index(ArticlesRepository $articlesRepository, EntityManagerInterface $entityManager)
+    public function index(ArticlesRepository $articlesRepository, MediaRepository $mediaRepository, EntityManagerInterface $entityManager)
     {
         // Récupérer tous les articles depuis le repository
         $articles = $articlesRepository->findAll();
@@ -46,22 +47,57 @@ class MediaWordpressController extends AbstractController
 
                     // Parcourir chaque média et les insérer en base de données
                     foreach ($mediaItems as $mediaItem) {
+                        // Vérifier si le média existe déjà
+                        $existingMedia = $mediaRepository->find($mediaItem['id']);
+                        if ($existingMedia) {
+                            // Ignorer les médias existants
+                            continue;
+                        }
+
+                        // Télécharger l'image
+                        $mediaUrl = $mediaItem['guid']['rendered'];
+                        if ($mediaUrl) {
+                            $imageContent = file_get_contents($mediaUrl);
+
+                            // Générer le chemin du fichier
+                            $mediaId = $mediaItem['id'];
+                            $mediaIdArray = str_split($mediaId);
+                            $mediaPath = 'C:\laragon\www\justfocus.en\public/images/' . implode('/', $mediaIdArray) . '/';
+
+                            // Générer un ID unique plus sécurisé
+                            $uniqueId = uniqid() . '-' . md5(uniqid(rand(), true));
+
+                            // Générer le nom du fichier
+                            $mediaFileName = $mediaPath . $uniqueId . '.jpg';
+
+                            // Créer le dossier
+                            if (!file_exists($mediaPath)) {
+                                mkdir($mediaPath, 0777, true);
+                            }
+
+                            // Écrire le contenu de l'image dans le fichier
+                            file_put_contents($mediaFileName, $imageContent);
+
+                            // Stocker le chemin dans la base de données
+                            $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $uniqueId . '.jpg';
+                        } else {
+                            $mediaFileName = '/images/default.webp';
+                        }
+
                         $media = new Media();
                         $media->setId($mediaItem['id']);
-                        $media->setDate(new \DateTime($mediaItem['date'])); // Assurez-vous que 'date' correspond à un format valide
-                        $media->setModified(new \DateTime($mediaItem['modified'])); // Assurez-vous que 'modified' correspond à un format valide
+                        $media->setDate(new \DateTime($mediaItem['date']));
+                        $media->setModified(new \DateTime($mediaItem['modified']));
                         $media->setSlug($mediaItem['slug']);
-                        $media->setGuid($mediaItem['guid']['rendered']); // Utilisez la clé 'rendered' pour obtenir la chaîne de caractères
-                        
-                        $maxTitleLength = 255; // Remplacez 255 par la longueur maximale autorisée de votre colonne 'title'
-                        
+                        $media->setGuid($mediaFileName);
+
+                        $maxTitleLength = 255;
                         $title = $mediaItem['title']['rendered'];
-                        
                         if (strlen($title) > $maxTitleLength) {
                             $title = substr($title, 0, $maxTitleLength);
                         }
                         $media->setTitle($title);
-                        
+
                         // Associer le média à l'article actuel
                         $media->setPost($article);
 
@@ -86,3 +122,4 @@ class MediaWordpressController extends AbstractController
         return new JsonResponse($mediaData);
     }
 }
+

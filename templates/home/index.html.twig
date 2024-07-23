@@ -34,11 +34,11 @@
 						{% for item in slider[:2] %}
 							<div class="col-xl-12 col-sm-6 border-blog">
 								{% include '_partials/_mignature/_blog_item.html.twig' with {
-                            'item': item,
-                            'truncate': 50,
-                            'maxHeight': 187,
-                            'width': 288,
-                        } %}
+                                'item': item|default({}),
+                                'truncate': 50,
+                                'maxHeight': 187,
+                                'width': 288,
+                            } %}
 							</div>
 						{% endfor %}
 						{% endcache %}
@@ -47,19 +47,19 @@
 				<div class="col-xl-6 mt-4 mt-xl-0">
 					<div class="blog-style1 style-big">
 						<div class="blog-img">
-							<img src="{{ slider[2].media|first.guid }}" alt="{{ slider[2].media|first.title }}" style="height:490px; width:600px">
-							<a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name }}</a>
+							<img src="{{ slider[2].media|first.guid|default('images/default.webp') }}" alt="{{ slider[2].media|first.title|default('Default Title') }}" style="height:490px; width:600px">
+							<a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name|default('Default Category') }}</a>
 						</div>
 						<h3 class="box-title-30">
-							{{ macros.truncate_title(slider[2], 75) }}
+							{{ macros.truncate_title(slider[2]|default({}), 75) }}
 						</h3>
 						<div class="blog-meta">
 							<a href="">
 								<i class="far fa-user"></i>
-								{{ slider[2].user.pseudo }}</a>
+								{{ slider[2].user.pseudo|default('Default User') }}</a>
 							<a href="">
 								<i class="fal fa-calendar-days"></i>
-								{{ slider[2].date|date('d M Y') }}</a>
+								{{ slider[2].date|date('d M Y')|default('01 Jan 2024') }}</a>
 						</div>
 					</div>
 				</div>
@@ -75,11 +75,11 @@
 								{% for news_item in breaking %}
 									<div class="col-xl-12 col-md-6 border-blog">
 										{% include '_partials/_mignature/_blog_item_small.html.twig' with {
-                                    'item': news_item,
-                                    'truncate': 30,
-                                    'maxHeight': 100,
-                                    'width': 100
-                                } %}
+                                        'item': news_item|default({}),
+                                        'truncate': 30,
+                                        'maxHeight': 100,
+                                        'width': 100
+                                    } %}
 									</div>
 								{% endfor %}
 								{% endcache %}
@@ -91,11 +91,11 @@
 								{% for slider_item in slider %}
 									<div class="col-xl-12 col-md-6 border-blog">
 										{% include '_partials/_mignature/_blog_item_small.html.twig' with {
-                                    'item': slider_item,
-                                    'truncate': 30,
-                                    'maxHeight': 100,
-                                    'width': 100
-                                } %}
+                                        'item': slider_item|default({}),
+                                        'truncate': 30,
+                                        'maxHeight': 100,
+                                        'width': 100
+                                    } %}
 									</div>
 								{% endfor %}
 								{% endcache %}
@@ -106,6 +106,7 @@
 			</div>
 		</div>
 	</section>
+
 
 	<div>
 		<div class="container">
@@ -160,46 +161,56 @@
 				</div>
 			</div>
 			<div class="filter-active-cat1">
-				{% for category, items in {'game': musique, 'robotic': critiques, 'electric': evenements} %}
-					<div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
-						<div class="col-xl-6 mb-35 mb-xl-0">
-							<div class="blog-style1 style-big">
-								{% set item = items[0] %}
-								<div class="blog-img">
-									<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
-									<a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
-								</div>
-								<h3 class="box-title-30">
-									{{ macros.truncate_title(slider[2], 75) }}
-								</h3>
-								<div class="blog-meta">
-									<a href="">
-										<i class="far fa-user"></i>
-										{{ item.user.pseudo|default('Default Author') }}</a>
-									<a href="">
-										<i class="fal fa-calendar-days"></i>22 Mar, 2023</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-xl-6">
-							<div class="row gy-4">
-								{% cache 'music_items_' ~ category %}
-								{% for item in items[1:4] %}
-									<div class="col-xl-6 col-sm-6 border-blog two-column">
-										{% include '_partials/_mignature/_blog_item.html.twig' with {
-                                'item': item,
-                                'truncate': 50,
-                                'maxHeight': 187,
-                                'width': 288
-                            } %}
+				{% for category, items in {'game': musique|default([]), 'robotic': critiques|default([]), 'electric': evenements|default([])} %}
+					{% if items|length > 0 %}
+						<div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
+							<div class="col-xl-6 mb-35 mb-xl-0">
+								<div class="blog-style1 style-big">
+									{% set item = items[0]|default({}) %}
+									<div class="blog-img">
+										<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
+										<a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
 									</div>
-								{% endfor %}
-								{% endcache %}
+									<h3 class="box-title-30">
+										{{ macros.truncate_title(item|default({}), 75) }}
+									</h3>
+									<div class="blog-meta">
+										<a href="">
+											<i class="far fa-user"></i>
+											{{ item.user.pseudo|default('Default Author') }}</a>
+										<a href="">
+											<i class="fal fa-calendar-days"></i>
+											{{ item.date|date('d M, Y')|default('22 Mar, 2023') }}</a>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="row gy-4">
+									{% cache 'music_items_' ~ category %}
+									{% for item in items[1:4] %}
+										<div class="col-xl-6 col-sm-6 border-blog two-column">
+											{% include '_partials/_mignature/_blog_item.html.twig' with {
+                                    'item': item|default({}),
+                                    'truncate': 50,
+                                    'maxHeight': 187,
+                                    'width': 288
+                                } %}
+										</div>
+									{% endfor %}
+									{% endcache %}
+								</div>
 							</div>
 						</div>
-					</div>
+					{% else %}
+						<div class="row filter-item {{ category }} {% if category == 'game' %}active-filter{% endif %}">
+							<div class="col-xl-12">
+								<p>No items available in this category.</p>
+							</div>
+						</div>
+					{% endif %}
 				{% endfor %}
 			</div>
+
 		</div>
 	</section>
 

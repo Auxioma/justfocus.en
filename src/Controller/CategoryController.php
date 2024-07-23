@@ -22,7 +22,7 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/{category}/{slug}', name: 'app_sous_category')]
-    #[Route('/{slug}', name: 'app_category')]
+    #[Route('/{slug}', name: 'app_category', priority: 2)]
     public function index(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $category = $this->categoryRepository->findOneBySlug($slug);
