@@ -64,7 +64,7 @@ class MediaWordpressController extends AbstractController
                             // Générer le chemin du fichier
                             $mediaId = $mediaItem['id'];
                             $mediaIdArray = str_split($mediaId);
-                            $mediaPath = 'C:\laragon\www\justfocus.en\public/images/' . implode('/', $mediaIdArray) . '/';
+                            $mediaPath = '/home/zuhpqwez/public_html/public/images/' . implode('/', $mediaIdArray) . '/';
 
                             // Générer un ID unique plus sécurisé
                             // $uniqueId = uniqid() . '-' . md5(uniqid(rand(), true));
