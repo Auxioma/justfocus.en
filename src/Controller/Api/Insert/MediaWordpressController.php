@@ -92,7 +92,7 @@ class MediaWordpressController extends AbstractController
                                 imagedestroy($image);
                                 $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $mediaId . '.webp';
                             } else {
-                                $mediaFileName = '/images/default.webp';
+                                $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $mediaId . '.png';
                             }
                         } else {
                             $mediaFileName = '/images/default.webp';
