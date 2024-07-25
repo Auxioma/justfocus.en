@@ -16,74 +16,82 @@ class MediaWordpressController extends AbstractController
     #[Route('/api/media/', name: 'api_media_wordpress')]
     public function index(ArticlesRepository $articlesRepository, MediaRepository $mediaRepository)
     {
-        // Récupérer tous les articles depuis le repository
+        // Retrieve all articles from the repository
         $articles = $articlesRepository->findAll();
 
-        // URL de l'API WordPress
+        // WordPress API URL
         $wordpressApiUrl = 'https://justfocus.fr/wp-json/wp/v2/media';
 
-        // Instanciation du client Guzzle HTTP
+        // Instantiate the Guzzle HTTP client
         $client = new Client();
 
-        // Tableau pour stocker les médias de chaque article
+        // Array to store media for each article
         $mediaData = [];
 
-        // Parcourir chaque article
+        // Iterate over each article
         foreach ($articles as $article) {
             $articleId = $article->getId();
 
             try {
-                // Faire la requête GET à l'API WordPress pour récupérer les médias de cet article
+                // Make the GET request to the WordPress API to fetch media for this article
                 $response = $client->request('GET', $wordpressApiUrl, [
                     'query' => [
                         'parent' => $articleId,
                     ],
                 ]);
 
-                // Vérifier le code de statut de la réponse
+                // Check the response status code
                 if ($response->getStatusCode() === 200) {
-                    // Décoder la réponse JSON
+                    // Decode the JSON response
                     $mediaItems = json_decode($response->getBody()->getContents(), true);
 
-                    // Assurer qu'il y ait au moins un média
+                    // Ensure there's at least one media item
                     if (count($mediaItems) > 0) {
-                        $mediaItem = $mediaItems[0]; // Prendre seulement le premier média
+                        $mediaItem = $mediaItems[0]; // Take only the first media item
 
-                        // Vérifier si le média existe déjà
+                        // Check if the media already exists
                         $existingMedia = $mediaRepository->find($mediaItem['id']);
                         if ($existingMedia) {
-                            // Ignorer les médias existants
+                            // Skip existing media
                             continue;
                         }
 
-                        // Télécharger l'image
+                        // Download the image
                         $mediaUrl = $mediaItem['guid']['rendered'];
                         if ($mediaUrl) {
                             $imageContent = file_get_contents($mediaUrl);
 
-                            // Générer le chemin du fichier
+                            // Generate the file path
                             $mediaId = $mediaItem['id'];
                             $mediaIdArray = str_split($mediaId);
-                            $mediaPath = '/home/zuhpqwez/public_html/public/images/' . implode('/', $mediaIdArray) . '/';
 
-                            // Générer un ID unique plus sécurisé
-                            // $uniqueId = uniqid() . '-' . md5(uniqid(rand(), true));
-                            $uniqueId = $mediaId;
+                            $env = $_ENV['APP_ENV'] ?? 'prod';
+                            $mediaPath = ($env === 'prod')
+                                ? '/var/www/justfocus/public/images/' . implode('/', $mediaIdArray) . '/'
+                                : 'C:\laragon\www\justfocus.en\public/images/' . implode('/', $mediaIdArray) . '/';
 
-                            // Créer le dossier
+                            // Create the directory
                             if (!file_exists($mediaPath)) {
                                 mkdir($mediaPath, 0777, true);
                             }
 
-                            // Chemin du fichier final en WEBP
-                            $mediaFileNameWebP = $mediaPath . $uniqueId . '.webp';
+                            // Final file path for the WebP image
+                            $mediaFileNameWebP = $mediaPath . $mediaId . '.webp';
 
-                            // Convertir l'image en WEBP
+                            // Convert the image to WebP
                             $image = imagecreatefromstring($imageContent);
                             if ($image !== false) {
+                                // Check if the image is a palette image and convert to true color if necessary
+                                if (!imageistruecolor($image)) {
+                                    $trueColorImage = imagecreatetruecolor(imagesx($image), imagesy($image));
+                                    imagecopy($trueColorImage, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+                                    imagedestroy($image);
+                                    $image = $trueColorImage;
+                                }
+
                                 imagewebp($image, $mediaFileNameWebP);
                                 imagedestroy($image);
-                                $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $uniqueId . '.webp';
+                                $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $mediaId . '.webp';
                             } else {
                                 $mediaFileName = '/images/default.webp';
                             }
@@ -105,24 +113,24 @@ class MediaWordpressController extends AbstractController
                         }
                         $media->setTitle($title);
 
-                        // Associer le média à l'article actuel
+                        // Associate the media with the current article
                         $media->setPost($article);
 
-                        // Utiliser la méthode save du repository pour enregistrer l'entité
+                        // Use the repository's save method to store the entity
                         $mediaRepository->save($media);
                         $mediaData[] = $media;
                     }
                 } else {
-                    // Gérer les erreurs de requête si nécessaire
-                    $mediaData[$articleId] = ['error' => 'Erreur lors de la récupération des médias.'];
+                    // Handle request errors if necessary
+                    $mediaData[$articleId] = ['error' => 'Error retrieving media.'];
                 }
             } catch (\Exception $e) {
-                // Gérer les exceptions si la requête échoue
-                $mediaData[$articleId] = ['error' => 'Erreur lors de la récupération des médias : ' . $e->getMessage()];
+                // Handle exceptions if the request fails
+                $mediaData[$articleId] = ['error' => 'Error retrieving media: ' . $e->getMessage()];
             }
         }
 
-        // Retourner les données sous forme de réponse JSON
+        // Return the data as a JSON response
         return new JsonResponse($mediaData);
     }
 }
