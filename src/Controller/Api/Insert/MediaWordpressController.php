@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MediaWordpressController extends AbstractController
 {
     #[Route('/api/media/', name: 'api_media_wordpress')]
-    public function index(ArticlesRepository $articlesRepository, MediaRepository $mediaRepository, EntityManagerInterface $entityManager)
+    public function index(ArticlesRepository $articlesRepository, MediaRepository $mediaRepository)
     {
         // Récupérer tous les articles depuis le repository
         $articles = $articlesRepository->findAll();
@@ -45,8 +45,10 @@ class MediaWordpressController extends AbstractController
                     // Décoder la réponse JSON
                     $mediaItems = json_decode($response->getBody()->getContents(), true);
 
-                    // Parcourir chaque média et les insérer en base de données
-                    foreach ($mediaItems as $mediaItem) {
+                    // Assurer qu'il y ait au moins un média
+                    if (count($mediaItems) > 0) {
+                        $mediaItem = $mediaItems[0]; // Prendre seulement le premier média
+
                         // Vérifier si le média existe déjà
                         $existingMedia = $mediaRepository->find($mediaItem['id']);
                         if ($existingMedia) {
@@ -65,21 +67,26 @@ class MediaWordpressController extends AbstractController
                             $mediaPath = 'C:\laragon\www\justfocus.en\public/images/' . implode('/', $mediaIdArray) . '/';
 
                             // Générer un ID unique plus sécurisé
-                            $uniqueId = uniqid() . '-' . md5(uniqid(rand(), true));
-
-                            // Générer le nom du fichier
-                            $mediaFileName = $mediaPath . $uniqueId . '.jpg';
+                            // $uniqueId = uniqid() . '-' . md5(uniqid(rand(), true));
+                            $uniqueId = $mediaId;
 
                             // Créer le dossier
                             if (!file_exists($mediaPath)) {
                                 mkdir($mediaPath, 0777, true);
                             }
 
-                            // Écrire le contenu de l'image dans le fichier
-                            file_put_contents($mediaFileName, $imageContent);
+                            // Chemin du fichier final en WEBP
+                            $mediaFileNameWebP = $mediaPath . $uniqueId . '.webp';
 
-                            // Stocker le chemin dans la base de données
-                            $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $uniqueId . '.jpg';
+                            // Convertir l'image en WEBP
+                            $image = imagecreatefromstring($imageContent);
+                            if ($image !== false) {
+                                imagewebp($image, $mediaFileNameWebP);
+                                imagedestroy($image);
+                                $mediaFileName = '/images/' . implode('/', $mediaIdArray) . '/' . $uniqueId . '.webp';
+                            } else {
+                                $mediaFileName = '/images/default.webp';
+                            }
                         } else {
                             $mediaFileName = '/images/default.webp';
                         }
@@ -101,8 +108,8 @@ class MediaWordpressController extends AbstractController
                         // Associer le média à l'article actuel
                         $media->setPost($article);
 
-                        // Persister l'entité Media
-                        $entityManager->persist($media);
+                        // Utiliser la méthode save du repository pour enregistrer l'entité
+                        $mediaRepository->save($media);
                         $mediaData[] = $media;
                     }
                 } else {
@@ -115,11 +122,7 @@ class MediaWordpressController extends AbstractController
             }
         }
 
-        // Exécuter les opérations en base de données (commit)
-        $entityManager->flush();
-
         // Retourner les données sous forme de réponse JSON
         return new JsonResponse($mediaData);
     }
 }
-

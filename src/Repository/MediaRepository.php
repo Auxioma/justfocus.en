@@ -16,6 +16,22 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
+    public function save(Media $media): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->beginTransaction();
+        try {
+            $entityManager->persist($media);
+            $entityManager->flush();
+            $entityManager->commit();
+        } catch (\Throwable $e) {
+            $entityManager->rollback();
+
+            throw $e;
+        }
+    }
+
+    
     //    /**
     //     * @return Media[] Returns an array of Media objects
     //     */
