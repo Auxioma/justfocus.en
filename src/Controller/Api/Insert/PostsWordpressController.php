@@ -25,8 +25,14 @@ class PostsWordpressController extends AbstractController
     private LoggerInterface $logger;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(HttpClientInterface $client, ArticlesRepository $articlesRepository, CategoryRepository $categoryRepository, UserRepository $userRepository, LoggerInterface $logger, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        HttpClientInterface $client,
+        ArticlesRepository $articlesRepository,
+        CategoryRepository $categoryRepository,
+        UserRepository $userRepository,
+        LoggerInterface $logger,
+        EntityManagerInterface $entityManager
+    ) {
         $this->client = $client;
         $this->articlesRepository = $articlesRepository;
         $this->categoryRepository = $categoryRepository;
@@ -73,11 +79,11 @@ class PostsWordpressController extends AbstractController
 
                         if ($existingArticle) {
                             // Mettre à jour l'article existant si nécessaire
-                            $existingArticle->setTitle($postData['title']['rendered'] ?? 'No title');
-                            $existingArticle->setSlug($postData['slug'] ?? '');
+                            $existingArticle->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));
+                            $existingArticle->setSlug(html_entity_decode($postData['slug'] ?? ''));
                             $existingArticle->setDate(new \DateTime($postData['date'] ?? 'now'));
                             $existingArticle->setModified(new \DateTime($postData['modified'] ?? 'now'));
-                            $existingArticle->setContent($postData['content']['rendered'] ?? '');
+                            $existingArticle->setContent(html_entity_decode($postData['content']['rendered'] ?? ''));
 
                             $existingArticle->clearCategories();
                             foreach ($postData['categories'] ?? [] as $catId) {
@@ -101,11 +107,11 @@ class PostsWordpressController extends AbstractController
                             // Créer un nouvel article si aucun n'existe avec cet ID
                             $article = new Articles();
                             $article->setId($postData['id']); // Définir l'ID de manière explicite si nécessaire
-                            $article->setTitle($postData['title']['rendered'] ?? 'No title');
-                            $article->setSlug($postData['slug'] ?? '');
+                            $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));
+                            $article->setSlug(html_entity_decode($postData['slug'] ?? ''));
                             $article->setDate(new \DateTime($postData['date'] ?? 'now'));
                             $article->setModified(new \DateTime($postData['modified'] ?? 'now'));
-                            $article->setContent($postData['content']['rendered'] ?? '');
+                            $article->setContent(html_entity_decode($postData['content']['rendered'] ?? ''));
 
                             foreach ($postData['categories'] ?? [] as $catId) {
                                 $category = $this->categoryRepository->find($catId);
@@ -140,3 +146,4 @@ class PostsWordpressController extends AbstractController
         return new JsonResponse(['message' => 'Articles successfully inserted or updated', 'articles' => $posts]);
     }
 }
+

@@ -14,7 +14,6 @@
 					<div class="row slick-marquee" itemscope itemtype="http://schema.org/ItemList">
 						{% cache 'breaking_news' %}
 						{% for item in breaking %}
-						{{dump(item)}}
 							<div class="col-auto" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
 								{{ macros.breaking_news_link(item) }}
 							</div>
