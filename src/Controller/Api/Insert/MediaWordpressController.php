@@ -5,7 +5,6 @@ namespace App\Controller\Api\Insert;
 use App\Entity\Media;
 use App\Repository\ArticlesRepository;
 use App\Repository\MediaRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
