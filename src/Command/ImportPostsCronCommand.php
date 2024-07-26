@@ -120,6 +120,8 @@ final class ImportPostsCronCommand extends Command
 
     private function populateArticle(Articles $article, array $postData): void
     {
+        // traduction en anglais avec deepl $postData['title']['rendered'] 
+        
         $article->setId($postData['id']);
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));
         $article->setSlug(html_entity_decode($postData['slug'] ?? ''));

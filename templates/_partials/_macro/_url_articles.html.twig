@@ -1,5 +1,7 @@
 {% macro breaking_news_link(item) %}
     {% set last_category = item.categories|last %}
+    {% set first_category = item.categories|first %}
+
     {% if last_category.parent %}
         <a href="{{ path('app_articles', {
             'slug': item.slug,
@@ -8,17 +10,49 @@
         }) }}" class="breaking-news" itemprop="url">
             <span itemprop="headline">{{ item.title }}</span>
         </a>
+    {% elseif first_category.parent %}
+        <a href="{{ path('app_articles', {
+            'slug': item.slug,
+            'souscategorie': first_category.slug,
+            'categorie': first_category.parent.slug
+        }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title }}</span>
+        </a>
+    {% else %}
+        <a href="{{ path('app_articles_without_souscategory', {
+            'slug': item.slug,
+            'categorie': first_category.slug,
+        }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title }}</span>
+        </a>
     {% endif %}
 {% endmacro %}
 
 {% macro truncate_title(item, length) %}
-    {% set last_category = item.categories|last %}
+    {% set last_category  = item.categories|last %}
+    {% set first_category = item.categories|first %}
+
     {% if last_category.parent %}
         <a class="hover-line" href="{{ path('app_articles', {
             'slug': item.slug,
             'souscategorie': last_category.slug,
             'categorie': last_category.parent.slug
         }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title|u.truncate(length) }}</span>
+        </a>
+    {% elseif first_category.parent %}
+        <a class="hover-line" href="{{ path('app_articles', {
+            'slug': item.slug,
+            'souscategorie': first_category.slug,
+            'categorie': first_category.parent.slug
+        }) }}" class="breaking-news" itemprop="url">
+            <span itemprop="headline">{{ item.title|u.truncate(length) }}</span>
+        </a>
+    {% else %}
+        <a href="{{ path('app_articles_without_souscategory', {
+            'slug': item.slug,
+            'categorie': first_category.slug,
+        }) }}" class="hover-line" itemprop="url">
             <span itemprop="headline">{{ item.title|u.truncate(length) }}</span>
         </a>
     {% endif %}
