@@ -59,38 +59,24 @@
                                 <div class="content">
                                     {{ article.content|raw }}
                                 </div>
-                                <div class="blog-tag">
-                                    <h6 class="title">Related Tag :</h6>
-                                    <div class="tagcloud">
-                                        <a href="blog.html">Sports</a>
-                                        <a href="blog.html">Politics</a>
-                                        <a href="blog.html">Business</a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="blog-author">
-                        <div class="auhtor-img">
-                            <img src="/assets/img/blog/blog-author.jpg" alt="Blog Author Image">
-                        </div>
                         <div class="media-body">
-                            <div class="author-top">
-                                <div>
-                                    <h3 class="author-name"><a class="text-inherit" href="team-details.html">Ronald Richards</a></h3>
-                                    <span class="author-desig">Founder & CEO</span>
-                                </div>
-                                <div class="social-links">
-                                    <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
-                                    <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-                                </div>
+                            <h6 class="title">Related Tag :</h6>
+                            <div class="tagcloud">
+
+                                {% for tag in article.tags[0:10] %}
+                                    <a href="">{{ tag.name }}</a>
+                                {% endfor %}
+
                             </div>
-                            <p class="author-text">Adventurer and passionate travel blogger. With a backpack full of stories and a camera in hand, she takes her readers on exhilarating journeys around the world.</p>
                         </div>
                     </div>
+
+                    <!-- 
                     <div class="th-comments-wrap ">
                         <h2 class="blog-inner-title h3">Comments (03)</h2>
                         <ul class="comment-list">
@@ -142,7 +128,9 @@
                                 </div>
                             </li>
                         </ul>
-                    </div> <!-- Comment end --> <!-- Comment Form -->
+                    </div> 
+                    
+                    <!-- Comment end --> <!--
                     <div class="th-comment-form ">
                         <div class="form-title">
                             <h3 class="blog-inner-title mb-2">Leave a Comment</h3>
@@ -170,72 +158,14 @@
                             </div>
                         </div>
                     </div>
+                    -->
                     <div class="related-post-wrapper pt-30 mb-30">
                         <div class="row align-items-center">
-                            <div class="col">
-                                <h2 class="sec-title has-line">Related Post</h2>
-                            </div>
-                            <div class="col-auto">
-                                <div class="sec-btn">
-                                    <div class="icon-box">
-                                        <button data-slick-prev="#related-post-slide" class="slick-arrow default"><i class="far fa-arrow-left"></i></button>
-                                        <button data-slick-next="#related-post-slide" class="slick-arrow default"><i class="far fa-arrow-right"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row slider-shadow th-carousel" id="related-post-slide" data-slide-show="3" data-lg-slide-show="2" data-md-slide-show="2" data-sm-slide-show="2">
-                            <div class="col-sm-6 col-xl-4">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_1.jpg" alt="blog image">
-                                        <a data-theme-color="#00D084" href="blog.html" class="category">Lifestyle</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Balance harmony and joy in Every lifestyle.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>15 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xl-4">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_2.jpg" alt="blog image">
-                                        <a data-theme-color="#FF9500" href="blog.html" class="category">Politics</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Power to the people for a Better future!</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>16 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xl-4">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="/assets/img/blog/blog_1_3.jpg" alt="blog image">
-                                        <a data-theme-color="#E7473C" href="blog.html" class="category">Fitness</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Fitness the key to vitality and Well-being.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>21 Mar, 2023</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-xl-4">
-                                <div class="blog-style1">
-                                    <div class="blog-img">
-                                        <img src="assets/img/blog/blog_1_4.jpg" alt="blog image">
-                                        <a data-theme-color="#00D084" href="blog.html" class="category">Health</a>
-                                    </div>
-                                    <h3 class="box-title-22"><a class="hover-line" href="blog-details.html">Embrace bump and Victory volleyball style.</a></h3>
-                                    <div class="blog-meta">
-                                        <a href="author.html"><i class="far fa-user"></i>By - Tnews</a>
-                                        <a href="blog.html"><i class="fal fa-calendar-days"></i>14 Mar, 2023</a>
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <ins class="adsbygoogle" style="display:inline-block;width:1224px;height:100px" data-ad-client="ca-pub-0669489715091946" data-ad-slot="5326160941"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -251,105 +181,27 @@
                         <div class="widget widget_categories  ">
                             <h3 class="widget_title">Categories</h3>
                             <ul>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_1.jpg" href="blog.html">Sports</a>
-                                </li>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_2.jpg" href="blog.html">Business</a>
-                                </li>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_3.jpg" href="blog.html">Politics</a>
-                                </li>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_4.jpg" href="blog.html">Health</a>
-                                </li>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_5.jpg" href="blog.html">Technology</a>
-                                </li>
-                                <li>
-                                    <a data-bg-src="assets/img/bg/category_bg_1_6.jpg" href="blog.html">Entertainment</a>
-                                </li>
+								{% for categorie in categories %}
+									<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="item">
+											<span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
+										</a>
+										<meta itemprop="position" content="{{ loop.index }}">
+									</li>
+								{% endfor %}
                             </ul>
                         </div>
-                        <div class="widget  ">
-                            <h3 class="widget_title">Recent Posts</h3>
-                            <div class="recent-post-wrap">
-                                <div class="recent-post">
-                                    <div class="media-img">
-                                        <a href="blog-details.html"><img src="assets/img/blog/recent-post-1-1.jpg" alt="Blog Image"></a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Fitness: Your journey to Better, stronger you.</a></h4>
-                                        <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>21 June, 2023</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="recent-post">
-                                    <div class="media-img">
-                                        <a href="blog-details.html"><img src="assets/img/blog/recent-post-1-2.jpg" alt="Blog Image"></a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Embrace the game Ignite your sporting</a></h4>
-                                        <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>22 June, 2023</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="recent-post">
-                                    <div class="media-img">
-                                        <a href="blog-details.html"><img src="assets/img/blog/recent-post-1-3.jpg" alt="Blog Image"></a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Revolutionizing lives Through technology</a></h4>
-                                        <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>23 June, 2023</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="recent-post">
-                                    <div class="media-img">
-                                        <a href="blog-details.html"><img src="assets/img/blog/recent-post-1-4.jpg" alt="Blog Image"></a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Enjoy the Virtual Reality embrace the</a></h4>
-                                        <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>25 June, 2023</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="widget  ">
-                            <div class="widget-ads">
-                                <a href="https://themeforest.net/user/themeholy/portfolio">
-                                    <img class="w-100" src="assets/img/ads/siderbar_ads_1.jpg" alt="ads">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="widget widget_tag_cloud  ">
-                            <h3 class="widget_title">Popular Tags</h3>
-                            <div class="tagcloud">
-                                <a href="blog.html">Sports</a>
-                                <a href="blog.html">Politics</a>
-                                <a href="blog.html">Business</a>
-                                <a href="blog.html">Music</a>
-                                <a href="blog.html">Food</a>
-                                <a href="blog.html">Technology</a>
-                                <a href="blog.html">Travels</a>
-                                <a href="blog.html">Health</a>
-                                <a href="blog.html">Fashions</a>
-                                <a href="blog.html">Animal</a>
-                                <a href="blog.html">Weather</a>
-                                <a href="blog.html">Movies</a>
-                            </div>
-                        </div>
+						<div class="widget">
+							<div class="widget-ads">
+								<a href="https://themeforest.net/user/themeholy/portfolio">
+									<img class="w-100" src="/assets/img/ads/siderbar_ads_1.jpg" alt="ads">
+								</a>
+							</div>
+						</div>
                     </aside>
                 </div>
             </div>
         </div>
-    </section><!--==============================
-	Footer Area
-==============================-->
+    </section>
     
 {% endblock %}
