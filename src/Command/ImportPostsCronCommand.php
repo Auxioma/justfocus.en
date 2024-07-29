@@ -131,7 +131,28 @@ final class ImportPostsCronCommand extends Command
         $response = $this->client->request('POST', $url);
         $response = $response->toArray();
         $postData['title']['rendered'] = $response['translations'][0]['text'];
-        
+
+
+        // utilisation de l'API de chatGpt pour la traduction du contenue et reformatage du HTML
+        $ApiBot = $_ENV['OPENAI_API_KEY'];
+        $Content = $postData['content']['rendered'];
+
+        // ecrire le prompt
+        $prompt = 'Translate the following text from French to English: ' . $Content;
+
+        $openAiResponse = $this->client->request('POST', 'https://api.openai.com/v1/engines/davinci-codex/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $ApiBot,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'text-davinci-003',
+                'prompt' => $prompt,
+                'max_tokens' => 1500,
+                'temperature' => 0.7,
+            ],
+        ]);
+            
         
         $article->setId($postData['id']);
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));

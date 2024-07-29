@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{% import '_partials/_macro/_url_articles.html.twig' as macros %}
+{% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
 {% block title %}Hello CategoryController!
 {% endblock %}
@@ -26,8 +28,8 @@
 							<div class="col-sm-6" itemscope itemtype="http://schema.org/NewsArticle">
 								<div class="blog-style7">
 									<div class="blog-img">
-										<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="blog image" style="height:300px;width:436px" height="300" width="436">
-										<a data-theme-color="#6234AC" href="blog.html" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
+										<img src="{{ item.media|first.guid|default('/images/default.webp') }}" alt="blog image" style="height:300px;width:436px" height="300" width="436">
+										{{ categories.category_small(item) }}
 									</div>
 									<div class="blog-meta">
 										<a href="author.html" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -41,7 +43,7 @@
 										</a>
 									</div>
 									<h3 class="box-title-24">
-										<a class="hover-line" href="blog-details.html" itemprop="headline">{{ item.title|u.truncate(40)|default('Default Title') }}</a>
+										{{ macros.truncate_title(item|default({}), 40) }}
 									</h3>
 									<meta itemprop="mainEntityOfPage" content="blog-details.html">
 								</div>

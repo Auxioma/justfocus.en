@@ -1,0 +1,25 @@
+{% macro category_small(item) %}
+
+    {% set last_category = item.categories|last %}
+    {% set first_category = item.categories|first %}
+
+    {% if last_category.parent %}
+        <a data-theme-color="#6234AC" href="{{ path('app_sous_category', {
+            'slug': last_category.slug,
+            'category': last_category.parent.slug
+        }) }}" class="category">
+            {{ last_category.name|default('Default Category') }}
+        </a>
+    {% elseif first_category.parent %}
+        <a data-theme-color="#6234AC" href="{{ path('app_sous_category', {
+            'slug': first_category.slug,
+            'category': first_category.parent.slug
+        }) }}" class="category">
+            {{ first_category.name|default('Default Category') }}
+        </a>
+    {% else %}
+        A faire
+    {% endif %}
+
+
+{% endmacro %}
