@@ -121,6 +121,17 @@ final class ImportPostsCronCommand extends Command
     private function populateArticle(Articles $article, array $postData): void
     {
         // traduction en anglais avec deepl $postData['title']['rendered'] 
+        $authKey = $_ENV['DEEPL_API_KEY'];
+        $authKey = 'auth_key=' . $authKey;
+        $text = $postData['title']['rendered'];
+        $text = 'text=' . $text;
+        $sourceLang = 'source_lang=FR';
+        $targetLang = 'target_lang=EN';
+        $url = 'https://api.deepl.com/v2/translate?' . $authKey . '&' . $text . '&' . $sourceLang . '&' . $targetLang;
+        $response = $this->client->request('POST', $url);
+        $response = $response->toArray();
+        $postData['title']['rendered'] = $response['translations'][0]['text'];
+        
         
         $article->setId($postData['id']);
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));
