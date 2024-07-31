@@ -55,7 +55,7 @@ class PostsWordpressController extends AbstractController
 
         foreach ($categories as $category) {
             $categoryId = $category->getId();
-            $page = 1;
+            $page = 3;
 
             do {
                 $url = self::WORDPRESS_API_URL . '?categories=' . $categoryId . '&per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish';
