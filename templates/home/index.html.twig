@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
+{% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% block title %}Just Focus
-{% endblock %}
+{% block title %}Just Focus{% endblock %}
 
 {% block body %}
 
@@ -48,7 +48,7 @@
 					<div class="blog-style1 style-big">
 						<div class="blog-img">
 							<img src="{{ slider[2].media|first.guid|default('images/default.webp') }}" alt="{{ slider[2].media|first.title|default('Default Title') }}" style="height:490px; width:600px">
-							<a data-theme-color="#FF9500" href="#" class="category">{{ slider[2].categories[0].name|default('Default Category') }}</a>
+							{{ categories.category_small(slider[2]) }}
 						</div>
 						<h3 class="box-title-30">
 							{{ macros.truncate_title(slider[2]|default({}), 75) }}
