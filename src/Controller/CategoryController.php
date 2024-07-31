@@ -33,7 +33,7 @@ class CategoryController extends AbstractController
             $categories = $category->getSubcategories();
         }
 
-        $articles = $this->articlesRepository->findByCategory($slug);
+        $articles = $this->articlesRepository->PaginationCategoryAndArticle($slug);
 
         $pagination = $paginator->paginate(
             $articles,

@@ -51,6 +51,21 @@ class ArticlesRepository extends ServiceEntityRepository
     /**
      * @return Articles[]
      */
+    public function PaginationCategoryAndArticle(string $categoryName): array
+    {
+        $query = $this->createQueryBuilder('a')
+            ->leftJoin('a.categories', 'c')
+            ->andWhere('c.slug = :categoryName')
+            ->setParameter('categoryName', $categoryName)
+            ->orderBy('a.id', 'DESC')
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
+     * @return Articles[]
+     */
     public function RandomArticles(): array
     {
         return $this->createQueryBuilder('a')

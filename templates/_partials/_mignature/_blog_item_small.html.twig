@@ -1,14 +1,13 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
+{% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
 {% apply spaceless %}
     <div class="blog-style2">
         <div class="blog-img">
-            <img src="{{ item.media|first.guid|default('images/default.webp') | imagine_filter('small') }}" alt="{{ item.media|first.title|default('just focus') }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }}" width="{{ width }}">
+            <img src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('small') }}" alt="{{ item.media|first.title|default('just focus') }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }}" width="{{ width }}">
         </div>
         <div class="blog-content">
-            <a data-theme-color="#FF9500" href="blog.html" class="category">
-                {{ item.categories[0].name }}
-            </a>
+            {{ categories.category_small(item) }}
             <h3 class="box-title-18">
                 {{ macros.truncate_title(item, 30) }}
             </h3>

@@ -18,7 +18,11 @@
             {{ first_category.name|default('Default Category') }}
         </a>
     {% else %}
-        A faire
+        <a data-theme-color="#6234AC" href="{{ path('app_category', {
+            'slug': first_category.slug,
+        }) }}" class="category">
+            {{ first_category.name|default('Default Category') }}
+        </a>
     {% endif %}
 
 
