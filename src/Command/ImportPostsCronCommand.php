@@ -138,7 +138,16 @@ final class ImportPostsCronCommand extends Command
         $Content = $postData['content']['rendered'];
 
         // ecrire le prompt
-        $prompt = 'Translate the following text from French to English: ' . $Content;
+        $prompt  = 'reformate le code HTML avec les balises appropriées et traduit le texte suivant du français vers l\'anglais: ';
+        $prompt .= 'Les paragraphes serons séparés par des balises <p> et les titres par des balises <h2>, <h3>, <h4>, <h5>, <h6> avec la  class="h4" ';
+        $prompt .= 'les URL des balise a du type <a href="https://justfocus.fr ne sont pas conservé. Y compris le texte de la balise <a> ';
+        $prompt .= 'les images sont conservé avec les balises <img src="https://justfocus.fr/monimage.jpg" alt="mon image"> ';
+        $prompt .= 'les images serons dans les balise <div class="col-md-auto"><div class=""><img class="w-100" src="https://justfocus.fr/monimage.jpg" alt="mon image"></div></div>';
+        $prompt .= 'les balise alt serons conservé. ';
+        $prompt .= 'Les listes serons <div class="blog-inner-list"><ul><li>mon item de liste</li></ul></div> ';
+        $prompt .= 'les citations serons <blockquote><p>mon texte de citation<p></blockquote> ';
+        $prompt .= 'met les mots clé pour un meilleur référencement dans les balise <strong> et <em> ';
+        $prompt .= 'et traduit en anglais américain: ' . $Content;
 
         $openAiResponse = $this->client->request('POST', 'https://api.openai.com/v1/engines/davinci-codex/completions', [
             'headers' => [

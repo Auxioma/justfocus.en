@@ -55,6 +55,12 @@ class Articles
     #[ORM\ManyToMany(targetEntity: Tags::class, mappedBy: 'article')]
     private Collection $tags;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $metaTitle = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $metaDescription = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -242,6 +248,30 @@ class Articles
         if ($this->tags->removeElement($tag)) {
             $tag->removeArticle($this);
         }
+
+        return $this;
+    }
+
+    public function getMetaTitle(): ?string
+    {
+        return $this->metaTitle;
+    }
+
+    public function setMetaTitle(?string $metaTitle): static
+    {
+        $this->metaTitle = $metaTitle;
+
+        return $this;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    public function setMetaDescription(?string $metaDescription): static
+    {
+        $this->metaDescription = $metaDescription;
 
         return $this;
     }
