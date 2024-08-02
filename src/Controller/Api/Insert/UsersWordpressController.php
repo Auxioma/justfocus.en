@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
+
 class UsersWordpressController extends AbstractController
 {
     private $httpClient;
@@ -88,9 +90,9 @@ class UsersWordpressController extends AbstractController
         $url = 'https://justfocus.fr/wp-json/jwt-auth/v1/token';
         $response = $this->httpClient->request('POST', $url, [
             'json' => [
-                'username' => 'guillaume2vo',
-                'password' => 'uKOdDIGLj9&LlcTzpdkb!#*K',
-                'email' => 'SUPPORT@AUXIOMA.EU'
+                'username' => '%env(USERNAME_WP)%',
+                'password' => '%env(PASSWORD_WP)%',
+                'email' => '%env(EMAIL_WP)%',
             ]
         ]);
 
