@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LegalController extends AbstractController
 {
-    #[Route('/o/o/o/legal', name: 'legal', priority: 1)]
+    #[Route('/o/o/o/legal', name: 'app_legal', priority: 1)]
     public function index(): Response
     {
         return $this->render('legal/pricacy-policy.html.twig');
