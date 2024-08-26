@@ -161,8 +161,9 @@ final class ImportPostsCronCommand extends Command
                 'temperature' => 0.7,
             ],
         ]);
-            
+
         
+
         $article->setId($postData['id']);
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title'));
         $article->setSlug(html_entity_decode($postData['slug'] ?? ''));
