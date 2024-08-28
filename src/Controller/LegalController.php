@@ -13,4 +13,11 @@ class LegalController extends AbstractController
     {
         return $this->render('legal/pricacy-policy.html.twig');
     }
+
+    #[Route('/terms-and-conditions', name: 'terms-and-conditions', priority: 10)]
+    public function therm(): Response
+    {
+        return $this->render('legal/terms-conditions.html.twig');
+    }
+
 }
