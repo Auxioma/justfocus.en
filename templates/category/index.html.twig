@@ -60,7 +60,7 @@
 							<ul>
 								{% for categorie in categories %}
 									<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_sous_category', {'category': categorie.parent.slug, 'slug': categorie.slug}) }}" itemprop="item">
+										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_sous_category', {'categorie': categorie.parent.slug, 'slug': categorie.slug}) }}" itemprop="item">
 											<span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
 										</a>
 										<meta itemprop="position" content="{{ loop.index }}">

@@ -81,7 +81,7 @@
                                             <ul class="sub-menu">
                                                 {% for subcategorie in categorie.subcategories %}
                                                     <li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                                        <a href="{{ path('app_sous_category', {'category': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
+                                                        <a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>

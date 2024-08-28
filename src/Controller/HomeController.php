@@ -31,7 +31,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        dd('coucou');
         // Fetch categorized articles
         $categorizedArticles = array_map(
             fn($category) => $this->articleRepository->findByCategory($category),

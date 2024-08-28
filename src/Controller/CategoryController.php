@@ -21,8 +21,8 @@ class CategoryController extends AbstractController
         $this->categoryRepository = $categoryRepository;
     }
 
-    #[Route('/{category}/{slug}', name: 'app_sous_category')]
-    #[Route('/{slug}', name: 'app_category', priority: 2)]
+    #[Route('/{categorie}/{slug}', name: 'app_sous_category', requirements: ['categorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 3)]
+    #[Route('/{slug}', name: 'app_category', requirements: ['slug' => '[\w-]+'], priority: 5)]
     public function index(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $category = $this->categoryRepository->findOneBySlug($slug);
@@ -47,11 +47,10 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/{categorie}/{souscategorie}/{slug}', name: 'app_articles')]
-    #[Route('/{categorie}/{slug}', name: 'app_articles_without_souscategory')]
+    #[Route('/{articlecategorie}/{souscategorie}/{slug}', name: 'app_articles', requirements: ['articlecategorie' => '[\w-]+', 'souscategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 2)]
+    #[Route('/{articlecategorie}/{slug}', name: 'app_articles_without_souscategory', requirements: ['articlecategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 3)]
     public function articles(string $slug): Response
     {
-        
         return $this->render('category/articles.html.twig', [
             'article' => $this->articlesRepository->findOneBySlug($slug),
             'categories' => $this->categoryRepository->findBy(['parent' => null, 'isOnline' => true])
