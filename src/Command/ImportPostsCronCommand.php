@@ -21,7 +21,7 @@ use App\Entity\Articles;
 final class ImportPostsCronCommand extends Command
 {
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/posts';
-    private const PER_PAGE = 100;
+    private const PER_PAGE = 10;
 
     private HttpClientInterface $client;
     private ArticlesRepository $articlesRepository;
@@ -59,7 +59,7 @@ final class ImportPostsCronCommand extends Command
         }
 
         $insertedCount = 0;
-        $maxInserts = 50;
+        $maxInserts = 1;
 
         foreach ($categories as $category) {
             $categoryId = $category->getId();
