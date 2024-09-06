@@ -86,15 +86,15 @@
             <div class="container">
                 <div class="row jusity-content-between align-items-center">
                     <div class="col-lg-5">
-                        <p class="copyright-text">Copyright <i class="fal fa-copyright"></i> {{ 'now' | date('Y') }} <a href="home-newspaper.html">justfocus</a>. All Rights Reserved.</p>
+                        <p class="copyright-text">Copyright <i class="fal fa-copyright"></i> {{ 'now' | date('Y') }} <a href="{{ path('app_home') }}">justfocus</a>. All Rights Reserved.</p>
                     </div>
                     <div class="col-lg-auto ms-auto d-none d-lg-block">
                         <div class="footer-links">
                             <ul>
                                 <li><a href="{{ path('app_home') }}">Home</a></li>
                                 <!--<li><a href="about.html">About Us</a></li>
-                                <li><a href="about.html">Faq</a></li>
-                                <li><a href="contact.html">Contact Us</a></li>-->
+                                <li><a href="about.html">Faq</a></li>-->
+                                <li><a href="{{ path('app_contact') }}">Contact Us</a></li>
                             </ul>
                         </div>
                     </div>
