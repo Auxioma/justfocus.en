@@ -25,28 +25,33 @@ Contact Info Area
                         <div class="contact-feature-wrap">
                             <div class="contact-feature">
                                 <div class="box-icon">
-                                    <img src="assets/img/icon/contact_1_1.svg" alt="icon">
+                                    <img src="{{ asset('assets/img/icon/contact_1_1.svg') }}" alt="icon">
                                 </div>
                                 <div class="box-content">
                                     <h3 class="box-title-22">Our Address</h3>
-                                    <p class="box-text">Street Parker Rd. Allentown, New Mexico 31134 </p>
+                                    <p class="box-text">Kharkhiv </p>
                                 </div>
                             </div>
                             <div class="contact-feature">
                                 <div class="box-icon">
-                                    <img src="assets/img/icon/contact_1_2.svg" alt="icon">
+                                    <img src="{{ asset('assets/img/icon/contact_1_2.svg') }}" alt="icon">
                                 </div>
                                 <div class="box-content">
                                     <h3 class="box-title-22">Email Address</h3>
                                     <p class="box-text">
-                                        <a href="mailto:needhelp@gmail.com">needhelp@gmail.com</a>
-                                        <a href="mailto:info@gmail.com">info@gmail.com</a>
+                                        <script type="text/javascript">
+                                            // Encode email address
+                                            var user = "partnair";
+                                            var domain = "justfocus.info";
+                                            document.write("<a href='mailto:" + user + "@" + domain + "'>" + user + "@" + domain + "</a>");
+                                        </script>
+
                                     </p>
                                 </div>
                             </div>
                             <div class="contact-feature">
                                 <div class="box-icon">
-                                    <img src="assets/img/icon/contact_1_3.svg" alt="icon">
+                                    <img src="{{ asset('assets/img/icon/contact_1_3.svg') }}" alt="icon">
                                 </div>
                                 <div class="box-content">
                                     <h3 class="box-title-22">Phone Number</h3>
