@@ -9,7 +9,7 @@ class Contact {
 
     private $Sujet; 
 
-    private $Message;
+    private $Message; 
 
     public function getNom()
     {
