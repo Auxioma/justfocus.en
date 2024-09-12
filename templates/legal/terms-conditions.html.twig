@@ -4,16 +4,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="breadcumb-wrapper">
-		<div class="container">
-			<ul class="breadcumb-menu">
-				<li>
-					<a href="home-newspaper.html">Home</a>
-				</li>
-				<li>About Us</li>
-			</ul>
-		</div>
-	</div>
+	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': 'Terms & Conditions'} %}
 
 	<div class="space2" id="about-sec">
 		<div class="container">

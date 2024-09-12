@@ -47,8 +47,8 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/{articlecategorie}/{souscategorie}/{slug}', name: 'app_articles', requirements: ['articlecategorie' => '[\w-]+', 'souscategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 2)]
-    #[Route('/{articlecategorie}/{slug}', name: 'app_articles_without_souscategory', requirements: ['articlecategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 3)]
+    #[Route('/{articlecategorie}/{souscategorie}/{slug}.html', name: 'app_articles', requirements: ['articlecategorie' => '[\w-]+', 'souscategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 2)]
+    #[Route('/{articlecategorie}/{slug}.html', name: 'app_articles_without_souscategory', requirements: ['articlecategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 5)]
     public function articles(string $slug): Response
     {
         return $this->render('category/articles.html.twig', [

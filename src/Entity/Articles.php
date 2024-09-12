@@ -61,6 +61,9 @@ class Articles
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $metaDescription = null;
 
+    #[ORM\Column]
+    private ?bool $isOnline = false;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -272,6 +275,18 @@ class Articles
     public function setMetaDescription(?string $metaDescription): static
     {
         $this->metaDescription = $metaDescription;
+
+        return $this;
+    }
+
+    public function isOnline(): ?bool
+    {
+        return $this->isOnline;
+    }
+
+    public function setOnline(bool $isOnline): static
+    {
+        $this->isOnline = $isOnline;
 
         return $this;
     }

@@ -4,8 +4,8 @@
 
 {% block body %}
 
-	{% include '_partials/_mignature/_breadcumb.html.twig' %}
-    
+	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': 'Contact us'} %}
+
     <div class="space2">
         <div class="container">
             <div class="row">
@@ -65,7 +65,7 @@
 
                         <h4 class="form-title">Send Message</h4>
                         
-                        {{ form_start(form, {'attr': {'class': 'contact-form ajax-contact3'}}) }}
+                        {{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
 
                             <div class="row">
                                 <div class="form-group col-md-6">
@@ -81,7 +81,7 @@
                                     {{ form_widget(form.Message) }}
                                 </div>
                                 <div class="form-btn col-12">
-                                        <button class="th-btn" type="submit">Submit Now<i class="fas fa-arrow-up-right ms-2"></i></button>
+                                    <button class="th-btn" type="submit">Submit Now<i class="fas fa-arrow-up-right ms-2"></i></button>
                                 </div>
                             </div>
                             <p class="form-messages mb-0 mt-3"></p>
