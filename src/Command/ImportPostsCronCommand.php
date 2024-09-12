@@ -181,6 +181,8 @@ final class ImportPostsCronCommand extends Command
         $article->setDate(new \DateTime($postData['date'] ?? 'now')); // Définit la date de l'article
         $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
         $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
+        $article->setVisit(0); // Définit le nombre de visites à 0
+        $article->setMetaTitle($postData['title']['rendered'] ?? 'No title'); // Définit le titre de la méta
 
         foreach ($postData['categories'] ?? [] as $catId) { // Boucle sur les catégories de l'article
             $category = $this->categoryRepository->find($catId); // Cherche la catégorie par ID
