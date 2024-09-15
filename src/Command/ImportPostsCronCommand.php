@@ -56,51 +56,36 @@ final class ImportPostsCronCommand extends Command
     {
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
-        $categories = $this->categoryRepository->findAll(); // Récupère toutes les catégories
-
-        if (!$categories) { // Vérifie si aucune catégorie n'a été trouvée
-            $output->writeln('No categories found.'); // Affiche un message si aucune catégorie n'est trouvée
-            return Command::FAILURE; // Retourne un échec de commande
-        }
-
         $insertedCount = 0; // Compteur d'articles insérés
         $maxInserts = 10; // Nombre maximum d'insertions
 
-        foreach ($categories as $key => $category) { // Boucle sur chaque catégorie
-            $categoryId = $category->getId(); // Récupère l'ID de la catégorie
+        
             $page = 1; // Initialise la page à 1
 
             do {
-                $url = self::WORDPRESS_API_URL . '?categories=' . $categoryId . '&per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish'; // Construit l'URL pour la requête API
+                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish'; // Construit l'URL pour la requête API
                 $response = $this->client->request('GET', $url); // Fait la requête GET à l'API WordPress
 
                 if ($response->getStatusCode() !== 200) { // Vérifie si la réponse n'est pas un succès
-                    $this->logger->error('Failed to fetch posts from WordPress for category ' . $categoryId); // Log une erreur si la requête échoue
+                    $this->logger->error('Une erreur s\'est produite lors de la récupération des articles.'); // Log l'erreur   
                     break; // Sort de la boucle
                 }
 
-                $categoryPosts = $response->toArray(); // Convertit la réponse en tableau PHP
-                if (empty($categoryPosts)) { // Vérifie si la réponse est vide
+                $InsertPost = $response->toArray(); // Convertit la réponse en tableau PHP
+                if (empty($InsertPost)) { // Vérifie si la réponse est vide
                     break; // Sort de la boucle
                 }
-
-                // filter if there are subcategories
-                $ForSubCategories = $categoryPosts[$key]['categories'];
-
-                if (!array_diff($ForSubCategories, self::TABLEAU)) {
-                    print_r($ForSubCategories);
-                    $output->writeln('Subcategories found. Skipping...');
-                    continue;
-                }                
                 
                 $this->entityManager->beginTransaction(); // Démarre une transaction
                 try {
-                    foreach ($categoryPosts as $postData) { // Boucle sur chaque article de la catégorie
+                    foreach ($InsertPost as $postData) { // Boucle sur chaque article de la catégorie
                         if ($insertedCount >= $maxInserts) { // Vérifie si le nombre maximum d'insertions est atteint
                             $output->writeln('Maximum number of articles inserted. Ending import.'); // Affiche un message d'arrêt de l'importation
                             $this->entityManager->commit(); // Valide la transaction
                             return Command::SUCCESS; // Retourne un succès de commande
                         }
+
+                        //
 
                         $existingArticle = $this->articlesRepository->find($postData['id']); // Cherche si l'article existe déjà
 
@@ -125,8 +110,8 @@ final class ImportPostsCronCommand extends Command
                 }
 
                 $page++; // Passe à la page suivante
-            } while (count($categoryPosts) === self::PER_PAGE); // Continue tant qu'il y a des articles à récupérer
-        }
+            } while (count($InsertPost) === self::PER_PAGE); // Continue tant qu'il y a des articles à récupérer
+        
 
         $output->writeln('Articles successfully inserted.'); // Affiche un message de succès
         return Command::SUCCESS; // Retourne un succès de commande
@@ -134,46 +119,6 @@ final class ImportPostsCronCommand extends Command
 
     private function populateArticle(Articles $article, array $postData): void
     {
-        // Décommenter pour traduire le titre en anglais avec l'API DeepL
-        // $authKey = $_ENV['DEEPL_API_KEY'];
-        // $authKey = 'auth_key=' . $authKey;
-        // $text = $postData['title']['rendered'];
-        // $text = 'text=' . $text;
-        // $sourceLang = 'source_lang=FR';
-        // $targetLang = 'target_lang=EN';
-        // $url = 'https://api.deepl.com/v2/translate?' . $authKey . '&' . $text . '&' . $sourceLang . '&' . $targetLang;
-        // $response = $this->client->request('POST', $url);
-        // $response = $response->toArray();
-        // $postData['title']['rendered'] = $response['translations'][0]['text'];
-
-        // Utilisation de l'API ChatGPT pour reformater et traduire le contenu
-        //$ApiBot = $_ENV['OPENAI_API_KEY'];
-        //$Content = $postData['content']['rendered'];
-
-        // Ecrire le prompt pour ChatGPT
-        //$prompt  = 'Reformate le code HTML avec les balises appropriées et traduit le texte suivant du français vers l\'anglais: ';
-        //$prompt .= 'Les paragraphes seront séparés par des balises <p> et les titres par des balises <h2>, <h3>, <h4>, <h5>, <h6> avec la classe "h4". ';
-        //$prompt .= 'Les URL dans les balises <a href="https://justfocus.fr ne sont pas conservées. Y compris le texte de la balise <a>. ';
-        //$prompt .= 'Les images sont conservées avec les balises <img src="https://justfocus.fr/monimage.jpg" alt="mon image"> ';
-        //$prompt .= 'Les images seront dans les balises <div class="col-md-auto"><div class=""><img class="w-100" src="https://justfocus.fr/monimage.jpg" alt="mon image"></div></div>. ';
-        //$prompt .= 'Les balises alt sont conservées. ';
-        //$prompt .= 'Les listes seront <div class="blog-inner-list"><ul><li>mon item de liste</li></ul></div>. ';
-        //$prompt .= 'Les citations seront <blockquote><p>mon texte de citation</p></blockquote>. ';
-        //$prompt .= 'Mets les mots-clés pour un meilleur référencement dans les balises <strong> et <em>. ';
-        //$prompt .= 'Et traduit en anglais américain: ' . $Content;
-
-        //$openAiResponse = $this->client->request('POST', 'https://api.openai.com/v1/engines/davinci-codex/completions', [
-        //'headers' => [
-        //'Authorization' => 'Bearer ' . $ApiBot,
-        //'Content-Type' => 'application/json',
-        //],
-        //'json' => [
-        //'model' => 'text-davinci-003',
-        //'prompt' => $prompt,
-        //'max_tokens' => 1500,
-        //'temperature' => 0.7,
-        //],
-        //]);
 
         $article->setId($postData['id']); // Définit l'ID de l'article
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title')); // Définit le titre de l'article
