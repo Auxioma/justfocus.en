@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin/admin/admin/admin', name: 'admin')]
+    #[Route('/admin_olga150187', name: 'admin', priority: 10)]
     public function index(): Response
     {
         return $this->render('bundles/EasyAdminBundle/page/login.html.twig');
@@ -28,6 +28,6 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Categorie', 'fas fa-list', Category::class);
-        yield MenuItem::linkToCrud('Articles', 'fas fa-list', Articles::class);
+        yield MenuItem::linkToCrud('Articles en francais', 'fas fa-list', Articles::class);
     }
 }

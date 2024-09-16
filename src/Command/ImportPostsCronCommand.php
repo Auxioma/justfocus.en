@@ -85,8 +85,6 @@ final class ImportPostsCronCommand extends Command
                             return Command::SUCCESS; // Retourne un succès de commande
                         }
 
-                        //
-
                         $existingArticle = $this->articlesRepository->find($postData['id']); // Cherche si l'article existe déjà
 
                         if ($existingArticle) { // Vérifie si l'article existe
