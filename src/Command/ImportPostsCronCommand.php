@@ -21,7 +21,7 @@ use App\Entity\Articles;
 final class ImportPostsCronCommand extends Command
 {
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/posts'; // URL de l'API WordPress à utiliser
-    private const PER_PAGE = 3; // Nombre d'articles à récupérer par page
+    private const PER_PAGE = 30; // Nombre d'articles à récupérer par page
 
     private const TABLEAU = [ // Un tableau de valeurs pour vérifier les catégories
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
@@ -57,7 +57,7 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 3; // Nombre maximum d'insertions
+        $maxInserts = 30; // Nombre maximum d'insertions
 
         
             $page = 1; // Initialise la page à 1
