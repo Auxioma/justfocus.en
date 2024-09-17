@@ -89,7 +89,7 @@ class MediaFetchCommand extends Command
 
                             $env = $_ENV['APP_ENV'] ?? 'prod';
                             $mediaPath = ($env === 'prod')
-                                ? ' /home/djdaeqtk/public_html/public/images/' . implode('/', $mediaIdArray) . '/'
+                                ? '/home/favevace/www/public/images/' . implode('/', $mediaIdArray) . '/'
                                 : 'C:\laragon\www\justfocus.en\public/images/' . implode('/', $mediaIdArray) . '/';
 
                             // Create the directory
