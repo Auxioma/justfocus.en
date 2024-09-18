@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Articles
 {
     #[ORM\Id]
-    // #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -46,8 +45,8 @@ class Articles
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?User $User = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $visit = null;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $visit = 0; // Le nombre de visites, initialisé à 0
 
     /**
      * @var Collection<int, Tags>
@@ -167,13 +166,6 @@ class Articles
         return $this;
     }
 
-    public function clearCategories(): self
-    {
-        $this->categories->clear();
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Media>
      */
@@ -216,15 +208,16 @@ class Articles
         return $this;
     }
 
-    public function getVisit(): ?string
+    // Méthode pour obtenir le nombre de visites
+    public function getVisit(): ?int
     {
         return $this->visit;
     }
 
-    public function setVisit(?string $visit): static
+    // Méthode pour incrémenter les visites
+    public function incrementVisit(): static
     {
-        $this->visit = $visit;
-
+        $this->visit++;
         return $this;
     }
 
@@ -290,5 +283,4 @@ class Articles
 
         return $this;
     }
-
 }
