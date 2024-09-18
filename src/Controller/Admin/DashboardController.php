@@ -28,6 +28,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Categorie', 'fas fa-list', Category::class);
-        yield MenuItem::linkToCrud('Articles en francais', 'fas fa-list', Articles::class);
+        yield MenuItem::linkToCrud('Articles en francais', 'fas fa-list', Articles::class)->setQueryParameter('isOnline', false);
+        yield MenuItem::linkToCrud('Articles en anglais', 'fas fa-list', Articles::class)->setQueryParameter('isOnline', true);
     }
 }
