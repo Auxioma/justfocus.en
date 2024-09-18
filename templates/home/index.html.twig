@@ -168,7 +168,7 @@
 								<div class="blog-style1 style-big">
 									{% set item = items[0]|default({}) %}
 									<div class="blog-img">
-										<img src="{{ item.media|first.guid|default('default.jpg') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
+										<img src="{{ item.media|first.guid|default('images/default.webp') }}" alt="{{ item.media|first.title|default('Default Title') }}" height="490" width="600" style="height:490px;width:600px">
 										<a data-theme-color="#007BFF" href="#" class="category">{{ item.categories[0].name|default('Default Category') }}</a>
 									</div>
 									<h3 class="box-title-30">
