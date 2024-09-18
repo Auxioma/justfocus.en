@@ -283,4 +283,15 @@ class Articles
 
         return $this;
     }
+
+    public function getFirstMedia(): ?Media
+    {
+        return $this->media->first() ?: null; 
+    }
+
+    public function getFirstMediaUrl(): ?string
+    {
+        $firstMedia = $this->getFirstMedia();
+        return $firstMedia ? $firstMedia->getGuid() : 'default.webp';
+    }
 }

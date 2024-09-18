@@ -5,19 +5,22 @@ namespace App\Controller\Admin;
 use App\Entity\Articles;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\Collection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\Component\HttpFoundation\RequestStack;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ArticlesCrudController extends AbstractCrudController
 {
@@ -39,6 +42,10 @@ class ArticlesCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
+            ImageField::new('firstMediaUrl')
+                ->setBasePath('/images/') // Chemin vers le dossier où sont stockées les images
+                ->setLabel('Première Image')
+                ->onlyOnIndex(), // Affiche uniquement dans l'index (optionnel)
             TextField::new('title')->setMaxLength(255),
             DateField::new('date'),
             NumberField::new('visit'),
@@ -69,7 +76,6 @@ class ArticlesCrudController extends AbstractCrudController
         return "Articles (Total: $articleCount)";
     }
     
-
     public function configureActions(Actions $actions): Actions
     {
         // Récupérer la requête courante
@@ -84,7 +90,6 @@ class ArticlesCrudController extends AbstractCrudController
         return $actions;
     }
     
-
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         // Récupérer la requête courante
