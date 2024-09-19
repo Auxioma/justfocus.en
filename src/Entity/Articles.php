@@ -292,6 +292,6 @@ class Articles
     public function getFirstMediaUrl(): ?string
     {
         $firstMedia = $this->getFirstMedia();
-        return $firstMedia ? $firstMedia->getGuid() : 'default.webp';
+        return $firstMedia ? $firstMedia->getGuid() : '/images/default.webp';
     }
 }
