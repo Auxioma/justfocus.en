@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Articles;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Collections\Collection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -43,7 +42,7 @@ class ArticlesCrudController extends AbstractCrudController
         return [
             IdField::new('id'),
             ImageField::new('firstMediaUrl')
-                ->setBasePath('/images/') // Chemin vers le dossier où sont stockées les images
+                ->setBasePath('') // Chemin vers le dossier où sont stockées les images
                 ->setLabel('Première Image')
                 ->onlyOnIndex(), // Affiche uniquement dans l'index (optionnel)
             TextField::new('title')->setMaxLength(255),
