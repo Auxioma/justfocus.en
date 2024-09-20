@@ -52,9 +52,8 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 100; // Nombre maximum d'insertions
+        $maxInserts = 50; // Nombre maximum d'insertions
 
-        
             $page = 1; // Initialise la page à 1
 
             do {
@@ -112,14 +111,12 @@ final class ImportPostsCronCommand extends Command
 
     private function populateArticle(Articles $article, array $postData): void
     {
-
         $article->setId($postData['id']); // Définit l'ID de l'article
         $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title')); // Définit le titre de l'article
         $article->setSlug(html_entity_decode($postData['slug'] ?? '')); // Définit le slug de l'article
         $article->setDate(new \DateTime($postData['date'] ?? 'now')); // Définit la date de l'article
         $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
         $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
-        $article->setVisit(0); // Définit le nombre de visites à 0
         $article->setMetaTitle($postData['title']['rendered'] ?? 'No title'); // Définit le titre de la méta
 
         foreach ($postData['categories'] ?? [] as $catId) { // Boucle sur les catégories de l'article
