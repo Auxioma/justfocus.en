@@ -20,8 +20,20 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # config/services.yaml
+
+    App\Controller\ErrorController:
+        public: true
+        tags:
+            - { name: 'controller.service_arguments' }
+        arguments: ['@logger']
+
+    twig.exception_listener:
+        public: false
+        class: Symfony\Component\HttpKernel\EventListener\ErrorListener
+        arguments:
+            - 'App\Controller\ErrorController::show'
+
 
     App\Twig\ReadingExtension:
         tags: ['twig.extension']
