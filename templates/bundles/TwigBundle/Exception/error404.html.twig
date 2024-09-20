@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}error 404 - Just Focus{% endblock %}
+    <div class="breadcumb-wrapper">
+        <div class="container">
+            <ul class="breadcumb-menu">
+                <li><a href="home-newspaper.html">Home</a></li>
+                <li>404 - Error Page</li>
+            </ul>
+        </div>
+    </div>
+    <section class="space2">
+        <div class="container">
+            <div class="error-img">
+                <img class="light-img" src="assets/img/theme-img/error.svg" alt="404 image">
+                <img class="dark-img" src="assets/img/theme-img/error-dark.svg" alt="404 image">
+            </div>
+            <div class="error-content">
+                <h2 class="error-title"><span class="text-theme">OooPs!</span> Page Not Found</h2>
+                <p class="error-text">Oops! The page you are looking for does not exist. It might have been moved or deleted. Please check and try again.</p>
+                <a href="{{ path('app_home') }}" class="th-btn"><i class="fal fa-home me-2"></i>Back To Home</a>
+            </div>
+        </div>
+    </section>
+{% block body %}
