@@ -1,101 +1,167 @@
-    <header class="th-header header-layout1">
-        <div class="header-top">
-            <div class="container">
-                <div class="row justify-content-center justify-content-lg-between align-items-center gy-2">
-                    <div class="col-auto d-none d-lg-block">
-                        <div class="header-links">
-                            <ul>
-                                <li><i class="fal fa-calendar-days"></i><a href="blog.html">{{ "now"|date("M d, Y") }}</a></li>
-                                <li><a href="{{ path('app_legal') }}">Privacy Policy</a></li>
-                                <li><a href="{{ path('terms-and-conditions') }}">Terms & Conditions</a></li>
-                                <li>
-                                    <a class="theme-toggler" href="#">
-                                        <span class="dark"><i class="fas fa-moon"></i>Dark Mode</span>
-                                        <span class="light"><i class="fas fa-sun-bright"></i>Light Mode</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <div class="header-links">
-                            <ul>
-                                <li class="d-none d-sm-inline-block"><i class="far fa-user"></i><a href="blog.html">Login / register</a></li>
-                                <li>
-                                    <div class="social-links">
-                                        <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
-                                        <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
-                                        <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
-                                        <a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-middle">
-            <div class="container">
-                <div class="row justify-content-center justify-content-lg-between align-items-center">
-                    <div class="col-auto d-none d-lg-block">
-                        <div class="col-auto">
-                            <div class="header-logo">
-                                <a href="{{ path('app_home') }}"><img class="light-img" src="{{ asset('assets/img/logo.png') }}" height="60" alt="Tnews"></a>
-                                <a href="{{ path('app_home') }}"><img class="dark-img" src="assets/img/logo-white.svg" alt="Tnews"></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 text-end">
-                        <div class="header-ads">
-                            <ins class="adsbygoogle"
-                                style="display:inline-block;width:700px;height:60px"
-                                data-ad-client="ca-pub-0669489715091946"
-                                data-ad-slot="5326160941">
-                            </ins>
-                            <script>
-                                (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="sticky-wrapper">
-            <div class="menu-area">
-                <div class="container">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-auto d-lg-none d-block">
-                            <div class="header-logo">
-                                <a href="home-newspaper.html"><img src="/assets/img/logo-white.svg" alt="Tnews"></a>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <nav class="main-menu d-none d-lg-inline-block" itemscope itemtype="http://schema.org/SiteNavigationElement">
-                                {% block menu %}
-                                <ul>
-                                    {% for categorie in categories %}
-                                        <li class="menu-item-has-children" itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                            <a href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="name">{{ categorie.name }}</a>
-                                            <ul class="sub-menu">
-                                                {% for subcategorie in categorie.subcategories %}
-                                                    <li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                                        <a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% endfor %}
-                                    <li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-                                        <a href="{{ path('app_contact') }}" itemprop="name">Contact</a>
-                                    </li>
-                                </ul>
-                                {% endblock %}
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+<header class="th-header header-layout1">
+	<div class="header-top">
+		<div class="container">
+			<div class="row justify-content-center justify-content-lg-between align-items-center gy-2">
+				<div class="col-auto d-none d-lg-block">
+					<div class="header-links">
+						<ul>
+							<li>
+								<i class="fal fa-calendar-days"></i>
+								<a href="blog.html">{{ "now"|date("M d, Y") }}</a>
+							</li>
+							<li>
+								<a href="{{ path('app_legal') }}">Privacy Policy</a>
+							</li>
+							<li>
+								<a href="{{ path('terms-and-conditions') }}">Terms & Conditions</a>
+							</li>
+							<li>
+								<a class="theme-toggler" href="#">
+									<span class="dark">
+										<i class="fas fa-moon"></i>Dark Mode</span>
+									<span class="light">
+										<i class="fas fa-sun-bright"></i>Light Mode</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-auto">
+					<div class="header-links">
+						<ul>
+							<li class="d-none d-sm-inline-block">
+								<i class="far fa-user"></i>
+								<a href="blog.html">Login / register</a>
+							</li>
+							<li>
+								<div class="social-links">
+									<a href="https://www.facebook.com/">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+									<a href="https://www.twitter.com/">
+										<i class="fab fa-twitter"></i>
+									</a>
+									<a href="https://www.linkedin.com/">
+										<i class="fab fa-linkedin-in"></i>
+									</a>
+									<a href="https://www.instagram.com/">
+										<i class="fab fa-instagram"></i>
+									</a>
+									<a href="https://www.youtube.com/">
+										<i class="fab fa-youtube"></i>
+									</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="header-middle">
+		<div class="container">
+			<div class="row justify-content-center justify-content-lg-between align-items-center">
+				<div class="col-auto d-none d-lg-block">
+					<div class="col-auto">
+						<div class="header-logo">
+							<a href="{{ path('app_home') }}"><img class="light-img" src="{{ asset('assets/img/logo.png') }}" height="60" alt="Tnews"></a>
+							<a href="{{ path('app_home') }}"><img class="dark-img" src="assets/img/logo-white.svg" alt="Tnews"></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8 text-end">
+					<div class="header-ads">
+						<ins class="adsbygoogle" style="display:inline-block;width:700px;height:60px" data-ad-client="ca-pub-0669489715091946" data-ad-slot="5326160941"></ins>
+						<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sticky-wrapper">
+		<div class="menu-area">
+			<div class="container">
+				<div class="row align-items-center justify-content-between">
+					<div class="col-auto d-lg-none d-block">
+						<div class="header-logo">
+							<a href="home-newspaper.html"><img src="/assets/img/logo-white.svg" alt="Tnews"></a>
+						</div>
+					</div>
+					<div class="col-auto">
+						<nav class="main-menu d-none d-lg-inline-block" itemscope itemtype="http://schema.org/SiteNavigationElement">
+							{% block menu %}
+								<ul>
+									{% for categorie in categories %}
+										<li class="menu-item-has-children" itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+											<a href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="name">{{ categorie.name }}</a>
+											<ul class="sub-menu">
+												{% for subcategorie in categorie.subcategories %}
+													<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+														<a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
+													</li>
+												{% endfor %}
+											</ul>
+										</li>
+									{% endfor %}
+									<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+										<a href="{{ path('app_contact') }}" itemprop="name">Contact</a>
+									</li>
+								</ul>
+							{% endblock %}
+						</nav>
+					</div>
+					<div class="col-auto" id="col-hidden-tab-and-pc">
+						<div class="header-button">
+							<button type="button" class="simple-icon searchBoxToggler">
+								<i class="far fa-search"></i>
+							</button>
+							<button type="button" class="simple-icon d-none d-lg-block cartToggler">
+								<i class="far fa-cart-shopping"></i>
+								<span class="badge">5</span>
+							</button>
+							<a href="#" class="icon-btn sideMenuToggler d-none d-lg-block">
+								<i class="far fa-bars"></i>
+							</a>
+							<button type="button" class="th-menu-toggle d-block d-lg-none">
+								<i class="far fa-bars"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="th-menu-wrapper">
+	<div class="th-menu-area text-center">
+		<button class="th-menu-toggle">
+			<i class="fal fa-times"></i>
+		</button>
+		<div class="mobile-logo">
+			<a href="{{ path('app_home') }}"><img src="assets/img/logo.svg" alt="Tnews"></a>
+		</div>
+		<div class="th-mobile-menu">
+			<ul>
+				{% for categorie in categories %}
+					<li class="menu-item-has-children" itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+						<a href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="name">{{ categorie.name }}</a>
+						<ul class="sub-menu">
+							{% for subcategorie in categorie.subcategories %}
+								<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+									<a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</li>
+				{% endfor %}
+				<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+					<a href="{{ path('app_contact') }}" itemprop="name">Contact</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+

@@ -1342,13 +1342,20 @@ textarea.is-invalid {
     opacity: 1;
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
-    box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
+    box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
   }
   100% {
     opacity: 0;
     -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
-    box-shadow: -1em -1em 0 -0.35em currentcolor, 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor, -1.5em 0 0 -0.35em currentcolor, 1.5em -0 0 -0.35em currentcolor, -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor, 1em 1em 0 -0.35em currentcolor;
+    box-shadow: -1em -1em 0 -0.35em currentcolor,
+ 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor,
+ -1.5em 0 0 -0.35em currentcolor, 1.5em -0 0 -0.35em currentcolor,
+ -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor,
+ 1em 1em 0 -0.35em currentcolor;
   }
 }
 
@@ -1357,13 +1364,20 @@ textarea.is-invalid {
     opacity: 1;
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
-    box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
+    box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor,
+ 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
   }
   100% {
     opacity: 0;
     -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
-    box-shadow: -1em -1em 0 -0.35em currentcolor, 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor, -1.5em 0 0 -0.35em currentcolor, 1.5em -0 0 -0.35em currentcolor, -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor, 1em 1em 0 -0.35em currentcolor;
+    box-shadow: -1em -1em 0 -0.35em currentcolor,
+ 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor,
+ -1.5em 0 0 -0.35em currentcolor, 1.5em -0 0 -0.35em currentcolor,
+ -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor,
+ 1em 1em 0 -0.35em currentcolor;
   }
 }
 
@@ -12933,6 +12947,13 @@ html.dark-theme .dark-theme > .blog-style3 {
   .space-extra2,
   .space-extra2-bottom {
     padding-bottom: 70px;
+  }
+}
+
+/* Quelque ajout par Guillaume */
+@media (min-width: 991px) {
+  #col-hidden-tab-and-pc {
+    display: none;
   }
 }
 
