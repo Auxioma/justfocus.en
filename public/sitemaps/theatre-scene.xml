@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <url>
+        <loc>https://127.0.0.1/featured-content/theatre-scene</loc>
+        <lastmod>2024-09-20</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+                <url>
+            <loc>https://127.0.0.1/featured-content/theatre-scene/daredevil-born-again.html</loc>
+            <lastmod>2024-08-04</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.6</priority>
+        </url>
+            <url>
+            <loc>https://127.0.0.1/featured-content/theatre-scene/superman-retour.html</loc>
+            <lastmod>2024-08-04</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.6</priority>
+        </url>
+            <url>
+            <loc>https://127.0.0.1/featured-content/theatre-scene/le-grand-rex-regale-les-fans.html</loc>
+            <lastmod>2024-08-06</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.6</priority>
+        </url>
+    </urlset>
