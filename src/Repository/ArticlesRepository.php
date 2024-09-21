@@ -75,4 +75,14 @@ class ArticlesRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findArticlesWithoutMedia(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.media', 'm')  // Left join to fetch articles without media
+            ->where('m.id IS NULL')     // Check where media is null (no related media entities)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

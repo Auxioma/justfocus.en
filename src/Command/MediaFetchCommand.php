@@ -38,7 +38,7 @@ class MediaFetchCommand extends Command
         $io = new SymfonyStyle($input, $output);
         
         // Retrieve all articles from the repository
-        $articles = $this->articlesRepository->findAll();
+        $articles = $this->articlesRepository->findArticlesWithoutMedia();
 
         // WordPress API URL
         $wordpressApiUrl = 'https://justfocus.fr/wp-json/wp/v2/media';
