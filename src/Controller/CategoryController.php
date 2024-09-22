@@ -32,11 +32,23 @@ class CategoryController extends AbstractController
     public function index(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $category = $this->categoryRepository->findOneBySlug($slug);
-        
+       
         if ($request->attributes->get('_route') === 'app_sous_category') {
             $categories = $category->getParent()->getSubcategories();
         } else {
             $categories = $category->getSubcategories();
+        }
+
+        // affichage pour le breadcrumb
+        if ($request->attributes->get('_route') === 'app_sous_category') {
+            $breadcrumbSousCategoryName = $category->getParent()->getName();
+            $breadcrumbSousCategorySlug = $category->getParent()->getSlug(); 
+
+            $breadcrumbCategoryName = $category->getName();
+            $breadcrumbCategorySlug = $category->getSlug();     
+        } else {
+            $breadcrumbCategoryName = $category->getName();
+            $breadcrumbCategorySlug = $category->getSlug(); 
         }
 
         $articles = $this->articlesRepository->PaginationCategoryAndArticle($slug);
@@ -47,9 +59,15 @@ class CategoryController extends AbstractController
             10
         );
 
+            
+
         return $this->render('category/index.html.twig', [
             'pagination' => $pagination,
             'categories' => $categories,
+            'breadcrumbCategoryName' => $breadcrumbCategoryName,
+            'breadcrumbCategorySlug' => $breadcrumbCategorySlug,
+            'breadcrumbSousCategoryName' => $breadcrumbSousCategoryName ?? null,
+            'breadcrumbSousCategorySlug' => $breadcrumbSousCategorySlug ?? null
         ]);
     }
     

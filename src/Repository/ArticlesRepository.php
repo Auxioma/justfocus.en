@@ -84,5 +84,19 @@ class ArticlesRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    
+    /**
+     * Récupère les articles qui n'ont pas de tags associés
+     *
+     * @return Articles[]
+     */
+    public function findArticlesWithoutTags(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.tags', 't')
+            ->where('t.id IS NULL') // Vérifie l'absence de tags
+            ->getQuery()
+            ->getResult();
+    }
 
 }

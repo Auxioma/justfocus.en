@@ -24,7 +24,7 @@ class Tags
     /**
      * @var Collection<int, Articles>
      */
-    #[ORM\ManyToMany(targetEntity: Articles::class, inversedBy: 'tags')]
+    #[ORM\ManyToMany(targetEntity: Articles::class, inversedBy: 'tags', cascade: ['persist'])]
     private Collection $article;
 
     public function __construct()
