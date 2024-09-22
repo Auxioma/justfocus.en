@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Just Focus
-{% endblock %}
+{% block title %}Just Focus{% endblock %}
+{% block description %}Just Focus{% endblock %}
+{% block keywords %}Just Focus{% endblock %}
+
 
 {% block body %}
-	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': 'Terms & Conditions'} %}
+	{% include '_partials/_mignature/_breadcumb.html.twig' with {'title': 'Terms & Conditions', 'titre':null} %}
 
 	<div class="space2" id="about-sec">
 		<div class="container">

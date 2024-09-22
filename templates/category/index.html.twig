@@ -2,12 +2,13 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 {% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% block title %}Hello CategoryController!
-{% endblock %}
+{% block title %}Just Focus{% endblock %}
+{% block description %}Just Focus{% endblock %}
+{% block keywords %}Just Focus{% endblock %}
 
 {% block body %}
 
-	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': 'reerererer'} %}
+	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': breadcrumbSousCategoryName, 'title': breadcrumbCategoryName, 'slug': breadcrumbSousCategorySlug } %} 
 
 
 	<section class="space-top space-extra-bottom">

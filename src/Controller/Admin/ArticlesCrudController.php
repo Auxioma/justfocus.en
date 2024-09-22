@@ -13,9 +13,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -39,17 +43,70 @@ class ArticlesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            // Onglet : Informations principales
+            FormField::addTab('Informations Principales'),
+            IdField::new('id')->hideOnForm(),
+            TextField::new('title')->setLabel('Titre'),
+            TextField::new('slug')->setLabel('Slug')->hideOnIndex(),
+            DateField::new('date')->setLabel('Date de publication'),
+            DateField::new('modified')->setLabel('Date de modification')->hideOnIndex(),
+    
+            // Onglet : Contenu
+            FormField::addTab('Contenu'),
+            TextEditorField::new('content')
+                ->hideOnIndex()
+                ->setLabel('Contenu')
+                ->setNumOfRows(20)  // Optionnel : Définit la taille de l'éditeur
+                ->setRequired(true),  // Définit si le champ est obligatoire ou non
+
+    
+            // Onglet : Catégories et Tags
+            FormField::addTab('Catégories et Tags'),
+            AssociationField::new('categories')
+                ->hideOnIndex()
+                ->setLabel('Catégories')
+                ->formatValue(function ($value, $entity) {
+                    // Assure-toi que $entity a bien une méthode getCategories() qui retourne une Collection
+                    if (!$entity->getCategories()->isEmpty()) {
+                        return implode(', ', $entity->getCategories()->map(function ($category) {
+                            // Récupère le nom et le slug de chaque catégorie
+                            return $category->getName();
+                        })->toArray());
+                    }
+                    return ''; // Si aucune catégorie n'est liée, retourne une chaîne vide
+                }),
+        
+                AssociationField::new('tags')
+                    ->hideOnIndex()
+                    ->setLabel('Tags')
+                    ->formatValue(function ($value, $entity) {
+                        if (!$entity->getTags()->isEmpty()) {
+                            return implode(', ', $entity->getTags()->map(function ($tag) {
+                                return $tag->getName();
+                            })->toArray());
+                        }
+                        return ''; // Retourne une chaîne vide si aucun tag n'est associé
+                    }),
+        
+            // Onglet : Médias
+            FormField::addTab('Médias'),
             ImageField::new('firstMediaUrl')
-                ->setBasePath('') // Chemin vers le dossier où sont stockées les images
-                ->setLabel('Première Image')
-                ->onlyOnIndex(), // Affiche uniquement dans l'index (optionnel)
-            TextField::new('title')->setMaxLength(255),
-            DateField::new('date'),
-            NumberField::new('visit'),
+            ->setBasePath('') // Chemin vers le dossier où sont stockées les images
+            ->setLabel('Première Image'),
+    
+            // Onglet : SEO
+            FormField::addTab('SEO'),
+            TextField::new('metaTitle')->setLabel('Meta Title')->hideOnIndex(),
+            TextField::new('metaDescription')->setLabel('Meta Description')->hideOnIndex(),
+    
+            // Onglet : Statistiques et statut
+            FormField::addTab('Statistiques et Statut'),
+            NumberField::new('visit')->setLabel('Nombre de visites'),
+            BooleanField::new('isOnline')->setLabel('En ligne'),
         ];
     }
-
+    
+    
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -82,7 +139,9 @@ class ArticlesCrudController extends AbstractCrudController
     
         // Désactiver certaines actions si `isOnline` est à 0
         if ($isonline == 0) {
-            return $actions->disable(Action::NEW, Action::EDIT, Action::DELETE);
+            return $actions
+                ->disable(Action::NEW, Action::EDIT, Action::DELETE)
+                ->add(Action::INDEX, Action::DETAIL); // Ajout d'une action show ou détail
         }
     
         return $actions;
