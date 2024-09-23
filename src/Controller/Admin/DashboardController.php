@@ -31,7 +31,9 @@ class DashboardController extends AbstractDashboardController
 
         // Récupérer les données via l'API
         $searchAnalytics = $this->searchConsoleService->getSearchAnalytics($siteUrl, $startDate, $endDate);
-dd($searchAnalytics);
+
+        dd($searchAnalytics);
+        
         // Passer les données à la vue
         return $this->render('admin/dashboard.html.twig', [
             'searchAnalytics' => $searchAnalytics,
