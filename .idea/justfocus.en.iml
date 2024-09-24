@@ -154,6 +154,15 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-paginator-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-components" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/apache-pack" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfonycasts/verify-email-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfonycasts/reset-password-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/deeplcom/deepl-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/twig/cache-extra" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/liip/imagine-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/imagine/imagine" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-http/multipart-stream-builder" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
