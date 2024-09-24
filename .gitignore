@@ -32,4 +32,4 @@
 phpstan.neon
 ###< phpstan/phpstan ###
 
-/config/google/
+/public/sitemaps/*.xml
