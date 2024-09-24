@@ -3,21 +3,47 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-
-    <h1>Register</h1>
-
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+	<div class="breadcumb-wrapper">
+        <div class="container">
+            <ul class="breadcumb-menu">
+                <li><a href="home-newspaper.html">Home</a></li>
+                <li>Registration.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="space2">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="pe-xxl-4 me-xl-3 text-center text-xl-start mb-40 mb-lg-0">
+                        <div class="title-area mb-32">
+                            uuuuuuuu                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="quote-form-box">
+                        <h4 class="form-title">Registration</h4>
+                        {{ form_start(registrationForm, {'attr': {'class': 'contact-form'}}) }}
+                        {{ form_errors(registrationForm) }}
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    {{ form_widget(registrationForm.email) }}
+                                </div>
+                                <div class="form-group col-md-12">
+                                    {{ form_widget(registrationForm.plainPassword) }}
+                                </div>
+                                <div class="checkbox mb-3">
+                                    {{ form_widget(registrationForm.agreeTerms) }}
+                                </div> 
+                                <div class="form-btn col-12">
+                                    <button type="submit" class="th-btn">Submit Now<i class="fas fa-arrow-up-right ms-2"></i></button>
+                                </div>
+                            </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
