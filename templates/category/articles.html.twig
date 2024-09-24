@@ -27,13 +27,20 @@
                             <div class="share-links-wrap">
                                 <div class="share-links">
                                     <span class="share-links-title">Share Post:</span>
-                                    <div class="multi-social">
-                                        <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
-                                        <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                        <a href="https://pinterest.com/" target="_blank"><i class="fab fa-pinterest-p"></i></a>
-                                        <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-                                    </div><!-- End Social Share -->
+                                        <div class="multi-social">
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ app.request.uri }}" target="_blank" aria-label="Partager sur Facebook">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                            <a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}&text=Découvrez cette page !" target="_blank" aria-label="Partager sur Twitter">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ app.request.uri }}&title=Découvrez cette page" target="_blank" aria-label="Partager sur LinkedIn">
+                                                <i class="fab fa-linkedin-in"></i>
+                                            </a>
+                                            <a href="https://pinterest.com/pin/create/button/?url={{ app.request.uri }}&media={{ absolute_url(article.media|first.guid|default('images/default.webp')) }}&description=Description" target="_blank" aria-label="Partager sur Pinterest">
+                                                <i class="fab fa-pinterest-p"></i>
+                                            </a>
+                                        </div>
                                 </div>
                             </div>
                             <div class="blog-content">
@@ -42,7 +49,7 @@
                                         Print :
                                         <i class="fas fa-print"></i>
                                     </button>
-                                    <a class="blog-info" href="mailto:">
+                                    <a class="blog-info" href="mailto:?subject=Découvrez cette page&body={{ app.request.uri }}">
                                         Email :
                                         <i class="fas fa-envelope"></i>
                                     </a>
