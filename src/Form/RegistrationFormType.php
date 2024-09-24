@@ -21,6 +21,9 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => 'Enter your email',
+                ],
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter an email']),
                     new Email(['message' => 'Please enter a valid email address']),
@@ -29,17 +32,24 @@ class RegistrationFormType extends AbstractType
     
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'class' => 'form-check-validate',
+                ],
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
                     ]),
                 ],
+                'label_html' => true, // Permet d'utiliser du HTML dans le label
+                'label' => 'I agree to <a href="https://justfocus.info/terms-and-conditions" target="_blank">The justfocus\'s Terms of Service</a> and <a href="https://justfocus.info/private-policy" target="_blank">Privacy Policy</a>.',
             ])
+            
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'placeholder' => 'Enter your password',
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
@@ -47,7 +57,6 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                     new Regex([
@@ -63,8 +72,8 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'csrf_protection' => true,  // Active explicitement la protection CSRF
-            'csrf_field_name' => '_token',  // Nom du champ CSRF (par défaut)
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
         ]);
     }
 }
