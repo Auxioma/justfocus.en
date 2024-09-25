@@ -57,8 +57,8 @@ final class ImportPostsCronCommand extends Command
             $page = 1; // Initialise la page à 1
 
             // Filtre pour les articles de 2024 uniquement
-            $afterDate = '2014-01-01T00:00:00'; // Début de l'année 2024
-            $beforeDate = '2024-12-31T23:59:59'; // Fin de l'année 2024
+            $afterDate = '2010-01-01T00:00:00'; // Début de l'année 2024
+            $beforeDate = '2015-12-31T23:59:59'; // Fin de l'année 2024
 
             do {
                 $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE 
