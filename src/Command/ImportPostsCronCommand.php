@@ -52,7 +52,7 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 100; // Nombre maximum d'insertions
+        $maxInserts = 10000; // Nombre maximum d'insertions
 
             $page = 1; // Initialise la page à 1
 
