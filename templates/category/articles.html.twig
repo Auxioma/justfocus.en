@@ -21,7 +21,7 @@
                             <span><i class="far fa-book-open"></i>{{ article.content|reading_time }}</span>
                         </div>
                         <div class="blog-img">
-                            <img loading="lazy" src="{{ article.media|first.guid|default('images/default.webp') }}" alt="Blog Image" style="width:896px;height:500px" width="896" height="500">
+                            <img loading="lazy" src="{{ article.media|first.guid|default('images/default.webp') | imagine_filter('896x500') }}"  alt="Blog Image" width="896" height="500">
                         </div>
                         <div class="blog-content-wrap">
                             <div class="share-links-wrap">
@@ -165,10 +165,9 @@
                     <div class="related-post-wrapper pt-30 mb-30">
                         <div class="row align-items-center">
                             <div class="col-12">
-                                <ins class="adsbygoogle" style="display:inline-block;width:1224px;height:100px" data-ad-client="ca-pub-0669489715091946" data-ad-slot="5326160941"></ins>
-                                <script>
-                                    (adsbygoogle = window.adsbygoogle || []).push({});
-                                </script>
+			<a href="https://auxioma.eu">
+				<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
+			</a>
                             </div>
                         </div>
                     </div>
