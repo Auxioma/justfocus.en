@@ -114,7 +114,7 @@ final class ImportPostsCronCommand extends Command
             } while (count($InsertPost) === self::PER_PAGE); // Continue tant qu'il y a des articles à récupérer
         
 
-        $output->writeln('Articles successfully inserted.'); // Affiche un message de succès
+        $output->writeln('Articles successfully inserted. Page numéro '.$page.''); // Affiche un message de succès
         return Command::SUCCESS; // Retourne un succès de commande
     }
 
