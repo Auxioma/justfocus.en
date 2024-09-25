@@ -33,3 +33,7 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 /public/sitemaps/*.xml
+
+/.idea/
+/.vscode/
+
