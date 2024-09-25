@@ -1,10 +1,10 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 {% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% apply spaceless %}
+
 <div class="blog-style1 style-big" itemscope itemtype="http://schema.org/Article">
     <div class="blog-img">
-        <img src="{{ item.media|first.guid|default('images/default.webp') }}" alt="{{ item.media|first.title }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }}" width="{{ width }}" itemprop="image">
+        <img loading="lazy" src="{{ item.media|first.guid|default('images/default.webp') }}" alt="{{ item.media|first.title }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }}" width="{{ width }}" itemprop="image">
         {{ categories.category_small(item) }}
     </div>
     <h3 class="box-title-30" itemprop="headline">
@@ -19,4 +19,4 @@
     <meta itemprop="dateModified" content="{{ item.updatedAt|date('Y-m-d') }}">
     <meta itemprop="mainEntityOfPage" content="blog-details.html">
 </div>
-{% endapply %}
+

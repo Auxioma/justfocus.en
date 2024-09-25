@@ -21,7 +21,7 @@
                             <span><i class="far fa-book-open"></i>{{ article.content|reading_time }}</span>
                         </div>
                         <div class="blog-img">
-                            <img src="{{ article.media|first.guid|default('images/default.webp') }}" alt="Blog Image" style="width:896px;height:500px" width="896" height="500">
+                            <img loading="lazy" src="{{ article.media|first.guid|default('images/default.webp') }}" alt="Blog Image" style="width:896px;height:500px" width="896" height="500">
                         </div>
                         <div class="blog-content-wrap">
                             <div class="share-links-wrap">
@@ -86,7 +86,7 @@
                             <li class="th-comment-item">
                                 <div class="th-post-comment">
                                     <div class="comment-avater">
-                                        <img src="assets/img/blog/comment-author-1.jpg" alt="Comment Author">
+                                        <img loading="lazy" src="assets/img/blog/comment-author-1.jpg" alt="Comment Author">
                                     </div>
                                     <div class="comment-content">
                                         <span class="commented-on"><i class="fas fa-calendar-alt"></i>14 March, 2023</span>
@@ -101,7 +101,7 @@
                                     <li class="th-comment-item">
                                         <div class="th-post-comment">
                                             <div class="comment-avater">
-                                                <img src="assets/img/blog/comment-author-2.jpg" alt="Comment Author">
+                                                <img loading="lazy" src="assets/img/blog/comment-author-2.jpg" alt="Comment Author">
                                             </div>
                                             <div class="comment-content">
                                                 <span class="commented-on"><i class="fas fa-calendar-alt"></i>15 March, 2023</span>
@@ -118,7 +118,7 @@
                             <li class="th-comment-item">
                                 <div class="th-post-comment">
                                     <div class="comment-avater">
-                                        <img src="assets/img/blog/comment-author-3.jpg" alt="Comment Author">
+                                        <img loading="lazy" src="assets/img/blog/comment-author-3.jpg" alt="Comment Author">
                                     </div>
                                     <div class="comment-content">
                                         <span class="commented-on"><i class="fas fa-calendar-alt"></i>16 March, 2023</span>

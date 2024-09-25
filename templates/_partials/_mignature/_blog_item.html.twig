@@ -1,11 +1,11 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 {% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% apply spaceless %}
+
     <div itemscope itemtype="https://schema.org/NewsArticle">
         <div class="blog-style1">
             <div class="blog-img">
-                <img src="{{ item.media|first.guid|default('images/default.webp') | imagine_filter('medium') }}" alt="{{ item.media|first.title|default('just focus') }}" style="height:{{ maxHeight }}px; width:{{ width }}px" height="{{ maxHeight }}" width="{{ width }}">
+                <img loading="lazy" src="{{ item.media|first.guid|default('images/default.webp') | imagine_filter('187x288') }}" alt="{{ item.media|first.title|default('just focus') }}" height="{{ maxHeight }}" width="{{ width }}">
                 {{ categories.category_small(item) }}
             </div>
             <h3 class="box-title-22">
@@ -17,4 +17,4 @@
             </div>
         </div>
     </div>
-{% endapply %}
+
