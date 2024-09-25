@@ -73,7 +73,7 @@ class ImportPostsCronCommandTest extends TestCase
             $this->userRepository,
             $this->logger,
             $this->entityManager
-        );
+        ); 
         
         $commandTester = new CommandTester($command);
 
