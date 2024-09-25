@@ -56,8 +56,17 @@ final class ImportPostsCronCommand extends Command
 
             $page = 1; // Initialise la page à 1
 
+            // Filtre pour les articles de 2024 uniquement
+            $afterDate = '2024-01-01T00:00:00'; // Début de l'année 2024
+            $beforeDate = '2024-12-31T23:59:59'; // Fin de l'année 2024
+
             do {
-                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish'; // Construit l'URL pour la requête API
+                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE 
+                . '&page=' . $page 
+                . '&status=publish'
+                . '&after=' . $afterDate
+                . '&before=' . $beforeDate;
+
                 $response = $this->client->request('GET', $url); // Fait la requête GET à l'API WordPress
 
                 if ($response->getStatusCode() !== 200) { // Vérifie si la réponse n'est pas un succès
