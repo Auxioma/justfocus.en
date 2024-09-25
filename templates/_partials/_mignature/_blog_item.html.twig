@@ -5,7 +5,7 @@
     <div itemscope itemtype="https://schema.org/NewsArticle">
         <div class="blog-style1">
             <div class="blog-img">
-                <img loading="lazy" src="{{ item.media|first.guid|default('images/default.webp') | imagine_filter('187x288') }}" alt="{{ item.media|first.title|default('just focus') }}" height="{{ maxHeight }}" width="{{ width }}">
+                <img loading="lazy" src="{{ item.media|first.guid|default('images/default.webp') | imagine_filter('288x187') }}" alt="{{ item.media|first.title|default('just focus') }}" height="{{ maxHeight }}" width="{{ width }}">
                 {{ categories.category_small(item) }}
             </div>
             <h3 class="box-title-22">

@@ -11,10 +11,10 @@ liip_imagine:
                 thumbnail: { size: [100, 100], mode: outbound }
             format: webp
         
-        187x288:
+        288x187:
             quality: 100
             filters:
-                thumbnail: { size: [187, 288], mode: outbound }
+                thumbnail: { size: [288, 187], mode: outbound }
             format: webp
         
         600x490:
