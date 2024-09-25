@@ -52,12 +52,12 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 10000; // Nombre maximum d'insertions
+        $maxInserts = 50000; // Nombre maximum d'insertions
 
             $page = 1; // Initialise la page à 1
 
             // Filtre pour les articles de 2024 uniquement
-            $afterDate = '2023-01-01T00:00:00'; // Début de l'année 2024
+            $afterDate = '2014-01-01T00:00:00'; // Début de l'année 2024
             $beforeDate = '2024-12-31T23:59:59'; // Fin de l'année 2024
 
             do {
