@@ -52,21 +52,12 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 500000; // Nombre maximum d'insertions
+        $maxInserts = 50; // Nombre maximum d'insertions
 
             $page = 1; // Initialise la page à 1
 
-            // Filtre pour les articles de 2024 uniquement
-            $afterDate = '2000-01-01T00:00:00'; // Début de l'année 2024
-            $beforeDate = '2025-12-31T23:59:59'; // Fin de l'année 2024
-
             do {
-                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE 
-                . '&page=' . $page 
-                . '&status=publish'
-                . '&after=' . $afterDate
-                . '&before=' . $beforeDate;
-
+                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish'; // Construit l'URL pour la requête API
                 $response = $this->client->request('GET', $url); // Fait la requête GET à l'API WordPress
 
                 if ($response->getStatusCode() !== 200) { // Vérifie si la réponse n'est pas un succès
@@ -114,7 +105,7 @@ final class ImportPostsCronCommand extends Command
             } while (count($InsertPost) === self::PER_PAGE); // Continue tant qu'il y a des articles à récupérer
         
 
-        $output->writeln('Articles successfully inserted. Page numéro '.$page.''); // Affiche un message de succès
+        $output->writeln('Articles successfully inserted.'); // Affiche un message de succès
         return Command::SUCCESS; // Retourne un succès de commande
     }
 
@@ -127,6 +118,14 @@ final class ImportPostsCronCommand extends Command
         $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
         $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
         $article->setMetaTitle($postData['title']['rendered'] ?? 'No title'); // Définit le titre de la méta
+ 
+        // Meta description avec nettoyage et gestion des balises HTML
+        $metaDescription = html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? ''));
+        if (!empty($metaDescription)) {
+            $metaDescription = $this->truncateDescription($metaDescription, 255);
+        }
+
+        $article->setMetaDescription($metaDescription);
 
         foreach ($postData['categories'] ?? [] as $catId) { // Boucle sur les catégories de l'article
             $category = $this->categoryRepository->find($catId); // Cherche la catégorie par ID
@@ -143,4 +142,27 @@ final class ImportPostsCronCommand extends Command
             }
         }
     }
+
+    /**
+     * Tronque la description sans couper les mots et en respectant les espaces.
+     */
+    private function truncateDescription(string $description, int $maxLength): string
+    {
+        if (strlen($description) <= $maxLength) {
+            return $description;
+        }
+
+        $truncated = substr($description, 0, $maxLength);
+        // Trouve le dernier espace pour éviter de couper un mot
+        $lastSpace = strrpos($truncated, ' ');
+
+        // Si un espace est trouvé, on coupe à cet endroit
+        if ($lastSpace !== false) {
+            return substr($truncated, 0, $lastSpace) . '...';
+        }
+
+        // Sinon, renvoie la description tronquée sans espace trouvé
+        return substr($truncated, 0, $maxLength) . '...';
+    }
+
 }
