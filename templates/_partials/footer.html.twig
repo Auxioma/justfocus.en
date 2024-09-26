@@ -1,3 +1,5 @@
+ {% import '_partials/_macro/_url_articles.html.twig' as macros %}
+ 
     <footer class="footer-wrapper footer-layout1" data-bg-src="{{ asset('assets/img/bg/footer_bg_1.png') }}">
         <div class="widget-area">
             <div class="container">
@@ -35,28 +37,30 @@
                         <div class="widget footer-widget">
                             <h3 class="widget_title">Recent Posts</h3>
                             <div class="recent-post-wrap">
+
+                                {% for footer in footers %}
+
                                 <div class="recent-post">
                                     <div class="media-img">
-                                        <a href="blog-details.html"><img loading="lazy" src="assets/img/blog/recent-post-2-1.jpg" alt="Blog Image"></a>
+                                        <a href="">
+                                            <img loading="lazy" src="{{ footer.media|first.guid|default('images/default.webp') | imagine_filter('80x80') }}" alt="Blog Image">
+                                        </a>
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Equality and justice for Every citizen</a></h4>
+                                        <h4 class="post-title">
+                                        
+                                        {{ macros.truncate_title(footer, 40) }}
+                                        
+                                        </h4>
                                         <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>21 June, 2023</a>
+                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>{{ footer.date|date('Y-m-d') }}</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="recent-post">
-                                    <div class="media-img">
-                                        <a href="blog-details.html"><img loading="lazy" src="assets/img/blog/recent-post-2-2.jpg" alt="Blog Image"></a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="post-title"><a class="hover-line" href="blog-details.html">Key eyes on the latest update of technology</a></h4>
-                                        <div class="recent-post-meta">
-                                            <a href="blog.html"><i class="fal fa-calendar-days"></i>22 June, 2023</a>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                {% endfor %}
+
+
                             </div>
                         </div>
                     </div>

@@ -63,6 +63,9 @@ class Articles
     #[ORM\Column]
     private ?bool $isOnline = false;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private $likes = 0;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -293,5 +296,22 @@ class Articles
     {
         $firstMedia = $this->getFirstMedia();
         return $firstMedia ? $firstMedia->getGuid() : '/images/default.webp';
+    }
+
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): self
+    {
+        $this->likes = $likes;
+        return $this;
+    }
+
+    public function incrementLikes(): self
+    {
+        $this->likes++;
+        return $this;
     }
 }
