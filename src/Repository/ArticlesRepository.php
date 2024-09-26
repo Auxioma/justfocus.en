@@ -81,7 +81,6 @@ class ArticlesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->leftJoin('a.media', 'm')  // Left join to fetch articles without media
             ->where('m.id IS NULL')     // Check where media is null (no related media entities)
-            ->setMaxResults(100)         // Limit the number of results
             ->getQuery()
             ->getResult();
     }
