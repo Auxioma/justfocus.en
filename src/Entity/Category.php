@@ -204,4 +204,10 @@ class Category
 
         return $this;
     }
+
+    public function getArticleCount(): int
+    {
+        return $this->articles->count(); // Compte le nombre d'articles dans la collection
+    }
+
 }

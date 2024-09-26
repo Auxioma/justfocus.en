@@ -1,0 +1,38 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main  %}
+    <div class="mb-4">
+        <h1 class="text-center">Sous-catégories de {{ category.name }}</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>En ligne</th>
+                    <th>Nombre d'articles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subCategory in subCategories %}
+                    <tr>
+                        <td>{{ subCategory.id }}</td>
+                        <td>{{ subCategory.name }}</td>
+                        <td><input type="checkbox" disabled {{ subCategory.isOnline ? 'checked' : '' }}></td>
+                        <td>{{ subCategory.articleCount }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucune sous-catégorie trouvée.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center">
+
+    </div>
+{% endblock %}
