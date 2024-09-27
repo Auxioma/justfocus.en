@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class GoogleCallbackController extends AbstractController
 {
-    #[Route('/api/google/cloud/callback', name: 'google_callback')]
+    #[Route('/callback', name: 'google_callback', methods: ['GET'], priority: 10)]
     public function callback(Request $request, GoogleSearchConsoleService $googleService): Response
     {
         // Récupérer le code dans l'URL de callback
