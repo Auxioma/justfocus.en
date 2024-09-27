@@ -1,5 +1,17 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 	{% block content %}
-        <h1>just focus</h1>
+        <h1>Liste des sites Google Search Console</h1>
+        <ul>
+            {% for site in sites %}
+                <li>{{ site.siteUrl }}</li>
+            {% endfor %}
+        </ul>
+
+        <h1>Données de site</h1>
+        <ul>
+            {% for row in siteData.rows %}
+                <li>Requête : {{ row.keys[0] }} - Nombre de clics : {{ row.clicks }}</li>
+            {% endfor %}
+        </ul>
     {% endblock %}

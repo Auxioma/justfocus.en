@@ -46,8 +46,10 @@ class MediaFetchCommand extends Command
         // Initialiser le client HTTP Guzzle
         $client = new Client();
     
-        // Tableau pour stocker les médias
-        $mediaData = [];
+        // Variables pour stocker le nombre de succès et d'échecs
+        $successCount = 0;
+        $errorCount = 0;
+        $mediaData = [];  // Stocker des infos sur chaque article
     
         foreach ($articles as $article) {
             $articleId = $article->getId();
@@ -83,7 +85,9 @@ class MediaFetchCommand extends Command
                             // Vérifier si le contenu est bien une image
                             $imageInfo = getimagesizefromstring($imageContent);
                             if ($imageInfo === false) {
-                                $output->writeln("Le fichier récupéré pour l'ID {$mediaItem['id']} n'est pas une image valide.");
+                                $io->error("Le fichier récupéré pour l'ID {$mediaItem['id']} n'est pas une image valide.");
+                                $mediaData[$articleId] = 'Fichier non valide';
+                                $errorCount++;
                                 continue;
                             }
     
@@ -145,17 +149,25 @@ class MediaFetchCommand extends Command
                         // Sauvegarder l'entité dans la base de données
                         $this->mediaRepository->save($media);
     
-                        $output->writeln("Média avec ID {$mediaItem['id']} téléchargé et sauvegardé avec succès.");
+                        $io->success("Média avec ID {$mediaItem['id']} téléchargé et sauvegardé avec succès.");
+                        $mediaData[$articleId] = 'Téléchargé et sauvegardé avec succès';
+                        $successCount++;
+                    } else {
+                        $io->warning("Aucun média trouvé pour l'article ID {$articleId}.");
                     }
                 }
             } catch (\Exception $e) {
                 // Gérer les exceptions
-                $mediaData[$articleId] = ['error' => 'Erreur lors de la récupération du média : ' . $e->getMessage()];
+                $io->error("Erreur lors de la récupération du média pour l'article ID {$articleId} : " . $e->getMessage());
+                $mediaData[$articleId] = 'Erreur : ' . $e->getMessage();
+                $errorCount++;
             }
         }
     
-        $io->success('Médias récupérés avec succès.');
+        // Résumé des opérations
+        $io->success("Médias récupérés : {$successCount} succès, {$errorCount} erreurs.");
+        $io->table(['Article ID', 'Statut'], array_map(fn($id, $status) => [$id, $status], array_keys($mediaData), $mediaData));
+    
         return Command::SUCCESS;
     }
-    
 }
