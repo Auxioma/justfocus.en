@@ -37,3 +37,4 @@ phpstan.neon
 /.idea/
 /.vscode/
 
+/config/google/
