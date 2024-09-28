@@ -92,7 +92,8 @@ class ArticlesCrudController extends AbstractCrudController
             FormField::addTab('Médias'),
             ImageField::new('firstMediaUrl')
             ->setBasePath('') // Chemin vers le dossier où sont stockées les images
-            ->setLabel('Première Image'),
+            ->setLabel('Première Image')
+            ->hideOnForm(),
     
             // Onglet : SEO
             FormField::addTab('SEO'),
@@ -133,19 +134,22 @@ class ArticlesCrudController extends AbstractCrudController
     
     public function configureActions(Actions $actions): Actions
     {
-        // Récupérer la requête courante
         $request = $this->requestStack->getCurrentRequest();
         $isonline = $request->get('isOnline');
     
-        // Désactiver certaines actions si `isOnline` est à 0
+        // Adjust the conditions to avoid disabling the EDIT action unless absolutely needed
         if ($isonline == 0) {
             return $actions
-                ->disable(Action::NEW, Action::EDIT, Action::DELETE)
-                ->add(Action::INDEX, Action::DETAIL); // Ajout d'une action show ou détail
+                ->disable(Action::NEW, Action::DELETE)
+                ->add(Action::INDEX, Action::DETAIL, Action::EDIT);  // Ensure EDIT is added
+        } else {
+            return $actions
+                ->add(Action::NEW, Action::EDIT, Action::DELETE)
+                ->add(Action::INDEX, Action::DETAIL);
         }
-    
-        return $actions;
     }
+    
+
     
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {

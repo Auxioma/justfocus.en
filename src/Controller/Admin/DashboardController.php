@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\Articles;
 use App\Entity\Category;
-use App\Service\GoogleSearchConsoleService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -12,36 +11,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
-{
-    private $googleSearchConsoleService;
-
-    public function __construct(GoogleSearchConsoleService $googleSearchConsoleService)
-    {
-        $this->googleSearchConsoleService = $googleSearchConsoleService;
-    }
-
-    
+{    
     #[Route('/admin_olga150187', name: 'admin', priority: 10)]
     public function index(): Response
     {
-        try {
-            $sites = $this->googleSearchConsoleService->getSitesList();
-            $siteData = $this->googleSearchConsoleService->getSiteData('https://justfocus.info');
-        } catch (\Exception $e) {
-            // Enregistre l'erreur et affiche un message d'erreur utilisateur
-            $this->addFlash('error', 'Erreur lors de la connexion à Google Search Console: ' . $e->getMessage());
-            return $this->render('@EasyAdmin/page/dashboard.html.twig', [
-                'sites' => null,
-                'siteData' => null,
-            ]);
-        }
-    
-        return $this->render('@EasyAdmin/page/dashboard.html.twig', [
-            'sites' => $sites,
-            'siteData' => $siteData,
-        ]);
+        return $this->render('@EasyAdmin/page/login.html.twig');
     }
-    
+
 
     public function configureDashboard(): Dashboard
     {
