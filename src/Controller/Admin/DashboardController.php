@@ -24,14 +24,24 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin_olga150187', name: 'admin', priority: 10)]
     public function index(): Response
     {
-        $sites = $this->googleSearchConsoleService->getSitesList();
-        $siteData = $this->googleSearchConsoleService->getSiteData('https://justfocus.info');
-
-        return $this->render('@EasyAdmin/page//dashboard.html.twig', [
+        try {
+            $sites = $this->googleSearchConsoleService->getSitesList();
+            $siteData = $this->googleSearchConsoleService->getSiteData('https://justfocus.info');
+        } catch (\Exception $e) {
+            // Enregistre l'erreur et affiche un message d'erreur utilisateur
+            $this->addFlash('error', 'Erreur lors de la connexion à Google Search Console: ' . $e->getMessage());
+            return $this->render('@EasyAdmin/page/dashboard.html.twig', [
+                'sites' => null,
+                'siteData' => null,
+            ]);
+        }
+    
+        return $this->render('@EasyAdmin/page/dashboard.html.twig', [
             'sites' => $sites,
             'siteData' => $siteData,
         ]);
     }
+    
 
     public function configureDashboard(): Dashboard
     {
