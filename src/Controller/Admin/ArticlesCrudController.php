@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -47,7 +48,7 @@ class ArticlesCrudController extends AbstractCrudController
             FormField::addTab('Informations Principales'),
             IdField::new('id')->hideOnForm(),
             TextField::new('title')->setLabel('Titre'),
-            TextField::new('slug')->setLabel('Slug')->hideOnIndex(),
+            SlugField::new('slug')->setLabel('Slug')->hideOnIndex(),
             DateField::new('date')->setLabel('Date de publication'),
             DateField::new('modified')->setLabel('Date de modification')->hideOnIndex(),
     
@@ -157,21 +158,21 @@ class ArticlesCrudController extends AbstractCrudController
         $request = $this->requestStack->getCurrentRequest();
         // Récupérer le paramètre `isonline` de l'URL
         $isonline = $request->get('isOnline');
-
+    
         // Construire la requête de base
         $queryBuilder = $this->entityManager->getRepository(Articles::class)->createQueryBuilder('a');
-        
+    
         // Ajouter la condition selon le paramètre `isonline`
         if ($isonline !== null) {
             $queryBuilder->andWhere('a.isOnline = :isonline')
                          ->setParameter('isonline', $isonline);
         }
-
-        // Ajouter les filtres de recherche EasyAdmin
+    
+        // Appliquer les filtres de recherche EasyAdmin
         foreach ($filters as $filter) {
             $filter->apply($queryBuilder);
         }
-
+    
         // Appliquer les critères de recherche
         $searchTerms = $searchDto->getSearchMode();
         foreach ($fields as $field) {
@@ -180,14 +181,17 @@ class ArticlesCrudController extends AbstractCrudController
                              ->setParameter('searchTerm', '%' . $searchTerms . '%');
             }
         }
-
-        // Appliquer le tri
+    
+        // Appliquer le tri par défaut sur l'ID du plus grand au plus petit
+        $queryBuilder->orderBy('a.id', 'DESC');
+    
+        // Appliquer le tri de la recherche, s'il y en a
         if ($searchDto->getSort()) {
             foreach ($searchDto->getSort() as $field => $direction) {
                 $queryBuilder->addOrderBy('a.' . $field, $direction);
             }
         }
-
+    
         return $queryBuilder;
     }
 }
