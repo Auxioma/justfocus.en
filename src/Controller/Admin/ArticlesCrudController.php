@@ -149,9 +149,7 @@ class ArticlesCrudController extends AbstractCrudController
                 ->add(Action::INDEX, Action::DETAIL);
         }
     }
-    
 
-    
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         // Récupérer la requête courante

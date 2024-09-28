@@ -3,10 +3,38 @@
 {% block title %}Reset your password{% endblock %}
 
 {% block body %}
-    <h1>Reset your password</h1>
-
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
+	<div class="breadcumb-wrapper">
+        <div class="container">
+            <ul class="breadcumb-menu">
+                <li><a href="{{ path('app_home') }}">Home</a></li>
+                <li>Reset your password.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="space2">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="pe-xxl-4 me-xl-3 text-center text-xl-start mb-40 mb-lg-0">
+                        <div class="title-area mb-32">
+                            uuuuuuuu                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="quote-form-box">
+                        <h4 class="form-title">Reset your password</h4>
+                        {{ form_start(resetForm) }}
+                            {{ form_row(resetForm.plainPassword) }}
+                            <button class="btn btn-primary">Reset password</button>
+                        {{ form_end(resetForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+
+
+
