@@ -122,7 +122,7 @@ final class ImportPostsCronCommand extends Command
         // Meta description avec nettoyage et gestion des balises HTML
         $metaDescription = html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? ''));
         if (!empty($metaDescription)) {
-            $metaDescription = $this->truncateDescription($metaDescription, 255);
+            $metaDescription = $this->truncateDescription($metaDescription, 250);
         }
 
         $article->setMetaDescription($metaDescription);
