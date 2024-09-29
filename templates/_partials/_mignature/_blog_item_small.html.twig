@@ -4,7 +4,7 @@
 
     <div class="blog-style2">
         <div class="blog-img">
-            <img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('100x100') }}" alt="{{ item.media|first.title|default('just focus') }}" height="{{ maxHeight }}" width="{{ width }}">
+            <img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('100x100') }}" alt="{{ item.media|first.title|default('just focus') }}" height="{{ maxHeight }}" width="{{ width }}" class="blog_item_small">
         </div>
         <div class="blog-content">
             {{ categories.category_small(item) }}

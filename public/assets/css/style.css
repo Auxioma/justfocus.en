@@ -12899,5 +12899,15 @@ html.dark-theme .dark-theme > .blog-style3 {
   object-fit: cover;
 }
 
+.blog_item_small {
+  height: 100px!important;
+  object-fit: cover;
+}
+
+.blog_item {
+  height: 187px!important;
+  object-fit: cover;
+}
+
 
 /*# sourceMappingURL=style.css.map */
