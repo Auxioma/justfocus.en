@@ -44,8 +44,13 @@ liip_imagine:
         436x300:
             quality: 100
             filters:
-                thumbnail: { size: [436, 300], mode: outbound }
+                thumbnail: 
+                    size: [436, 300]
+                    mode: outbound
+                    force: true
             format: webp
+            
+
 
         80x80:
             quality: 100

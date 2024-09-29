@@ -20,16 +20,16 @@
 							<div class="col-sm-6" itemscope itemtype="http://schema.org/NewsArticle">
 								<div class="blog-style7">
 									<div class="blog-img">
-										<img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('436x300') }}" alt="blog image" height="300" width="436">
+										<img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('436x300') }}" alt="blog image" height="300" width="436" class="categorie__images">
 										{{ categories.category_small(item) }}
 									</div>
 									<div class="blog-meta">
-										<a href="author.html" itemprop="author" itemscope itemtype="http://schema.org/Person">
+										<a href="" itemprop="author" itemscope itemtype="http://schema.org/Person">
 											<i class="far fa-user"></i>
 											<span itemprop="name">{{ item.user.pseudo|default('Default Author') }}</span>
 										</a>
 										<meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-										<a href="blog.html">
+										<a href="">
 											<i class="fal fa-calendar-days"></i>
 											<time itemprop="dateModified" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time>
 										</a>
@@ -71,9 +71,9 @@
 						</div>
 						<div class="widget">
 							<div class="widget-ads">
-			<a href="https://auxioma.eu">
-				<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
-			</a>
+								<a href="https://auxioma.eu">
+									<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
+								</a>
 							</div>
 						</div>
 						<div class="widget widget_tag_cloud">
@@ -95,9 +95,9 @@
 						</div>
 						<div class="widget">
 							<div class="widget-ads">
-			<a href="https://auxioma.eu">
-				<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
-			</a>
+								<a href="https://auxioma.eu">
+									<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
+								</a>
 							</div>
 						</div>
 					</aside>

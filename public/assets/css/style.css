@@ -12889,4 +12889,15 @@ html.dark-theme .dark-theme > .blog-style3 {
   opacity: inherit!important;
 }
 
+.categorie__images {
+  height: 300px!important;
+  object-fit: cover;
+}
+
+.article__images {
+  height: 500px!important;
+  object-fit: cover;
+}
+
+
 /*# sourceMappingURL=style.css.map */
