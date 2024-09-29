@@ -35,7 +35,7 @@ phpstan.neon
 
 /public/sitemaps/*.xml
 
-/.idea/
-/.vscode/
+.idea/
+.vscode/
 
 /config/google/
