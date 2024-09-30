@@ -39,6 +39,7 @@ class ArticlesRepository extends ServiceEntityRepository
             ->leftJoin('a.categories', 'c')
             ->andWhere('c.slugSql = :categoryName')
             ->setParameter('categoryName', $categoryName)
+            ->andWhere('a.isOnline = true')
             ->orderBy('a.id', 'DESC')
             ->setMaxResults(10)
             ->getQuery();
@@ -57,6 +58,7 @@ class ArticlesRepository extends ServiceEntityRepository
             ->leftJoin('a.categories', 'c')
             ->andWhere('c.slug = :categoryName')
             ->setParameter('categoryName', $categoryName)
+            ->andWhere('a.isOnline = true')
             ->orderBy('a.id', 'DESC')
             ->getQuery();
 
@@ -69,6 +71,7 @@ class ArticlesRepository extends ServiceEntityRepository
     public function RandomArticles(): array
     {
         return $this->createQueryBuilder('a')
+            ->where('a.isOnline = true')
             ->orderBy('RAND()')
             ->setMaxResults(4)
             ->getQuery()

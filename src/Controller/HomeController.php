@@ -38,9 +38,9 @@ class HomeController extends AbstractController
         );
 
         // Fetch common queries
-        $breaking = $this->articleRepository->findBy([], ['modified' => 'DESC'], 4);
-        $slider = $this->articleRepository->findBy([], ['id' => 'DESC'], 4);
-        $bestofAndDiscover = $this->articleRepository->findBy([], ['visit' => 'DESC'], 4);
+        $breaking = $this->articleRepository->findBy(['isOnline' => true], ['modified' => 'DESC'], 4);
+        $slider = $this->articleRepository->findBy(['isOnline' => true], ['id' => 'DESC'], 4);
+        $bestofAndDiscover = $this->articleRepository->findBy(['isOnline' => true], ['visit' => 'DESC'], 4);
         $randomise = $this->articleRepository->RandomArticles();
 
         return $this->render('home/index.html.twig', array_merge([
