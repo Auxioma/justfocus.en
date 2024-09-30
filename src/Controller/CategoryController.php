@@ -59,8 +59,6 @@ class CategoryController extends AbstractController
             10
         );
 
-            
-
         return $this->render('category/index.html.twig', [
             'pagination' => $pagination,
             'categories' => $categories,
@@ -76,7 +74,7 @@ class CategoryController extends AbstractController
     public function articles(string $slug, SessionInterface $session): Response
     {
         // Récupérer l'article à partir du slug
-        $article = $this->articlesRepository->findOneBySlug($slug);
+        $article = $this->articlesRepository->findOneBy(['slug' => $slug, 'isOnline' => true]);
     
         if (!$article) {
             throw $this->createNotFoundException('Article non trouvé');

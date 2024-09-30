@@ -10,11 +10,13 @@
 
     {# Boucler sur les articles associés à la catégorie #}
     {% for article in category.articles %}
-        <url>
-            <loc>{{ app.request.scheme ~ '://' ~ app.request.host ~ '/' ~ urlPath ~ '/' ~ article.slug ~ '.html' }}</loc>
-            <lastmod>{{ article.getDate|date('Y-m-d') }}</lastmod>
-            <changefreq>weekly</changefreq>
-            <priority>0.6</priority>
-        </url>
+        {% if article == true %}
+            <url>
+                <loc>{{ app.request.scheme ~ '://' ~ app.request.host ~ '/' ~ urlPath ~ '/' ~ article.slug ~ '.html' }}</loc>
+                <lastmod>{{ article.getDate|date('Y-m-d') }}</lastmod>
+                <changefreq>weekly</changefreq>
+                <priority>0.6</priority>
+            </url>
+        {% endif %}
     {% endfor %}
 </urlset>
