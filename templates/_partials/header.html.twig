@@ -150,9 +150,11 @@
 						<a href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="name">{{ categorie.name }}</a>
 						<ul class="sub-menu">
 							{% for subcategorie in categorie.subcategories %}
-								<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
-									<a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
-								</li>
+								{% if subcategorie.isOnline == true %}
+									<li itemscope itemprop="hasPart" itemtype="http://schema.org/SiteNavigationElement">
+										<a href="{{ path('app_sous_category', {'categorie': categorie.slug, 'slug': subcategorie.slug}) }}" itemprop="name">{{ subcategorie.name }}</a>
+									</li>
+								{% endif %}
 							{% endfor %}
 						</ul>
 					</li>
