@@ -164,5 +164,4 @@ final class ImportPostsCronCommand extends Command
         // Sinon, renvoie la description tronquée sans espace trouvé
         return substr($truncated, 0, $maxLength) . '...';
     }
-
 }
