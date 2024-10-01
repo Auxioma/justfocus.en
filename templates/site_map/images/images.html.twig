@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     {# URL de la catégorie elle-même #}
     <url>
         <loc>{{ app.request.scheme ~ '://' ~ app.request.host ~ '/' ~ urlPath }}</loc>
@@ -16,6 +17,16 @@
                 <lastmod>{{ article.getDate|date('Y-m-d') }}</lastmod>
                 <changefreq>weekly</changefreq>
                 <priority>0.6</priority>
+
+                {# Boucler sur les images associées à l'article #}
+                {% for image in article.media %}
+                    <image:image>
+                        <image:loc>{{ app.request.scheme ~ '://' ~ app.request.host ~  image.guid }}</image:loc>
+                        {% if image.title %}
+                            <image:title>{{ image.title }}</image:title>
+                        {% endif %}
+                    </image:image>
+                {% endfor %}
             </url>
         {% endif %}
     {% endfor %}

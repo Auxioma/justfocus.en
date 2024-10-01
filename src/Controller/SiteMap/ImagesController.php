@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CategoriesController extends AbstractController
+class ImagesController extends AbstractController
 {
-    #[Route('/creation-sitemap-tous-les-jours', name: 'generate_sitemaps', priority: 10)]
+    #[Route('/sitemap-image-par-jour', name: 'sitemap', priority: 10)]
     public function generateSitemaps(CategoryRepository $categoryRepository): Response
     {
         // Récupérer les catégories en ligne uniquement
@@ -33,8 +33,8 @@ class CategoriesController extends AbstractController
                 $urlPath = $category->getSlug();
             }
 
-            $filename = $sitemapsDir . $category->getSlug() . '.xml';
-            $xmlContent = $this->renderView('site_map/categories/index.html.twig', [
+            $filename = $sitemapsDir . $category->getSlug() . '-images.xml';
+            $xmlContent = $this->render('site_map/images/images.html.twig', [
                 'category' => $category,
                 'urlPath' => $urlPath, // Passe l'URL personnalisée à la vue
             ]);
