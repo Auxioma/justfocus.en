@@ -73,6 +73,8 @@
                         </div>
                     </div>
 
+                    {# je vais vérifier que j'ai bien des tags #}
+                    {% if article.tags is not empty %}
                     <div class="blog-author">
                         <div class="media-body">
                             <h6 class="title">Related Tag :</h6>
@@ -85,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-
+                    {% endif %}
                     <!-- 
                     <div class="th-comments-wrap ">
                         <h2 class="blog-inner-title h3">Comments (03)</h2>

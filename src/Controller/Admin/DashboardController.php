@@ -25,7 +25,7 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin_olga150187', name: 'admin', priority: 10)]
     public function index(): Response
     {
-        try {
+        /*try {
             // Essayer de récupérer les données de Google Search Console
             $searchConsoleData = $this->googleService->getSearchConsoleData();
         
@@ -36,11 +36,11 @@ class DashboardController extends AbstractDashboardController
             }
 
             throw $e; // Lancer d'autres types d'erreurs
-        }
+        }*/
 
         // Si tout est bon, afficher les données
-        return $this->render('admin/dashboard.html.twig', [
-            'searchConsoleData' => $searchConsoleData,
+        return $this->render('bundles/EasyAdminBundle/page/login.html.twig', [
+            
         ]);  
     }
 
