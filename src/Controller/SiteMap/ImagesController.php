@@ -17,7 +17,7 @@ class ImagesController extends AbstractController
         $categories = $categoryRepository->findBy(['isOnline' => true]);
 
         $filesystem = new Filesystem();
-        $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/sitemaps/';
+        $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/';
 
         // Créer le dossier "sitemaps" s'il n'existe pas
         if (!$filesystem->exists($sitemapsDir)) {
