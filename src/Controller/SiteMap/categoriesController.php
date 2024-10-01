@@ -8,13 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CategoriesController extends AbstractController
+class categoriesController extends AbstractController
 {
     #[Route('/creation-sitemap-tous-les-jours', name: 'generate_sitemaps', priority: 10)]
     public function generateSitemaps(CategoryRepository $categoryRepository): Response
     {
         // Récupérer les catégories en ligne uniquement
-        $categories = $categoryRepository->findAll();
+        $categories = $categoryRepository->findBy(['isOnline' => true]);
 
         $filesystem = new Filesystem();
         $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/sitemaps/';
