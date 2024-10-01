@@ -28,8 +28,8 @@ class DashboardController extends AbstractDashboardController
         try {
             // Essayer de récupérer les données de Google Search Console
             $searchConsoleData = $this->googleService->getSearchConsoleData();
-          dd('ok');
-        } catch (\Exception $e) {  
+        
+        } catch (\Exception $e) {
             // Si l'utilisateur n'est pas authentifié, rediriger vers Google pour autorisation
             if ($e->getMessage() === 'Aucun jeton d\'accès disponible.') {
                 return $this->redirect($this->googleService->getAuthUrl());

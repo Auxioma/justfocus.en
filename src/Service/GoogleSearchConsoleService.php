@@ -19,7 +19,7 @@ class GoogleSearchConsoleService
         $this->client = new Google_Client();
         $this->client->setAuthConfig(__DIR__ . '/../../config/google/credentials.json');
         $this->client->addScope(Google_Service_Webmasters::WEBMASTERS_READONLY);
-        $this->client->setRedirectUri('https://justfocus.info/callback'); // Remplacez par votre URL
+        $this->client->setRedirectUri('https://justfocus.en.co.uk/callback'); // Remplacez par votre URL
     }
 
     // Retourner l'URL d'authentification pour Google OAuth2
@@ -32,7 +32,7 @@ class GoogleSearchConsoleService
     public function authenticate(string $code): void
     {
         $accessToken = $this->client->fetchAccessTokenWithAuthCode($code);
-        
+
         if (isset($accessToken['error'])) {
             throw new \Exception('Erreur lors de l\'authentification : ' . $accessToken['error_description']);
         }
@@ -73,7 +73,7 @@ class GoogleSearchConsoleService
     {
         $client = $this->getClient();
         $webmasters = new Google_Service_Webmasters($client);
-        $siteUrl = 'https://justfocus.info'; // Remplacez par votre URL
+        $siteUrl = 'justfocus.info'; // Remplacez par votre URL
 
         // Créer une requête Search Analytics
         $request = new Google_Service_Webmasters_SearchAnalyticsQueryRequest();
