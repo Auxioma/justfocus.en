@@ -14,7 +14,7 @@ class CategoriesController extends AbstractController
     public function generateSitemaps(CategoryRepository $categoryRepository): Response
     {
         // Récupérer les catégories en ligne uniquement
-        $categories = $categoryRepository->findBy(['isOnline' => true]);
+        $categories = $categoryRepository->findAll();
 
         $filesystem = new Filesystem();
         $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/sitemaps/';
