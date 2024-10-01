@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-    {# URL de la catégorie elle-même #}
+
+    <!-- URL de la catégorie elle-même -->
     <url>
         <loc>{{ app.request.scheme ~ '://' ~ app.request.host ~ '/' ~ urlPath }}</loc>
         <lastmod>{{ 'now'|date('Y-m-d') }}</lastmod>
@@ -9,7 +10,7 @@
         <priority>0.8</priority>
     </url>
 
-    {# Boucler sur les articles associés à la catégorie #}
+    <!-- Boucler sur les articles associés à la catégorie -->
     {% for article in category.articles %}
         {% if article.isOnline == true %}
             <url>
@@ -18,10 +19,10 @@
                 <changefreq>weekly</changefreq>
                 <priority>0.6</priority>
 
-                {# Boucler sur les images associées à l'article #}
+                <!-- Boucler sur les images associées à l'article -->
                 {% for image in article.media %}
                     <image:image>
-                        <image:loc>{{ app.request.scheme ~ '://' ~ app.request.host ~  image.guid }}</image:loc>
+                        <image:loc>{{ app.request.scheme ~ '://' ~ app.request.host ~ image.guid }}</image:loc>
                         {% if image.title %}
                             <image:title>{{ image.title }}</image:title>
                         {% endif %}
