@@ -48,7 +48,7 @@ class ArticlesCrudController extends AbstractCrudController
             FormField::addTab('Informations Principales'),
             IdField::new('id')->hideOnForm(),
             TextField::new('title')->setLabel('Titre'),
-            SlugField::new('slug')->setLabel('Slug')->hideOnIndex(),
+            SlugField::new('slug')->setLabel('Slug')->setTargetFieldName('title'),
             DateField::new('date')->setLabel('Date de publication'),
             DateField::new('modified')->setLabel('Date de modification')->hideOnIndex(),
     
@@ -133,7 +133,7 @@ class ArticlesCrudController extends AbstractCrudController
         return "Articles (Total: $articleCount)";
     }
     
-    public function configureActions(Actions $actions): Actions
+    /*public function configureActions(Actions $actions): Actions
     {
         $request = $this->requestStack->getCurrentRequest();
         $isonline = $request->get('isOnline');
@@ -148,7 +148,7 @@ class ArticlesCrudController extends AbstractCrudController
                 ->add(Action::NEW, Action::EDIT, Action::DELETE)
                 ->add(Action::INDEX, Action::DETAIL);
         }
-    }
+    }*/
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {

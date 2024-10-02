@@ -17,7 +17,7 @@ class categoriesController extends AbstractController
         $categories = $categoryRepository->findBy(['isOnline' => true]);
 
         $filesystem = new Filesystem();
-        $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/';
+        $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/sitemaps/';
 
         // Créer le dossier "sitemaps" s'il n'existe pas
         if (!$filesystem->exists($sitemapsDir)) {
