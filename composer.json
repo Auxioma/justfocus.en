@@ -100,7 +100,7 @@
             "@auto-scripts"
         ],
         "cs-fixer": [
-            "php-cs-fixer fix --config=php-cs-fixer.json"
+            "php-cs-fixer fix --config=php-cs-fixer.php"
         ]
     },
     "conflict": {
