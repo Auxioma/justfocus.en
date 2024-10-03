@@ -1,5 +1,12 @@
 parameters:
-    level: 6
+    level: max
     paths:
-        - src/
-        - tests/
+        - src
+        - tests
+
+    excludePaths:
+        - %currentWorkingDirectory%/var/*
+        - %currentWorkingDirectory%/vendor/*
+
+    ignoreErrors:
+        - '#Service "App\\Tests\\.*" is not found in the container.#'
