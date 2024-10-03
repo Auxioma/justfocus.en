@@ -1,0 +1,16 @@
+{
+    "finder": {
+        "name": "*.php",
+        "exclude": ["var", "vendor"],
+        "in": "./src"
+    },
+    "rules": {
+        "@Symfony": true,
+        "strict_param": true,
+        "array_syntax": {
+            "syntax": "short"
+        }
+    },
+    "using-cache": true,
+    "cache-file": ".php-cs-fixer.cache"
+}

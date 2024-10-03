@@ -111,16 +111,34 @@ final class ImportPostsCronCommand extends Command
 
     private function populateArticle(Articles $article, array $postData): void
     {
+
+        $authKey = $_ENV['DEEPL_API_KEY'] ?? null;
+        $translator = new \DeepL\Translator($authKey);
+
+        $translations = $translator->translateText(
+            [
+                html_entity_decode($postData['title']['rendered'] ?? 'No title'), 
+                $postData['title']['rendered'] ?? 'No title', 
+                html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? ''))
+            ],
+            null,
+            'en-GB',
+        );
+
+        // Reformatage du code et traduction avec l'API de ChatGPT pour les articles
+        $authGPT = $_ENV['OPENAI_API_KEY'] ?? null;
+        
+        
         $article->setId($postData['id']); // Définit l'ID de l'article
-        $article->setTitle(html_entity_decode($postData['title']['rendered'] ?? 'No title')); // Définit le titre de l'article
+        $article->setTitle($translations[0]->text); // Définit le titre de l'article
         $article->setSlug(html_entity_decode($postData['slug'] ?? '')); // Définit le slug de l'article
         $article->setDate(new \DateTime($postData['date'] ?? 'now')); // Définit la date de l'article
         $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
         $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
-        $article->setMetaTitle($postData['title']['rendered'] ?? 'No title'); // Définit le titre de la méta
+        $article->setMetaTitle($translations[1]->text); // Définit le titre de la méta
  
         // Meta description avec nettoyage et gestion des balises HTML
-        $metaDescription = html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? ''));
+        $metaDescription = $translations[2]->text;
         if (!empty($metaDescription)) {
             $metaDescription = $this->truncateDescription($metaDescription, 250);
         }

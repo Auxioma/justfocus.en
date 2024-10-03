@@ -6,12 +6,10 @@ use App\Entity\Articles;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\HttpFoundation\RequestStack;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
@@ -92,9 +90,9 @@ class ArticlesCrudController extends AbstractCrudController
             // Onglet : Médias
             FormField::addTab('Médias'),
             ImageField::new('firstMediaUrl')
-            ->setBasePath('') // Chemin vers le dossier où sont stockées les images
-            ->setLabel('Première Image')
-            ->hideOnForm(),
+                ->setBasePath('') // Chemin vers le dossier où sont stockées les images
+                ->setLabel('Première Image')
+                ->hideOnForm(),
     
             // Onglet : SEO
             FormField::addTab('SEO'),
@@ -133,23 +131,6 @@ class ArticlesCrudController extends AbstractCrudController
         return "Articles (Total: $articleCount)";
     }
     
-    /*public function configureActions(Actions $actions): Actions
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        $isonline = $request->get('isOnline');
-    
-        // Adjust the conditions to avoid disabling the EDIT action unless absolutely needed
-        if ($isonline == 0) {
-            return $actions
-                ->disable(Action::NEW, Action::DELETE)
-                ->add(Action::INDEX, Action::DETAIL, Action::EDIT);  // Ensure EDIT is added
-        } else {
-            return $actions
-                ->add(Action::NEW, Action::EDIT, Action::DELETE)
-                ->add(Action::INDEX, Action::DETAIL);
-        }
-    }*/
-
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         // Récupérer la requête courante
