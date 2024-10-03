@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
-class Contact {
+class Contact
+{
     private $Nom;
 
     private $Email;
 
-    private $Sujet; 
+    private $Sujet;
 
-    private $Message; 
+    private $Message;
 
     public function getNom()
     {
@@ -58,5 +59,4 @@ class Contact {
 
         return $this;
     }
-
 }

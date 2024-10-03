@@ -12,7 +12,7 @@ class MenuController extends AbstractController
     public function index(CategoryRepository $category): Response
     {
         return $this->render('_partials/header.html.twig', [
-            'categories' => $category->findBy(['parent' => null, 'isOnline' => true])
+            'categories' => $category->findBy(['parent' => null, 'isOnline' => true]),
         ]);
     }
 
@@ -20,7 +20,7 @@ class MenuController extends AbstractController
     {
         // je veux afficher les 2 derniers articles
         return $this->render('_partials/footer.html.twig', [
-            'footers' => $articlesRepository->findBy([], ['id' => 'DESC'], 2)
+            'footers' => $articlesRepository->findBy([], ['id' => 'DESC'], 2),
         ]);
     }
 }

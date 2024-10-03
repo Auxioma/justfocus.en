@@ -2,17 +2,17 @@
 
 namespace App\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Psr\Log\LoggerInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Articles;
 use App\Repository\ArticlesRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
-use App\Entity\Articles;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(
     name: 'app:import-posts', // Nom de la commande dans la console Symfony
@@ -36,7 +36,7 @@ final class ImportPostsCronCommand extends Command
         CategoryRepository $categoryRepository, // Injection de la dépendance pour le repository des catégories
         UserRepository $userRepository, // Injection de la dépendance pour le repository des utilisateurs
         LoggerInterface $logger, // Injection de la dépendance pour le logger
-        EntityManagerInterface $entityManager // Injection de la dépendance pour l'entity manager
+        EntityManagerInterface $entityManager, // Injection de la dépendance pour l'entity manager
     ) {
         parent::__construct(); // Appel au constructeur de la classe parente
         $this->client = $client; // Initialisation du client HTTP
@@ -54,72 +54,73 @@ final class ImportPostsCronCommand extends Command
         $insertedCount = 0; // Compteur d'articles insérés
         $maxInserts = 50; // Nombre maximum d'insertions
 
-            $page = 1; // Initialise la page à 1
+        $page = 1; // Initialise la page à 1
 
-            do {
-                $url = self::WORDPRESS_API_URL . '?per_page=' . self::PER_PAGE . '&page=' . $page . '&status=publish'; // Construit l'URL pour la requête API
-                $response = $this->client->request('GET', $url); // Fait la requête GET à l'API WordPress
+        do {
+            $url = self::WORDPRESS_API_URL.'?per_page='.self::PER_PAGE.'&page='.$page.'&status=publish'; // Construit l'URL pour la requête API
+            $response = $this->client->request('GET', $url); // Fait la requête GET à l'API WordPress
 
-                if ($response->getStatusCode() !== 200) { // Vérifie si la réponse n'est pas un succès
-                    $this->logger->error('Une erreur s\'est produite lors de la récupération des articles.'); // Log l'erreur   
-                    break; // Sort de la boucle
-                }
+            if (200 !== $response->getStatusCode()) { // Vérifie si la réponse n'est pas un succès
+                $this->logger->error('Une erreur s\'est produite lors de la récupération des articles.'); // Log l'erreur
+                break; // Sort de la boucle
+            }
 
-                $InsertPost = $response->toArray(); // Convertit la réponse en tableau PHP
-                if (empty($InsertPost)) { // Vérifie si la réponse est vide
-                    break; // Sort de la boucle
-                }
-                
-                $this->entityManager->beginTransaction(); // Démarre une transaction
-                try {
-                    foreach ($InsertPost as $postData) { // Boucle sur chaque article de la catégorie
-                        if ($insertedCount >= $maxInserts) { // Vérifie si le nombre maximum d'insertions est atteint
-                            $output->writeln('Maximum number of articles inserted. Ending import.'); // Affiche un message d'arrêt de l'importation
-                            $this->entityManager->commit(); // Valide la transaction
-                            return Command::SUCCESS; // Retourne un succès de commande
-                        }
+            $InsertPost = $response->toArray(); // Convertit la réponse en tableau PHP
+            if (empty($InsertPost)) { // Vérifie si la réponse est vide
+                break; // Sort de la boucle
+            }
 
-                        $existingArticle = $this->articlesRepository->find($postData['id']); // Cherche si l'article existe déjà
+            $this->entityManager->beginTransaction(); // Démarre une transaction
+            try {
+                foreach ($InsertPost as $postData) { // Boucle sur chaque article de la catégorie
+                    if ($insertedCount >= $maxInserts) { // Vérifie si le nombre maximum d'insertions est atteint
+                        $output->writeln('Maximum number of articles inserted. Ending import.'); // Affiche un message d'arrêt de l'importation
+                        $this->entityManager->commit(); // Valide la transaction
 
-                        if ($existingArticle) { // Vérifie si l'article existe
-                            $output->writeln('Article with ID ' . $postData['id'] . ' already exists. Skipping...'); // Affiche un message si l'article existe déjà
-                            continue; // Passe à l'itération suivante
-                        }
-
-                        $article = new Articles(); // Crée une nouvelle instance de l'entité Articles
-                        $this->populateArticle($article, $postData); // Remplit l'article avec les données récupérées
-                        $this->articlesRepository->save($article); // Sauvegarde l'article en base de données
-
-                        $output->writeln('Article with ID ' . $postData['id'] . ' inserted.'); // Affiche un message de succès d'insertion
-                        $insertedCount++; // Incrémente le compteur d'articles insérés
+                        return Command::SUCCESS; // Retourne un succès de commande
                     }
-                    $this->entityManager->commit(); // Valide la transaction
-                } catch (\Exception $e) { // Capture les exceptions
-                    $this->entityManager->rollback(); // Annule la transaction en cas d'erreur
-                    $this->logger->error('Failed to process posts: ' . $e->getMessage()); // Log l'erreur
-                    $output->writeln('Error: ' . $e->getMessage()); // Affiche l'erreur
-                    return Command::FAILURE; // Retourne un échec de commande
-                }
 
-                $page++; // Passe à la page suivante
-            } while (count($InsertPost) === self::PER_PAGE); // Continue tant qu'il y a des articles à récupérer
-        
+                    $existingArticle = $this->articlesRepository->find($postData['id']); // Cherche si l'article existe déjà
+
+                    if ($existingArticle) { // Vérifie si l'article existe
+                        $output->writeln('Article with ID '.$postData['id'].' already exists. Skipping...'); // Affiche un message si l'article existe déjà
+                        continue; // Passe à l'itération suivante
+                    }
+
+                    $article = new Articles(); // Crée une nouvelle instance de l'entité Articles
+                    $this->populateArticle($article, $postData); // Remplit l'article avec les données récupérées
+                    $this->articlesRepository->save($article); // Sauvegarde l'article en base de données
+
+                    $output->writeln('Article with ID '.$postData['id'].' inserted.'); // Affiche un message de succès d'insertion
+                    ++$insertedCount; // Incrémente le compteur d'articles insérés
+                }
+                $this->entityManager->commit(); // Valide la transaction
+            } catch (\Exception $e) { // Capture les exceptions
+                $this->entityManager->rollback(); // Annule la transaction en cas d'erreur
+                $this->logger->error('Failed to process posts: '.$e->getMessage()); // Log l'erreur
+                $output->writeln('Error: '.$e->getMessage()); // Affiche l'erreur
+
+                return Command::FAILURE; // Retourne un échec de commande
+            }
+
+            ++$page; // Passe à la page suivante
+        } while (self::PER_PAGE === count($InsertPost)); // Continue tant qu'il y a des articles à récupérer
 
         $output->writeln('Articles successfully inserted.'); // Affiche un message de succès
+
         return Command::SUCCESS; // Retourne un succès de commande
     }
 
     private function populateArticle(Articles $article, array $postData): void
     {
-
         $authKey = $_ENV['DEEPL_API_KEY'] ?? null;
         $translator = new \DeepL\Translator($authKey);
 
         $translations = $translator->translateText(
             [
-                html_entity_decode($postData['title']['rendered'] ?? 'No title'), 
-                $postData['title']['rendered'] ?? 'No title', 
-                html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? ''))
+                html_entity_decode($postData['title']['rendered'] ?? 'No title'),
+                $postData['title']['rendered'] ?? 'No title',
+                html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? '')),
             ],
             null,
             'en-GB',
@@ -127,8 +128,7 @@ final class ImportPostsCronCommand extends Command
 
         // Reformatage du code et traduction avec l'API de ChatGPT pour les articles
         $authGPT = $_ENV['OPENAI_API_KEY'] ?? null;
-        
-        
+
         $article->setId($postData['id']); // Définit l'ID de l'article
         $article->setTitle($translations[0]->text); // Définit le titre de l'article
         $article->setSlug(html_entity_decode($postData['slug'] ?? '')); // Définit le slug de l'article
@@ -136,7 +136,7 @@ final class ImportPostsCronCommand extends Command
         $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
         $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
         $article->setMetaTitle($translations[1]->text); // Définit le titre de la méta
- 
+
         // Meta description avec nettoyage et gestion des balises HTML
         $metaDescription = $translations[2]->text;
         if (!empty($metaDescription)) {
@@ -175,11 +175,11 @@ final class ImportPostsCronCommand extends Command
         $lastSpace = strrpos($truncated, ' ');
 
         // Si un espace est trouvé, on coupe à cet endroit
-        if ($lastSpace !== false) {
-            return substr($truncated, 0, $lastSpace) . '...';
+        if (false !== $lastSpace) {
+            return substr($truncated, 0, $lastSpace).'...';
         }
 
         // Sinon, renvoie la description tronquée sans espace trouvé
-        return substr($truncated, 0, $maxLength) . '...';
+        return substr($truncated, 0, $maxLength).'...';
     }
 }

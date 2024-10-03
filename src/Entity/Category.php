@@ -13,7 +13,7 @@ class Category
     {
         return $this->name;
     }
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -214,5 +214,4 @@ class Category
     {
         return $this->articles->count(); // Compte le nombre d'articles dans la collection
     }
-
 }

@@ -25,15 +25,16 @@ class HomeController extends AbstractController
     ];
 
     public function __construct(
-        private readonly ArticlesRepository $articleRepository
-    ){}
+        private readonly ArticlesRepository $articleRepository,
+    ) {
+    }
 
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
         // Fetch categorized articles
         $categorizedArticles = array_map(
-            fn($category) => $this->articleRepository->findByCategory($category),
+            fn ($category) => $this->articleRepository->findByCategory($category),
             self::CATEGORIES
         );
 

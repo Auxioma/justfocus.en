@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LegalController extends AbstractController
 {
@@ -19,5 +19,4 @@ class LegalController extends AbstractController
     {
         return $this->render('legal/terms-conditions.html.twig');
     }
-
 }

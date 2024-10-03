@@ -4,9 +4,9 @@ namespace App\Controller\SiteMap;
 
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Filesystem\Filesystem;
 
 class categoriesController extends AbstractController
 {
@@ -17,7 +17,7 @@ class categoriesController extends AbstractController
         $categories = $categoryRepository->findBy(['isOnline' => true]);
 
         $filesystem = new Filesystem();
-        $sitemapsDir = $this->getParameter('kernel.project_dir') . '/public/sitemaps/';
+        $sitemapsDir = $this->getParameter('kernel.project_dir').'/public/sitemaps/';
 
         // Créer le dossier "sitemaps" s'il n'existe pas
         if (!$filesystem->exists($sitemapsDir)) {
@@ -28,12 +28,12 @@ class categoriesController extends AbstractController
         foreach ($categories as $category) {
             // Vérifie si la catégorie a un parent et génère l'URL correctement
             if ($category->getParent()) {
-                $urlPath = $category->getParent()->getSlug() . '/' . $category->getSlug();
+                $urlPath = $category->getParent()->getSlug().'/'.$category->getSlug();
             } else {
                 $urlPath = $category->getSlug();
             }
 
-            $filename = $sitemapsDir . $category->getSlug() . '.xml';
+            $filename = $sitemapsDir.$category->getSlug().'.xml';
             $xmlContent = $this->renderView('site_map/categories/index.html.twig', [
                 'category' => $category,
                 'urlPath' => $urlPath, // Passe l'URL personnalisée à la vue

@@ -18,6 +18,7 @@ class ReadingExtension extends AbstractExtension
     {
         $words = str_word_count(strip_tags($text));
         $minutes = ceil($words / 200); // 200 mots par minute en moyenne
-        return $minutes . ' min read';
+
+        return $minutes.' min read';
     }
 }

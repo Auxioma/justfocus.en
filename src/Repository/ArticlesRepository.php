@@ -87,9 +87,9 @@ class ArticlesRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     /**
-     * Récupère les articles qui n'ont pas de tags associés
+     * Récupère les articles qui n'ont pas de tags associés.
      *
      * @return Articles[]
      */
@@ -101,5 +101,4 @@ class ArticlesRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }

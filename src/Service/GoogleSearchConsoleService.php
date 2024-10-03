@@ -1,11 +1,9 @@
 <?php
+
 // src/Service/GoogleSearchConsoleService.php
 
 namespace App\Service;
 
-use Google_Client;
-use Google_Service_Webmasters;
-use Google_Service_Webmasters_SearchAnalyticsQueryRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class GoogleSearchConsoleService
@@ -16,9 +14,9 @@ class GoogleSearchConsoleService
     public function __construct(RequestStack $requestStack)
     {
         $this->session = $requestStack->getSession();
-        $this->client = new Google_Client();
-        $this->client->setAuthConfig(__DIR__ . '/../../config/google/credentials.json');
-        $this->client->addScope(Google_Service_Webmasters::WEBMASTERS_READONLY);
+        $this->client = new \Google_Client();
+        $this->client->setAuthConfig(__DIR__.'/../../config/google/credentials.json');
+        $this->client->addScope(\Google_Service_Webmasters::WEBMASTERS_READONLY);
         $this->client->setRedirectUri('https://justfocus.en.co.uk/callback'); // Remplacez par votre URL
     }
 
@@ -34,7 +32,7 @@ class GoogleSearchConsoleService
         $accessToken = $this->client->fetchAccessTokenWithAuthCode($code);
 
         if (isset($accessToken['error'])) {
-            throw new \Exception('Erreur lors de l\'authentification : ' . $accessToken['error_description']);
+            throw new \Exception('Erreur lors de l\'authentification : '.$accessToken['error_description']);
         }
 
         // Stocker le jeton d'accès dans la session
@@ -43,7 +41,7 @@ class GoogleSearchConsoleService
     }
 
     // Récupérer le client avec un jeton d'accès valide ou le rafraîchir
-    public function getClient(): Google_Client
+    public function getClient(): \Google_Client
     {
         $accessToken = $this->session->get('google_access_token');
 
@@ -72,11 +70,11 @@ class GoogleSearchConsoleService
     public function getSearchConsoleData(): array
     {
         $client = $this->getClient();
-        $webmasters = new Google_Service_Webmasters($client);
+        $webmasters = new \Google_Service_Webmasters($client);
         $siteUrl = 'justfocus.info'; // Remplacez par votre URL
 
         // Créer une requête Search Analytics
-        $request = new Google_Service_Webmasters_SearchAnalyticsQueryRequest();
+        $request = new \Google_Service_Webmasters_SearchAnalyticsQueryRequest();
         $request->setStartDate('2023-01-01');
         $request->setEndDate('2023-01-31');
         $request->setDimensions(['query']);

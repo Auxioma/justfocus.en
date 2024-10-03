@@ -6,8 +6,8 @@ use App\Entity\Articles;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AjaxController extends AbstractController
 {
@@ -19,5 +19,4 @@ class AjaxController extends AbstractController
 
         return new JsonResponse(['likes' => $articles->getLikes()]);
     }
-
 }

@@ -220,7 +220,8 @@ class Articles
     // Méthode pour incrémenter les visites
     public function incrementVisit(): static
     {
-        $this->visit++;
+        ++$this->visit;
+
         return $this;
     }
 
@@ -289,12 +290,13 @@ class Articles
 
     public function getFirstMedia(): ?Media
     {
-        return $this->media->first() ?: null; 
+        return $this->media->first() ?: null;
     }
 
     public function getFirstMediaUrl(): ?string
     {
         $firstMedia = $this->getFirstMedia();
+
         return $firstMedia ? $firstMedia->getGuid() : '/images/default.webp';
     }
 
@@ -306,12 +308,14 @@ class Articles
     public function setLikes(int $likes): self
     {
         $this->likes = $likes;
+
         return $this;
     }
 
     public function incrementLikes(): self
     {
-        $this->likes++;
+        ++$this->likes;
+
         return $this;
     }
 }

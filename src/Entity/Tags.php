@@ -14,7 +14,7 @@ class Tags
     {
         return $this->name;
     }
-    
+
     #[ORM\Id]
     // #[ORM\GeneratedValue]
     #[ORM\Column]

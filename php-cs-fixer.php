@@ -9,7 +9,7 @@ $config = new PhpCsFixer\Config();
 return $config
     ->setRules([
         '@Symfony' => true,
-        'strict_param' => true,
+        'strict_param' => false,
         'array_syntax' => ['syntax' => 'short'],
     ])
     ->setFinder($finder)
