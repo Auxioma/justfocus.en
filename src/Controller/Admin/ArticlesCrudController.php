@@ -103,7 +103,7 @@ class ArticlesCrudController extends AbstractCrudController
     
             // Onglet : Statistiques et statut
             FormField::addTab('Statistiques et Statut'),
-            NumberField::new('visit')->setLabel('Nombre de visites'),
+            NumberField::new('visit')->setLabel('Nombre de visites')->hideOnForm(),
             BooleanField::new('isOnline')->setLabel('En ligne'),
         ];
     }
