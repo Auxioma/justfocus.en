@@ -44,9 +44,12 @@ class ArticlesRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery();
 
-        $query->useQueryCache(true); // Activer le cache de requête
+        $query->useQueryCache(true);
 
-        return $query->getResult();
+        /** @var Articles[] $result */
+        $result = $query->getResult(); // Assurez-vous que le type est bien Articles[]
+
+        return $result;
     }
 
     /**
@@ -62,7 +65,10 @@ class ArticlesRepository extends ServiceEntityRepository
             ->orderBy('a.id', 'DESC')
             ->getQuery();
 
-        return $query->getResult();
+        /** @var Articles[] $result */
+        $result = $query->getResult(); // Assurez-vous que le type est bien Articles[]
+
+        return $result;
     }
 
     /**
@@ -70,35 +76,47 @@ class ArticlesRepository extends ServiceEntityRepository
      */
     public function RandomArticles(): array
     {
-        return $this->createQueryBuilder('a')
+        $query = $this->createQueryBuilder('a')
             ->where('a.isOnline = true')
             ->orderBy('RAND()')
             ->setMaxResults(4)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+            ->getQuery();
 
-    public function findArticlesWithoutMedia(): array
-    {
-        return $this->createQueryBuilder('a')
-            ->leftJoin('a.media', 'm')  // Left join to fetch articles without media
-            ->where('m.id IS NULL')     // Check where media is null (no related media entities)
-            ->getQuery()
-            ->getResult();
+        /** @var Articles[] $result */
+        $result = $query->getResult(); // Assurez-vous que le type est bien Articles[]
+
+        return $result;
     }
 
     /**
-     * Récupère les articles qui n'ont pas de tags associés.
-     *
+     * @return Articles[]
+     */
+    public function findArticlesWithoutMedia(): array
+    {
+        $query = $this->createQueryBuilder('a')
+            ->leftJoin('a.media', 'm')
+            ->where('m.id IS NULL')
+            ->getQuery();
+
+        /** @var Articles[] $result */
+        $result = $query->getResult(); // Assurez-vous que le type est bien Articles[]
+
+        return $result;
+    }
+
+    /**
      * @return Articles[]
      */
     public function findArticlesWithoutTags(): array
     {
-        return $this->createQueryBuilder('a')
+        $query = $this->createQueryBuilder('a')
             ->leftJoin('a.tags', 't')
-            ->where('t.id IS NULL') // Vérifie l'absence de tags
-            ->getQuery()
-            ->getResult();
+            ->where('t.id IS NULL')
+            ->getQuery();
+
+        /** @var Articles[] $result */
+        $result = $query->getResult(); // Assurez-vous que le type est bien Articles[]
+
+        return $result;
     }
 }
