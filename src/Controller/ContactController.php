@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
@@ -27,21 +28,41 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Retrieve and validate the email address
+            $fromEmail = $form->get('Email')->getData();
+            if (!is_string($fromEmail) || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+                $this->addFlash('error', 'Invalid email address.');
+
+                return $this->redirectToRoute('app_contact', [], 301);
+            }
+
+            // Retrieve and validate the subject
+            $subject = $form->get('Sujet')->getData();
+            if (!is_string($subject) || empty($subject)) {
+                $this->addFlash('error', 'Subject cannot be empty.');
+
+                return $this->redirectToRoute('app_contact', [], 301);
+            }
+
+            // Safely handle 'Nom' and 'Message' fields with default empty strings
+            $name = $form->get('Nom')->getData() ?? '';        // Default to empty string if null
+            $message = $form->get('Message')->getData() ?? ''; // Default to empty string if null
+
             $email = (new TemplatedEmail())
-                ->from($form->get('Email')->getData())
+                ->from(new Address($fromEmail)) // Use Address to ensure valid email format
                 ->to('partnair@justfocus.info')
-                ->subject($form->get('Sujet')->getData())
+                ->subject($subject) // Ensure it's a valid string
                 ->htmlTemplate('emails/contact.html.twig')
                 ->context([
-                    'Nom' => $form->get('Nom')->getData(),
-                    'Message' => $form->get('Message')->getData(),
+                    'Nom' => $name,     // Pass name safely as string
+                    'Message' => $message, // Pass message safely as string
                 ]);
 
             $this->mailer->send($email);
 
             $this->addFlash('success', 'Your email has been sent!');
 
-            $this->redirectToRoute('app_contact', [], 301);
+            return $this->redirectToRoute('app_contact', [], 301);
         }
 
         return $this->render('contact/index.html.twig', [

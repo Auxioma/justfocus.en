@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\ArticlesRepository;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,26 +25,40 @@ class CategoryController extends AbstractController
     #[Route('/{slug}', name: 'app_category', requirements: ['slug' => '[\w-]+'], priority: 5)]
     public function index(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
-        $category = $this->categoryRepository->findOneBySlug($slug);
+        $category = $this->categoryRepository->findOneBy(['slug' => $slug]);
 
+        if (!$category) {
+            throw $this->createNotFoundException('Category not found');
+        }
+
+        // Categories: check if the parent exists before accessing its subcategories
         if ('app_sous_category' === $request->attributes->get('_route')) {
-            $categories = $category->getParent()->getSubcategories();
+            $parentCategory = $category->getParent();
+            if ($parentCategory) {
+                $categories = $parentCategory->getSubcategories();
+            } else {
+                $categories = []; // or handle the case where there is no parent
+            }
         } else {
             $categories = $category->getSubcategories();
         }
 
-        // affichage pour le breadcrumb
-        if ('app_sous_category' === $request->attributes->get('_route')) {
-            $breadcrumbSousCategoryName = $category->getParent()->getName();
-            $breadcrumbSousCategorySlug = $category->getParent()->getSlug();
+        // Breadcrumb logic with null checks
+        $breadcrumbCategoryName = $category->getName();
+        $breadcrumbCategorySlug = $category->getSlug();
 
-            $breadcrumbCategoryName = $category->getName();
-            $breadcrumbCategorySlug = $category->getSlug();
-        } else {
-            $breadcrumbCategoryName = $category->getName();
-            $breadcrumbCategorySlug = $category->getSlug();
+        if ('app_sous_category' === $request->attributes->get('_route')) {
+            $parentCategory = $category->getParent();
+            if ($parentCategory) {
+                $breadcrumbSousCategoryName = $parentCategory->getName();
+                $breadcrumbSousCategorySlug = $parentCategory->getSlug();
+            } else {
+                $breadcrumbSousCategoryName = null;
+                $breadcrumbSousCategorySlug = null;
+            }
         }
 
+        // Paginate articles
         $articles = $this->articlesRepository->PaginationCategoryAndArticle($slug);
 
         $pagination = $paginator->paginate(

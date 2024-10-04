@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryCrudController extends AbstractCrudController
 {
@@ -58,7 +59,7 @@ class CategoryCrudController extends AbstractCrudController
             ->disable(Action::NEW, Action::DELETE, Action::EDIT);
     }
 
-    public function showSubCategories(AdminContext $context, EntityManagerInterface $entityManager)
+    public function showSubCategories(AdminContext $context, EntityManagerInterface $entityManager): Response
     {
         $category = $context->getEntity()->getInstance();
 

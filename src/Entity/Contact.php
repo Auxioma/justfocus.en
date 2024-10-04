@@ -4,56 +4,55 @@ namespace App\Entity;
 
 class Contact
 {
-    private $Nom;
+    private string $Nom;
+    private string $Email;
+    private string $Sujet;
+    private string $Message;
 
-    private $Email;
-
-    private $Sujet;
-
-    private $Message;
-
-    public function getNom()
+    // Getters
+    public function getNom(): string
     {
         return $this->Nom;
     }
 
-    public function setNom(string $Nom)
+    public function getEmail(): string
+    {
+        return $this->Email;
+    }
+
+    public function getSujet(): string
+    {
+        return $this->Sujet;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->Message;
+    }
+
+    // Setters
+    public function setNom(string $Nom): self
     {
         $this->Nom = $Nom;
 
         return $this;
     }
 
-    public function getEmail()
-    {
-        return $this->Email;
-    }
-
-    public function setEmail(string $Email)
+    public function setEmail(string $Email): self
     {
         $this->Email = $Email;
 
         return $this;
     }
 
-    public function getSujet()
-    {
-        return $this->Sujet;
-    }
-
-    public function setSujet(string $Sujet)
+    public function setSujet(string $Sujet): self
     {
         $this->Sujet = $Sujet;
 
         return $this;
     }
 
-    public function getMessage()
-    {
-        return $this->Message;
-    }
-
-    public function setMessage(string $Message)
+    public function setMessage(string $Message): self
     {
         $this->Message = $Message;
 

@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Articles;
 use App\Entity\Tags;
+use App\Repository\ArticlesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -20,11 +21,13 @@ final class TagsPostCronCommand extends Command
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/tags';
 
     private EntityManagerInterface $entityManager;
+    private ArticlesRepository $articlesRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ArticlesRepository $articlesRepository)
     {
         parent::__construct();
         $this->entityManager = $entityManager;
+        $this->articlesRepository = $articlesRepository;    
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -32,7 +35,7 @@ final class TagsPostCronCommand extends Command
         $httpClient = HttpClient::create();
 
         // Récupérer les articles sans tags
-        $articles = $this->entityManager->getRepository(Articles::class)->findArticlesWithoutTags();
+        $articles = $this->articlesRepository->findArticlesWithoutTags();
 
         // Initialiser un compteur pour limiter à 100 articles et un autre pour les tags insérés
         $counter = 0;

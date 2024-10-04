@@ -5,22 +5,22 @@ namespace App\Controller;
 use App\Repository\ArticlesRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ArtilcesController extends AbstractController
 {
     private ArticlesRepository $articlesRepository;
     private CategoryRepository $categoryRepository;
-    private EntityManagerInterface $entityManager; // Add this
+    private EntityManagerInterface $entityManager;
 
     public function __construct(ArticlesRepository $articlesRepository, CategoryRepository $categoryRepository, EntityManagerInterface $entityManager)
     {
         $this->articlesRepository = $articlesRepository;
         $this->categoryRepository = $categoryRepository;
-        $this->entityManager = $entityManager; // Assign it here
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/{articlecategorie}/{souscategorie}/{slug}.html', name: 'app_articles', requirements: ['articlecategorie' => '[\w-]+', 'souscategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 2)]
@@ -41,11 +41,19 @@ class ArtilcesController extends AbstractController
         $now = new \DateTime();
         $canIncrement = true;
 
-        if ($lastVisit) {
-            $lastVisitTime = new \DateTime($lastVisit);
-            // Si la visite précédente remonte à moins d'une heure, ne pas incrémenter
-            if ($now->getTimestamp() - $lastVisitTime->getTimestamp() < 3600) {
-                $canIncrement = false;
+        if ($lastVisit && is_string($lastVisit)) {
+            // Ensure $lastVisit is a valid string before passing to DateTime
+            try {
+                $lastVisitTime = new \DateTime($lastVisit);
+            } catch (\Exception $e) {
+                $lastVisitTime = null; // Handle invalid date format, ignore last visit
+            }
+
+            if ($lastVisitTime instanceof \DateTime) {
+                // Si la visite précédente remonte à moins d'une heure, ne pas incrémenter
+                if ($now->getTimestamp() - $lastVisitTime->getTimestamp() < 3600) {
+                    $canIncrement = false;
+                }
             }
         }
 

@@ -64,7 +64,7 @@ class Articles
     private ?bool $isOnline = false;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private $likes = 0;
+    private int $likes = 0;
 
     public function __construct()
     {

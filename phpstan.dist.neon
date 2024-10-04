@@ -7,6 +7,3 @@ parameters:
     excludePaths:
         - %currentWorkingDirectory%/var/*
         - %currentWorkingDirectory%/vendor/*
-
-    #ignoreErrors:
-    #    - '#Service "App\\Tests\\.*" is not found in the container.#'

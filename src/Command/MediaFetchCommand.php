@@ -46,10 +46,9 @@ class MediaFetchCommand extends Command
         // Initialiser le client HTTP Guzzle
         $client = new Client();
 
-        // Variables pour stocker le nombre de succès et d'échecs
         $successCount = 0;
         $errorCount = 0;
-        $mediaData = [];  // Stocker des infos sur chaque article
+        $mediaData = [];
 
         foreach ($articles as $article) {
             $articleId = $article->getId();
@@ -62,109 +61,105 @@ class MediaFetchCommand extends Command
                     ],
                 ]);
 
-                // Vérifier le statut de la réponse
                 if (200 === $response->getStatusCode()) {
                     $mediaItems = json_decode($response->getBody()->getContents(), true);
 
-                    if (count($mediaItems) > 0) {
-                        $mediaItem = $mediaItems[0];
+                    // Ensure the response is an array
+                    if (is_array($mediaItems) && count($mediaItems) > 0) {
+                        $mediaItem = $mediaItems[0];  // Assuming we're dealing with the first media item
 
-                        // Vérifier si le média existe déjà
-                        $existingMedia = $this->mediaRepository->find($mediaItem['id']);
-                        if ($existingMedia) {
-                            $output->writeln("Le média avec ID {$mediaItem['id']} existe déjà. Passer...");
-                            continue;
-                        }
-
-                        // Récupérer l'URL du média
-                        $mediaUrl = $mediaItem['guid']['rendered'];
-                        if ($mediaUrl) {
-                            // Télécharger le contenu de l'image
-                            $imageContent = file_get_contents($mediaUrl);
-
-                            // Vérifier si le contenu est bien une image
-                            $imageInfo = getimagesizefromstring($imageContent);
-                            if (false === $imageInfo) {
-                                $io->error("Le fichier récupéré pour l'ID {$mediaItem['id']} n'est pas une image valide.");
-                                $mediaData[$articleId] = 'Fichier non valide';
-                                ++$errorCount;
+                        // Check if $mediaItem is an array and contains the necessary keys
+                        if (is_array($mediaItem) && isset($mediaItem['id'], $mediaItem['guid']['rendered'])) {
+                            $existingMedia = $this->mediaRepository->find($mediaItem['id']);
+                            if ($existingMedia) {
+                                $output->writeln("Le média avec ID {$mediaItem['id']} existe déjà. Passer...");
                                 continue;
                             }
 
-                            // Générer le chemin du fichier
-                            $mediaId = $mediaItem['id'];
-                            $mediaIdArray = str_split($mediaId);
+                            $mediaUrl = $mediaItem['guid']['rendered'];
+                            if ($mediaUrl) {
+                                $imageContent = @file_get_contents($mediaUrl);
 
-                            $env = $_ENV['APP_ENV'] ?? 'prod';
-                            $mediaPath = ('prod' === $env)
-                                ? '/home/favevace/www/public/images/'.implode('/', $mediaIdArray).'/'
-                                : 'C:\laragon\www\justfocus.en\public/images/'.implode('/', $mediaIdArray).'/';
+                                // Ensure the image content is valid
+                                if (false !== $imageContent) {
+                                    $imageInfo = getimagesizefromstring($imageContent);
+                                    if (false === $imageInfo) {
+                                        $io->error("Le fichier récupéré pour l'ID {$mediaItem['id']} n'est pas une image valide.");
+                                        $mediaData[$articleId] = 'Fichier non valide';
+                                        ++$errorCount;
+                                        continue;
+                                    }
 
-                            if (!file_exists($mediaPath)) {
-                                mkdir($mediaPath, 0777, true);
-                            }
+                                    // Proceed with saving the media
+                                    $mediaId = (string) $mediaItem['id'];  // Cast ID to string
+                                    $mediaIdArray = str_split($mediaId);
 
-                            // Créer un nom de fichier pour le format WebP
-                            $mediaFileNameWebP = $mediaPath.$mediaId.'.webp';
+                                    $env = $_ENV['APP_ENV'] ?? 'prod';
+                                    $mediaPath = ('prod' === $env)
+                                        ? '/home/favevace/www/public/images/'.implode('/', $mediaIdArray).'/'
+                                        : 'C:\laragon\www\justfocus.en\public/images/'.implode('/', $mediaIdArray).'/';
 
-                            // Créer l'image à partir du contenu téléchargé
-                            $image = imagecreatefromstring($imageContent);
-                            if (false !== $image) {
-                                // Convertir en WebP
-                                if (!imageistruecolor($image)) {
-                                    $trueColorImage = imagecreatetruecolor(imagesx($image), imagesy($image));
-                                    imagecopy($trueColorImage, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
-                                    imagedestroy($image);
-                                    $image = $trueColorImage;
+                                    if (!file_exists($mediaPath)) {
+                                        mkdir($mediaPath, 0777, true);
+                                    }
+
+                                    $mediaFileNameWebP = $mediaPath.$mediaId.'.webp';
+
+                                    // Create and convert image to WebP
+                                    $image = imagecreatefromstring($imageContent);
+                                    if (false !== $image) {
+                                        if (!imageistruecolor($image)) {
+                                            $trueColorImage = imagecreatetruecolor(imagesx($image), imagesy($image));
+                                            imagecopy($trueColorImage, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+                                            imagedestroy($image);
+                                            $image = $trueColorImage;
+                                        }
+
+                                        imagewebp($image, $mediaFileNameWebP);
+                                        imagedestroy($image);
+                                        $mediaFileName = '/images/'.implode('/', $mediaIdArray).'/'.$mediaId.'.webp';
+                                    } else {
+                                        $mediaFileName = '/images/default.webp';
+                                    }
+
+                                    // Enregistrer le média
+                                    $media = new Media();
+                                    $media->setId((int) $mediaItem['id']);  // Cast ID to integer
+                                    $media->setDate(new \DateTime($mediaItem['date']));
+                                    $media->setModified(new \DateTime($mediaItem['modified']));
+                                    $media->setSlug($mediaItem['slug'] ?? '');  // Handle missing slug
+                                    $media->setGuid($mediaFileName);
+
+                                    $title = $mediaItem['title']['rendered'] ?? '';  // Handle missing title
+                                    $maxTitleLength = 255;
+                                    if (strlen($title) > $maxTitleLength) {
+                                        $title = substr($title, 0, $maxTitleLength);
+                                    }
+                                    $media->setTitle($title);
+
+                                    // Associer le média à l'article
+                                    $media->setPost($article);
+
+                                    // Sauvegarder l'entité dans la base de données
+                                    $this->mediaRepository->save($media);
+
+                                    $io->success("Média avec ID {$mediaItem['id']} téléchargé et sauvegardé avec succès.");
+                                    $mediaData[$articleId] = 'Téléchargé et sauvegardé avec succès';
+                                    ++$successCount;
                                 }
-
-                                imagewebp($image, $mediaFileNameWebP);
-                                imagedestroy($image);
-                                $mediaFileName = '/images/'.implode('/', $mediaIdArray).'/'.$mediaId.'.webp';
-                            } else {
-                                $mediaFileName = '/images/'.implode('/', $mediaIdArray).'/'.$mediaId.'.png';
                             }
                         } else {
-                            $mediaFileName = '/images/default.webp';
+                            $io->warning("Aucun média trouvé pour l'article ID {$articleId}.");
                         }
-
-                        // Enregistrer le média
-                        $media = new Media();
-                        $media->setId($mediaItem['id']);
-                        $media->setDate(new \DateTime($mediaItem['date']));
-                        $media->setModified(new \DateTime($mediaItem['modified']));
-                        $media->setSlug($mediaItem['slug']);
-                        $media->setGuid($mediaFileName);
-
-                        $maxTitleLength = 255;
-                        $title = $mediaItem['title']['rendered'];
-                        if (strlen($title) > $maxTitleLength) {
-                            $title = substr($title, 0, $maxTitleLength);
-                        }
-                        $media->setTitle($title);
-
-                        // Associer le média à l'article
-                        $media->setPost($article);
-
-                        // Sauvegarder l'entité dans la base de données
-                        $this->mediaRepository->save($media);
-
-                        $io->success("Média avec ID {$mediaItem['id']} téléchargé et sauvegardé avec succès.");
-                        $mediaData[$articleId] = 'Téléchargé et sauvegardé avec succès';
-                        ++$successCount;
-                    } else {
-                        $io->warning("Aucun média trouvé pour l'article ID {$articleId}.");
                     }
                 }
             } catch (\Exception $e) {
-                // Gérer les exceptions
                 $io->error("Erreur lors de la récupération du média pour l'article ID {$articleId} : ".$e->getMessage());
                 $mediaData[$articleId] = 'Erreur : '.$e->getMessage();
                 ++$errorCount;
             }
         }
 
-        // Résumé des opérations
         $io->success("Médias récupérés : {$successCount} succès, {$errorCount} erreurs.");
         $io->table(['Article ID', 'Statut'], array_map(fn ($id, $status) => [$id, $status], array_keys($mediaData), $mediaData));
 

@@ -111,52 +111,93 @@ final class ImportPostsCronCommand extends Command
         return Command::SUCCESS; // Retourne un succès de commande
     }
 
+    /**
+     * @param array<string, mixed> $postData The data retrieved from the WordPress API
+     * @param Articles             $article  The article entity to populate
+     */
     private function populateArticle(Articles $article, array $postData): void
     {
         $authKey = $_ENV['DEEPL_API_KEY'] ?? null;
         $translator = new \DeepL\Translator($authKey);
 
+        // Check if $postData['title'] is an array and contains 'rendered'
+        $title = (isset($postData['title']) && is_array($postData['title']) && isset($postData['title']['rendered']) && is_string($postData['title']['rendered']))
+            ? $postData['title']['rendered']
+            : 'No title'; // Fallback value if not found or invalid
+
+        // Check if $postData['excerpt'] is an array and contains 'rendered'
+        $excerpt = (isset($postData['excerpt']) && is_array($postData['excerpt']) && isset($postData['excerpt']['rendered']) && is_string($postData['excerpt']['rendered']))
+            ? $postData['excerpt']['rendered']
+            : ''; // Fallback value if not found or invalid
+
+        // Translate the title and excerpt
         $translations = $translator->translateText(
             [
-                html_entity_decode($postData['title']['rendered'] ?? 'No title'),
-                $postData['title']['rendered'] ?? 'No title',
-                html_entity_decode(strip_tags($postData['excerpt']['rendered'] ?? '')),
+                html_entity_decode($title),
+                $title,
+                html_entity_decode(strip_tags($excerpt)),
             ],
             null,
             'en-GB',
         );
 
-        // Reformatage du code et traduction avec l'API de ChatGPT pour les articles
-        $authGPT = $_ENV['OPENAI_API_KEY'] ?? null;
+        // Set article ID, ensuring it's an integer
+        if (isset($postData['id']) && is_int($postData['id'])) {
+            $article->setId($postData['id']);
+        } else {
+            // Handle missing or invalid ID
+            throw new \Exception('Invalid or missing article ID');
+        }
 
-        $article->setId($postData['id']); // Définit l'ID de l'article
-        $article->setTitle($translations[0]->text); // Définit le titre de l'article
-        $article->setSlug(html_entity_decode($postData['slug'] ?? '')); // Définit le slug de l'article
-        $article->setDate(new \DateTime($postData['date'] ?? 'now')); // Définit la date de l'article
-        $article->setModified(new \DateTime($postData['modified'] ?? 'now')); // Définit la date de modification de l'article
-        $article->setContent(html_entity_decode($postData['content']['rendered'] ?? '')); // Définit le contenu de l'article
-        $article->setMetaTitle($translations[1]->text); // Définit le titre de la méta
+        // Set article title from translation
+        $article->setTitle($translations[0]->text);
 
-        // Meta description avec nettoyage et gestion des balises HTML
+        // Check if $postData['slug'] is a string
+        $slug = (isset($postData['slug']) && is_string($postData['slug'])) ? $postData['slug'] : '';
+        $article->setSlug(html_entity_decode($slug));
+
+        // Check if $postData['date'] is a valid string
+        $date = (isset($postData['date']) && is_string($postData['date'])) ? $postData['date'] : 'now';
+        $article->setDate(new \DateTime($date));
+
+        // Check if $postData['modified'] is a valid string
+        $modifiedDate = (isset($postData['modified']) && is_string($postData['modified'])) ? $postData['modified'] : 'now';
+        $article->setModified(new \DateTime($modifiedDate));
+
+        // Check if $postData['content'] is an array and contains 'rendered'
+        $content = (isset($postData['content']) && is_array($postData['content']) && isset($postData['content']['rendered']) && is_string($postData['content']['rendered']))
+            ? $postData['content']['rendered']
+            : ''; // Fallback if not found
+        $article->setContent(html_entity_decode($content));
+
+        // Set meta title from translation
+        $article->setMetaTitle($translations[1]->text);
+
+        // Meta description, truncate if necessary
         $metaDescription = $translations[2]->text;
         if (!empty($metaDescription)) {
             $metaDescription = $this->truncateDescription($metaDescription, 250);
         }
-
         $article->setMetaDescription($metaDescription);
 
-        foreach ($postData['categories'] ?? [] as $catId) { // Boucle sur les catégories de l'article
-            $category = $this->categoryRepository->find($catId); // Cherche la catégorie par ID
-            if ($category) { // Si la catégorie est trouvée
-                $article->addCategory($category); // Ajoute la catégorie à l'article
+        // Set categories, ensure $postData['categories'] is iterable
+        if (isset($postData['categories']) && is_array($postData['categories'])) {
+            foreach ($postData['categories'] as $catId) {
+                if (is_int($catId)) {
+                    $category = $this->categoryRepository->find($catId);
+                    if ($category) {
+                        $article->addCategory($category);
+                    }
+                }
             }
         }
 
-        $userId = $postData['author'] ?? null; // Récupère l'ID de l'auteur
-        if ($userId) { // Si l'ID de l'auteur existe
-            $user = $this->userRepository->find($userId); // Cherche l'utilisateur par ID
-            if ($user) { // Si l'utilisateur est trouvé
-                $article->setUser($user); // Associe l'utilisateur à l'article
+        // Set author (user), ensure $postData['author'] exists and is valid
+        $userId = $postData['author'] ?? null;
+        if (is_int($userId)) {
+            $user = $this->userRepository->find($userId);
+            if ($user) {
+                $article->setUser($user);
             }
         }
     }

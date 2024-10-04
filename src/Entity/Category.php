@@ -35,6 +35,9 @@ class Category
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     private ?self $parent = null;
 
+    /**
+     * @var Collection<int, self>
+     */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $subcategories;
 
@@ -130,7 +133,7 @@ class Category
     }
 
     /**
-     * @return Collection|self[]
+     * @return Collection<int, self>
      */
     public function getSubcategories(): Collection
     {

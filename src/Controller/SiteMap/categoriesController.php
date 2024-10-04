@@ -18,14 +18,14 @@ class categoriesController extends AbstractController
 
         $filesystem = new Filesystem();
 
-        // Assurez-vous que le chemin n'est pas null
+        // Assurez-vous que le chemin est bien une chaîne
         $projectDir = $this->getParameter('kernel.project_dir');
 
-        if (!$projectDir) {
-            throw new \UnexpectedValueException('Le paramètre kernel.project_dir est manquant.');
+        if (!is_string($projectDir)) {
+            throw new \UnexpectedValueException('Le paramètre kernel.project_dir doit être une chaîne de caractères.');
         }
 
-        $sitemapsDir = rtrim($projectDir, '/') . '/public/sitemaps/';
+        $sitemapsDir = rtrim($projectDir, '/').'/public/sitemaps/';
 
         // Créer le dossier "sitemaps" s'il n'existe pas
         if (!$filesystem->exists($sitemapsDir)) {
