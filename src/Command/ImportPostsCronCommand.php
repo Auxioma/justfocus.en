@@ -12,6 +12,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(
@@ -29,6 +30,7 @@ final class ImportPostsCronCommand extends Command
     private UserRepository $userRepository; // Repository pour les utilisateurs
     private LoggerInterface $logger; // Interface pour le logging
     private EntityManagerInterface $entityManager; // Interface pour la gestion des entités
+    private SluggerInterface $slugger; // Interface pour la gestion des slugs
 
     public function __construct(
         HttpClientInterface $client, // Injection de la dépendance pour le client HTTP
@@ -37,6 +39,7 @@ final class ImportPostsCronCommand extends Command
         UserRepository $userRepository, // Injection de la dépendance pour le repository des utilisateurs
         LoggerInterface $logger, // Injection de la dépendance pour le logger
         EntityManagerInterface $entityManager, // Injection de la dépendance pour l'entity manager
+        SluggerInterface $slugger // Injection de la dépendance pour le slugger 
     ) {
         parent::__construct(); // Appel au constructeur de la classe parente
         $this->client = $client; // Initialisation du client HTTP
@@ -45,6 +48,7 @@ final class ImportPostsCronCommand extends Command
         $this->userRepository = $userRepository; // Initialisation du repository des utilisateurs
         $this->logger = $logger; // Initialisation du logger
         $this->entityManager = $entityManager; // Initialisation de l'entity manager
+        $this->slugger = $slugger; // Initialisation du slugger 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -154,6 +158,7 @@ final class ImportPostsCronCommand extends Command
 
         // Check if $postData['slug'] is a string
         $slug = (isset($postData['slug']) && is_string($postData['slug'])) ? $postData['slug'] : '';
+        $slug = $this->slugger->slug(html_entity_decode($translations[0]->text));
         $article->setSlug(html_entity_decode($slug));
 
         // Check if $postData['date'] is a valid string
