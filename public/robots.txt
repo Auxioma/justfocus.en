@@ -2,3 +2,6 @@ User-agent: *
 
 Sitemap: https://justfocus.info/sitemaps/art-exhibitions.xml
 Sitemap: https://justfocus.info/sitemaps/anime-news-updates.xml
+Sitemap: https://justfocus.info/sitemaps/art-web-culture.xml
+Sitemap: https://justfocus.info/sitemaps/arts-entertainment.xml
+Sitemap: https://justfocus.info/sitemaps/asian-culture.xml
