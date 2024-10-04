@@ -105,7 +105,7 @@ final class TagsPostCronCommand extends Command
 
             ++$counter;
             $iterator->next();
-        } while ($counter < 100);
+        } while ($counter < 10000);
 
         // Afficher le nombre total de tags insérés
         $output->writeln("Total tags processed: {$tagsInserted}");
