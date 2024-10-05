@@ -5,7 +5,7 @@
 {% block keywords %}Just Focus{% endblock %}
 {% block body %}
 
-	{% include '_partials/_mignature/_breadcumb.html.twig' with {'title': 'Contact us', 'titre':null} %}
+    {{ include('_partials/_mignature/_breadcumb.html.twig', {title: 'Contact us', titre: null}) }}
 
     <div class="space2">
         <div class="container">
@@ -65,8 +65,8 @@
                     {% endfor %}
 
                         <h4 class="form-title">Send Message</h4>
-                        
-                        {{ form_start(form, {'attr': {'class': 'contact-form'}}) }}
+
+                        {{ form_start(form, {attr: {class: 'contact-form'}}) }}
 
                             <div class="row">
                                 <div class="form-group col-md-6">
@@ -91,8 +91,6 @@
                 </div>
             </div>
         </div>
-    </div> <!--==============================
-Contact Area  
-==============================-->
+    </div>
 
 {% endblock %}
