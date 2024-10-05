@@ -71,6 +71,7 @@ class Articles
         $this->categories = new ArrayCollection();
         $this->media = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->isOnline = false;
     }
 
     public function getId(): ?int
