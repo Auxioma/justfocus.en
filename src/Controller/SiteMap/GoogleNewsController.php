@@ -2,7 +2,6 @@
 
 namespace App\Controller\SiteMap;
 
-use App\Entity\Articles;
 use App\Repository\ArticlesRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
