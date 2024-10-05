@@ -19,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -52,7 +53,7 @@ class ArticlesCrudController extends AbstractCrudController
 
             // Onglet : Contenu
             FormField::addTab('Contenu'),
-            TextEditorField::new('content')
+            TextareaField::new('content')
                 ->hideOnIndex()
                 ->setLabel('Contenu')
                 ->setNumOfRows(20)  // Optionnel : Définit la taille de l'éditeur
