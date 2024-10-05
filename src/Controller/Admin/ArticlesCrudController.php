@@ -20,7 +20,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -123,7 +122,6 @@ class ArticlesCrudController extends AbstractCrudController
             return 'Articles (Total: N/A)';
         }
 
-        
         // Récupérer le paramètre `isonline` de l'URL
         $isonline = $request->get('isOnline');
 
@@ -142,46 +140,43 @@ class ArticlesCrudController extends AbstractCrudController
     {
         // Récupérer la requête courante
         $request = $this->requestStack->getCurrentRequest();
-    
+
         // Construire la requête de base
         $queryBuilder = $this->entityManager->getRepository(Articles::class)->createQueryBuilder('a');
-    
+
         // Vérifier si une requête existe avant de récupérer les paramètres de l'URL
         if (null !== $request) {
             // Récupérer le paramètre `isonline` de l'URL
             $isonline = $request->get('isOnline');
-    
+
             // Ajouter la condition selon le paramètre `isonline`
             if (null !== $isonline) {
                 $queryBuilder->andWhere('a.isOnline = :isonline')
                              ->setParameter('isonline', $isonline);
             }
         }
-    
+
         // Laisser EasyAdmin gérer automatiquement les filtres. Pas besoin d'appliquer manuellement les filtres ici.
-    
+
         // Appliquer les critères de recherche
         $searchTerms = $searchDto->getSearchMode();
         foreach ($fields as $field) {
             if ($field->isSortable()) {
-                $queryBuilder->orWhere($queryBuilder->expr()->like('a.' . $field->getProperty(), ':searchTerm'))
-                             ->setParameter('searchTerm', '%' . $searchTerms . '%');
+                $queryBuilder->orWhere($queryBuilder->expr()->like('a.'.$field->getProperty(), ':searchTerm'))
+                             ->setParameter('searchTerm', '%'.$searchTerms.'%');
             }
         }
-    
+
         // Appliquer le tri par défaut sur l'ID du plus grand au plus petit
         $queryBuilder->orderBy('a.id', 'DESC');
-    
+
         // Appliquer le tri de la recherche, s'il y en a
         if ($searchDto->getSort()) {
             foreach ($searchDto->getSort() as $field => $direction) {
-                $queryBuilder->addOrderBy('a.' . $field, $direction);
+                $queryBuilder->addOrderBy('a.'.$field, $direction);
             }
         }
-    
+
         return $queryBuilder;
     }
-    
-    
-    
 }

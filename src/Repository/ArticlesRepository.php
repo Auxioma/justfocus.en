@@ -121,17 +121,22 @@ class ArticlesRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Articles[]
+     * @return Articles[] Returns an array of Articles objects
      */
-    public function findRecentOnlineArticles()
+    public function findRecentOnlineArticles(): array
     {
-        return $this->createQueryBuilder('a')
+        $result = $this->createQueryBuilder('a')
             ->where('a.isOnline = :isOnline')
             ->andWhere('a.date >= :date')
             ->setParameter('isOnline', true)
             ->setParameter('date', new \DateTime('-7 days'))
             ->getQuery()
             ->getResult();
-    }
 
+        if (!is_array($result)) {
+            throw new \UnexpectedValueException('Expected an array of Articles');
+        }
+
+        return $result;
+    }
 }

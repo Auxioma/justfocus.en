@@ -4,9 +4,9 @@ namespace App\Controller\SiteMap;
 
 use App\Entity\Articles;
 use App\Repository\ArticlesRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ImageSitemapController extends AbstractController
 {
@@ -23,7 +23,7 @@ class ImageSitemapController extends AbstractController
         // Fetch all recent online articles
         $articles = $this->articlesRepository->findBy(['isOnline' => true]);
 
-        $xml  = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
         $xml .= ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
@@ -35,19 +35,21 @@ class ImageSitemapController extends AbstractController
             // Generate URL based on category/subcategory structure
             if (count($categories) > 0) {
                 $category = $categories[0];
-                
-                if ($category->getParent()) {
-                    $url = 'https://justfocus.info/' . $category->getParent()->getSlug() . '/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
+
+                if ($category && $category->getParent()) {
+                    $url = 'https://justfocus.info/'.$category->getParent()->getSlug().'/'.$category->getSlug().'/'.$article->getSlug().'.html';
+                } elseif ($category) {
+                    $url = 'https://justfocus.info/'.$category->getSlug().'/'.$article->getSlug().'.html';
                 } else {
-                    $url = 'https://justfocus.info/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
+                    $url = 'https://justfocus.info/'.$article->getSlug().'.html';
                 }
             } else {
-                $url = 'https://justfocus.info/' . $article->getSlug() . '.html';
+                $url = 'https://justfocus.info/'.$article->getSlug().'.html';
             }
 
             // Start building the XML for this URL
             $xml .= '<url>';
-            $xml .= '<loc>' . $url . '</loc>';
+            $xml .= '<loc>'.$url.'</loc>';
 
             // Fetch and append article images
             $mediaItems = $article->getMedia(); // Assuming Media entity has an image URL
@@ -55,9 +57,14 @@ class ImageSitemapController extends AbstractController
                 $imageUrl = $media->getGuid(); // Assuming Media entity has getUrl() method
                 if ($imageUrl) {
                     $xml .= '<image:image>';
-                    $xml .= '<image:loc>https://justfocus.info' . $imageUrl . '</image:loc>';
-                    $xml .= '<image:title>' . htmlspecialchars($article->getTitle(), ENT_XML1, 'UTF-8') . '</image:title>';
-                    $xml .= '<image:caption>' . htmlspecialchars($media->getTitle(), ENT_XML1, 'UTF-8') . '</image:caption>';
+                    $xml .= '<image:loc>https://justfocus.info'.$imageUrl.'</image:loc>';
+
+                    // Ensure title and caption are strings and not null
+                    $articleTitle = $article->getTitle() ?: '';
+                    $mediaTitle = $media->getTitle() ?: '';
+
+                    $xml .= '<image:title>'.htmlspecialchars($articleTitle, ENT_XML1, 'UTF-8').'</image:title>';
+                    $xml .= '<image:caption>'.htmlspecialchars($mediaTitle, ENT_XML1, 'UTF-8').'</image:caption>';
                     $xml .= '</image:image>';
                 }
             }

@@ -39,7 +39,7 @@ final class ImportPostsCronCommand extends Command
         UserRepository $userRepository, // Injection de la dépendance pour le repository des utilisateurs
         LoggerInterface $logger, // Injection de la dépendance pour le logger
         EntityManagerInterface $entityManager, // Injection de la dépendance pour l'entity manager
-        SluggerInterface $slugger // Injection de la dépendance pour le slugger 
+        SluggerInterface $slugger, // Injection de la dépendance pour le slugger
     ) {
         parent::__construct(); // Appel au constructeur de la classe parente
         $this->client = $client; // Initialisation du client HTTP
@@ -48,7 +48,7 @@ final class ImportPostsCronCommand extends Command
         $this->userRepository = $userRepository; // Initialisation du repository des utilisateurs
         $this->logger = $logger; // Initialisation du logger
         $this->entityManager = $entityManager; // Initialisation de l'entity manager
-        $this->slugger = $slugger; // Initialisation du slugger 
+        $this->slugger = $slugger; // Initialisation du slugger
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -27,7 +27,7 @@ final class TagsPostCronCommand extends Command
     {
         parent::__construct();
         $this->entityManager = $entityManager;
-        $this->articlesRepository = $articlesRepository;    
+        $this->articlesRepository = $articlesRepository;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
