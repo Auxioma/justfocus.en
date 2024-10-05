@@ -47,7 +47,7 @@ class ArticlesCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('title')->setLabel('Titre'),
             SlugField::new('slug')->setLabel('Slug')->setTargetFieldName('title')->hideOnIndex(),
-            TextField::new('categories')
+            AssociationField::new('categories')
                 ->setLabel('Catégorie')
                 ->formatValue(function ($value, $entity) {
                     // Récupérer le premier élément de la collection des catégories
