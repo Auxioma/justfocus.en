@@ -46,7 +46,19 @@ class ArticlesCrudController extends AbstractCrudController
             FormField::addTab('Informations Principales'),
             IdField::new('id')->hideOnForm(),
             TextField::new('title')->setLabel('Titre'),
-            SlugField::new('slug')->setLabel('Slug')->setTargetFieldName('title'),
+            SlugField::new('slug')->setLabel('Slug')->setTargetFieldName('title')->hideOnIndex(),
+            TextField::new('categories')
+                ->setLabel('Catégorie')
+                ->formatValue(function ($value, $entity) {
+                    // Récupérer le premier élément de la collection des catégories
+                    $categories = $entity->getCategories();
+                    if ($categories && count($categories) > 0) {
+                        return $categories[0]->getName(); // Remplacez 'getName()' par la méthode de votre entité
+                    }
+                    return null;
+                })
+                ->onlyOnIndex(),
+
             DateField::new('date')->setLabel('Date de publication'),
             DateField::new('modified')->setLabel('Date de modification')->hideOnIndex(),
 
