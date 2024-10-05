@@ -119,4 +119,19 @@ class ArticlesRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * @return Articles[]
+     */
+    public function findRecentOnlineArticles()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.isOnline = :isOnline')
+            ->andWhere('a.date >= :date')
+            ->setParameter('isOnline', true)
+            ->setParameter('date', new \DateTime('-7 days'))
+            ->getQuery()
+            ->getResult();
+    }
+
 }
