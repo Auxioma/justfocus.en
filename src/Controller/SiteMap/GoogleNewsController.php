@@ -36,10 +36,10 @@ class GoogleNewsController extends AbstractController
                 
                 if ($category->getParent()) {
                     // If there is a parent category (subcategory), create URL with both category and subcategory
-                    $url = 'https://justfocus.info/' . $category->getParent()->getSlug() . '/' . $category->getSlug() . '/' . $article->getSlug();
+                    $url = 'https://justfocus.info/' . $category->getParent()->getSlug() . '/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
                 } else {
                     // Otherwise, only the category exists without a subcategory
-                    $url = 'https://justfocus.info/' . $category->getSlug() . '/' . $article->getSlug();
+                    $url = 'https://justfocus.info/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
                 }
             }
 
