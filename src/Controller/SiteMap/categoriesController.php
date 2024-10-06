@@ -2,55 +2,66 @@
 
 namespace App\Controller\SiteMap;
 
-use App\Repository\CategoryRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
+
+use App\Repository\ArticlesRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class categoriesController extends AbstractController
 {
-    #[Route('/creation-sitemap-tous-les-jours', name: 'generate_sitemaps', priority: 10)]
-    public function generateSitemaps(CategoryRepository $categoryRepository): Response
+    private ArticlesRepository $articlesRepository;
+
+    public function __construct(ArticlesRepository $articlesRepository)
     {
-        // Récupérer les catégories en ligne uniquement
-        $categories = $categoryRepository->findBy(['isOnline' => true]);
+        $this->articlesRepository = $articlesRepository;
+    }
+    
+    #[Route('/creation-sitemap-tous-les-jours', name: 'generate_sitemaps', priority: 10)]
+    public function googleNews(): Response
+    {
+        // Récupérer tous les articles récents en ligne
+        $articles = $this->articlesRepository->findRecentOnlineArticles();
 
-        $filesystem = new Filesystem();
+        // Initialisation du contenu XML
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        // Assurez-vous que le chemin est bien une chaîne
-        $projectDir = $this->getParameter('kernel.project_dir');
+        foreach ($articles as $article) {
+            // Récupérer les catégories liées à cet article
+            $categories = $article->getCategories();
 
-        if (!is_string($projectDir)) {
-            throw new \UnexpectedValueException('Le paramètre kernel.project_dir doit être une chaîne de caractères.');
-        }
+            // L'article peut avoir plusieurs URLs en fonction de ses catégories
+            foreach ($categories as $category) {
+                $url = '';
 
-        $sitemapsDir = rtrim($projectDir, '/').'/public/sitemaps/';
+                // Générer l'URL basée sur la structure catégorie/sous-catégorie
+                if (null !== $category && $category->getParent()) {
+                    $url = 'https://justfocus.info/' . $category->getParent()->getSlug() . '/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
+                } elseif (null !== $category) {
+                    $url = 'https://justfocus.info/' . $category->getSlug() . '/' . $article->getSlug() . '.html';
+                }
 
-        // Créer le dossier "sitemaps" s'il n'existe pas
-        if (!$filesystem->exists($sitemapsDir)) {
-            $filesystem->mkdir($sitemapsDir);
-        }
+                // Formatage de la date de publication de l'article
+                $date = $article->getDate();
+                $formattedDate = null !== $date ? $date->format('Y-m-d') : '';
 
-        // Boucler sur chaque catégorie pour créer un fichier sitemap
-        foreach ($categories as $category) {
-            // Vérifie si la catégorie a un parent et génère l'URL correctement
-            if ($category->getParent()) {
-                $urlPath = $category->getParent()->getSlug().'/'.$category->getSlug();
-            } else {
-                $urlPath = $category->getSlug();
+                // Ajouter l'information de l'article au sitemap
+                $xml .= '<url>';
+                $xml .= '<loc>' . htmlspecialchars($url, ENT_XML1, 'UTF-8') . '</loc>';
+                $xml .= '<lastmod>' . $formattedDate . '</lastmod>';
+                $xml .= '<changefreq>daily</changefreq>';
+                $xml .= '<priority>0.8</priority>';
+                $xml .= '</url>';
             }
-
-            $filename = $sitemapsDir.$category->getSlug().'.xml';
-            $xmlContent = $this->renderView('site_map/categories/index.html.twig', [
-                'category' => $category,
-                'urlPath' => $urlPath, // Passe l'URL personnalisée à la vue
-            ]);
-
-            // Écrire le fichier XML pour chaque catégorie
-            $filesystem->dumpFile($filename, $xmlContent);
         }
 
-        return new Response('Sitemaps generated successfully.');
+        $xml .= '</urlset>';
+
+        // Retourner la réponse sous forme de XML
+        $response = new Response($xml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 }
