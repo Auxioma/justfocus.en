@@ -53,6 +53,9 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $slugSql = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $metaTitle = null;
+
     public function __construct()
     {
         $this->subcategories = new ArrayCollection();
@@ -216,5 +219,17 @@ class Category
     public function getArticleCount(): int
     {
         return $this->articles->count(); // Compte le nombre d'articles dans la collection
+    }
+
+    public function getMetaTitle(): ?string
+    {
+        return $this->metaTitle;
+    }
+
+    public function setMetaTitle(?string $metaTitle): static
+    {
+        $this->metaTitle = $metaTitle;
+
+        return $this;
     }
 }
