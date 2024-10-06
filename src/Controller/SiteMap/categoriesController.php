@@ -21,7 +21,7 @@ class categoriesController extends AbstractController
     public function googleNews(): Response
     {
         // Récupérer tous les articles récents en ligne
-        $articles = $this->articlesRepository->findRecentOnlineArticles();
+        $articles = $this->articlesRepository->findBy(['isOnline' => true]);
 
         // Initialisation du contenu XML
         $xml  = '<?xml version="1.0" encoding="UTF-8"?>';
