@@ -1,6 +1,6 @@
 User-agent: *
 
-Sitemap: https://justfocus.info/creation-sitemap-tous-les-jours
+Sitemap: https://justfocus.info/sitemap.xml
 Sitemap: https://justfocus.info/image-sitemap.xml
 Sitemap: https://justfocus.info/google-news.xml
-Sitemap: https://justfocus.info//bing-news.xml
+Sitemap: https://justfocus.info/bing-news.xml

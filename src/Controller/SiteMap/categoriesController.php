@@ -17,7 +17,7 @@ class categoriesController extends AbstractController
         $this->articlesRepository = $articlesRepository;
     }
     
-    #[Route('/creation-sitemap-tous-les-jours', name: 'generate_sitemaps', priority: 10)]
+    #[Route('/sitemap.xml', name: 'generate_sitemaps', priority: 10)]
     public function googleNews(): Response
     {
         // Récupérer tous les articles récents en ligne
