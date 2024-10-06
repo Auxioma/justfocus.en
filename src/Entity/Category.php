@@ -15,7 +15,7 @@ class Category
     }
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    // #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 

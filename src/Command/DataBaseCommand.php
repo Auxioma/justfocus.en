@@ -13,6 +13,7 @@ use Symfony\Component\Filesystem\Filesystem;
     name: 'app:database:dump',
     description: 'Dump the database to a file in the .database/ directory',
 )]
+
 final class DataBaseCommand extends Command
 {
     private string $databaseUrl;
