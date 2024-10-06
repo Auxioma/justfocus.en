@@ -2,104 +2,104 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 {% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% block title %}Just Focus{% endblock %}
-{% block description %}Just Focus{% endblock %}
+{% block title %}{% if pagination|length > 0 and pagination|first.categories is defined and pagination|first.categories|length > 0 %}{{ pagination|first.categories[0].metaTitle }}{% else %}Just Focus{% endif %}{% endblock %}
+
+{% block description %}{% if pagination|length > 0 and pagination|first.categories is defined and pagination|first.categories|length > 0 %}{{ pagination|first.categories[0].description }}{% else %}Just Focus{% endif %}{% endblock %}
 {% block keywords %}Just Focus{% endblock %}
 
 {% block body %}
 
-	{% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': breadcrumbSousCategoryName, 'title': breadcrumbCategoryName, 'slug': breadcrumbSousCategorySlug } %} 
+    {{ include('_partials/_mignature/_breadcumb.html.twig', {titre: breadcrumbSousCategoryName, title: breadcrumbCategoryName, slug: breadcrumbSousCategorySlug}) }}
 
+    <section class="space-top space-extra-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-9 col-lg-8">
+                    <div class="row gy-30">
+                        {% for item in pagination %}
+                            <div class="col-sm-6" itemscope itemtype="http://schema.org/NewsArticle">
+                                <div class="blog-style7">
+                                    <div class="blog-img">
+                                        <img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp')|imagine_filter('436x300') }}" alt="blog image" height="300" width="436" class="categorie__images">
+                                        {{ categories.category_small(item) }}
+                                    </div>
+                                    <div class="blog-meta">
+                                        <a href="" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                                            <i class="far fa-user"></i>
+                                            <span itemprop="name">{{ item.user.pseudo|default('Default Author') }}</span>
+                                        </a>
+                                        <meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
+                                        <a href="">
+                                            <i class="fal fa-calendar-days"></i>
+                                            <time itemprop="dateModified" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time>
+                                        </a>
+                                    </div>
+                                    <h3 class="box-title-24">
+                                        {{ macros.truncate_title(item|default({}), 40) }}
+                                    </h3>
+                                    <meta itemprop="mainEntityOfPage" content="#">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="th-pagination mt-40">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-lg-4 sidebar-wrap">
+                    <aside class="sidebar-area">
+                        <div class="widget widget_search  ">
 
-	<section class="space-top space-extra-bottom">
-		<div class="container">
-			<div class="row">
-				<div class="col-xxl-9 col-lg-8">
-					<div class="row gy-30">
-						{% for item in pagination %}
-							<div class="col-sm-6" itemscope itemtype="http://schema.org/NewsArticle">
-								<div class="blog-style7">
-									<div class="blog-img">
-										<img loading="lazy" src="{{ item.media|first.guid|default('/images/default.webp') | imagine_filter('436x300') }}" alt="blog image" height="300" width="436" class="categorie__images">
-										{{ categories.category_small(item) }}
-									</div>
-									<div class="blog-meta">
-										<a href="" itemprop="author" itemscope itemtype="http://schema.org/Person">
-											<i class="far fa-user"></i>
-											<span itemprop="name">{{ item.user.pseudo|default('Default Author') }}</span>
-										</a>
-										<meta itemprop="datePublished" content="{{ item.date|date('Y-m-d') }}">
-										<a href="">
-											<i class="fal fa-calendar-days"></i>
-											<time itemprop="dateModified" datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|date('d M Y') }}</time>
-										</a>
-									</div>
-									<h3 class="box-title-24">
-										{{ macros.truncate_title(item|default({}), 40) }}
-									</h3>
-									<meta itemprop="mainEntityOfPage" content="#">
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-					<div class="th-pagination mt-40">
-						{{ knp_pagination_render(pagination) }}
-					</div>
-				</div>
-				<div class="col-xxl-3 col-lg-4 sidebar-wrap">
-					<aside class="sidebar-area">
-						<div class="widget widget_search  ">
-							
-							{{ render(controller('App\\Controller\\Menu\\SearchController::search')) }}
-							
-						</div>
-						<div class="widget widget_categories">
-							<h3 class="widget_title">Categories</h3>
-							<ul>
-								{% for categorie in categories %}
-									<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_sous_category', {'categorie': categorie.parent.slug, 'slug': categorie.slug}) }}" itemprop="item">
-											<span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
-										</a>
-										<meta itemprop="position" content="{{ loop.index }}">
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-						<div class="widget">
-							<div class="widget-ads">
-								<a href="https://auxioma.eu">
-									<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
-								</a>
-							</div>
-						</div>
-						<div class="widget widget_tag_cloud">
-							<h3 class="widget_title">Popular Tags</h3>
-							<div class="tagcloud">
-								<a href="#">Sports</a>
-								<a href="#">Politics</a>
-								<a href="#">Business</a>
-								<a href="#">Music</a>
-								<a href="#">Food</a>
-								<a href="#">Technology</a>
-								<a href="#">Travels</a>
-								<a href="#">Health</a>
-								<a href="#">Fashions</a>
-								<a href="#">Animal</a>
-								<a href="#">Weather</a>
-								<a href="#">Movies</a>
-							</div>
-						</div>
-						<div class="widget">
-							<div class="widget-ads">
-								<a href="https://auxioma.eu">
-									<img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
-								</a>
-							</div>
-						</div>
-					</aside>
-				</div>
-			</div>
-		</div>
-	</section>
+                            {{ render(controller('App\\Controller\\Menu\\SearchController::search')) }}
+
+                        </div>
+                        <div class="widget widget_categories">
+                            <h3 class="widget_title">Categories</h3>
+                            <ul>
+                                {% for categorie in categories %}
+                                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                        <a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_sous_category', {categorie: categorie.parent.slug, slug: categorie.slug}) }}" itemprop="item">
+                                            <span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
+                                        </a>
+                                        <meta itemprop="position" content="{{ loop.index }}">
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-ads">
+                                <a href="https://auxioma.eu">
+                                    <img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="widget widget_tag_cloud">
+                            <h3 class="widget_title">Popular Tags</h3>
+                            <div class="tagcloud">
+                                <a href="#">Sports</a>
+                                <a href="#">Politics</a>
+                                <a href="#">Business</a>
+                                <a href="#">Music</a>
+                                <a href="#">Food</a>
+                                <a href="#">Technology</a>
+                                <a href="#">Travels</a>
+                                <a href="#">Health</a>
+                                <a href="#">Fashions</a>
+                                <a href="#">Animal</a>
+                                <a href="#">Weather</a>
+                                <a href="#">Movies</a>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-ads">
+                                <a href="https://auxioma.eu">
+                                    <img loading="lazy" src="/assets/img/ads/ads_1.jpg" alt="ads" class="w-100">
+                                </a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

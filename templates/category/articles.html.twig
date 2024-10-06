@@ -3,26 +3,26 @@
 
 {% block title %}{{ article.metaTitle }}{% endblock %}
 {% block description %}{{ article.metaDescription }}{% endblock %}
-{% block keywords %}Just Focus{% endblock %} 
+{% block keywords %}Just Focus{% endblock %}
 {% block body %}
-	
-    {% include '_partials/_mignature/_breadcumb.html.twig' with {'titre': null, 'title': null, 'slug': null } %} 
+
+    {{ include('_partials/_mignature/_breadcumb.html.twig', {titre: null, title: null, slug: null}) }}
 
     <section class="th-blog-wrapper blog-details space-top space-extra-bottom">
         <div class="container">
             <div class="row">
-                <div class="col-xxl-9 col-lg-8"> 
+                <div class="col-xxl-9 col-lg-8">
                     <div class="th-blog blog-single">
                         {{ categories.category_small(article) }}
                         <h2 class="blog-title">{{ article.title }}</h2>
                         <div class="blog-meta">
                             <a class="author" href=""><i class="far fa-user"></i>{{ article.user.pseudo }}</a>
-                            <a href="#"><i class="fal fa-calendar-days"></i>{{ article.date | date('Y M d') }}</a>
+                            <a href="#"><i class="fal fa-calendar-days"></i>{{ article.date|date('Y M d') }}</a>
                             <a href="#"><i class="far fa-comments"></i>Comments (0)</a>
                             <span><i class="far fa-book-open"></i>{{ article.content|reading_time }}</span>
                         </div>
                         <div class="blog-img">
-                            <img loading="lazy" src="{{ article.media|first.guid|default('images/default.webp') | imagine_filter('896x500') }}"  alt="Blog Image" width="896" height="500" class="article__images">
+                            <img loading="lazy" src="{{ article.media|first.guid|default('images/default.webp')|imagine_filter('896x500') }}"  alt="Blog Image" width="896" height="500" class="article__images">
                         </div>
                         <div class="blog-content-wrap">
                             <div class="share-links-wrap">
@@ -57,11 +57,11 @@
                                         Email :
                                         <i class="fas fa-envelope"></i>
                                     </a>
-                                    <button 
-                                        id="like-button"  
+                                    <button
+                                        id="like-button"
                                         class="blog-info ms-sm-auto"
                                     >
-                                        {{ article.likes }}  
+                                        {{ article.likes }}
                                         <i class="fas fa-thumbs-up"></i>
                                     </button>
                                     <span class="blog-info">{{ article.visit }} <i class="fas fa-eye"></i></span>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     {% endif %}
-                    <!-- 
+                    <!--
                     <div class="th-comments-wrap ">
                         <h2 class="blog-inner-title h3">Comments (03)</h2>
                         <ul class="comment-list">
@@ -140,8 +140,8 @@
                                 </div>
                             </li>
                         </ul>
-                    </div> 
-                    
+                    </div>
+
                     <!-- Comment end --> <!--
                     <div class="th-comment-form ">
                         <div class="form-title">
@@ -191,29 +191,29 @@
                         <div class="widget widget_categories  ">
                             <h3 class="widget_title">Categories</h3>
                             <ul>
-								{% for categorie in categories %}
-									<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-										<a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_category', {'slug': categorie.slug}) }}" itemprop="item">
-											<span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
-										</a>
-										<meta itemprop="position" content="{{ loop.index }}">
-									</li>
-								{% endfor %}
+                                {% for categorie in categories %}
+                                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                        <a data-bg-src="/assets/img/bg/category_bg_1_1.jpg" href="{{ path('app_category', {slug: categorie.slug}) }}" itemprop="item">
+                                            <span itemprop="name">{{ categorie.name|default('Default Category') }}</span>
+                                        </a>
+                                        <meta itemprop="position" content="{{ loop.index }}">
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
-						<div class="widget">
-							<div class="widget-ads">
-								<a href="https://themeforest.net/user/themeholy/portfolio">
-									<img class="w-100" src="/assets/img/ads/siderbar_ads_1.webp" alt="ads">
-								</a>
-							</div>
-						</div>
+                        <div class="widget">
+                            <div class="widget-ads">
+                                <a href="https://themeforest.net/user/themeholy/portfolio">
+                                    <img class="w-100" src="/assets/img/ads/siderbar_ads_1.webp" alt="ads">
+                                </a>
+                            </div>
+                        </div>
                     </aside>
                 </div>
             </div>
         </div>
     </section>
-    
+
 {% endblock %}
 
 {% block javascripts %}
