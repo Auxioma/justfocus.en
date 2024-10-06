@@ -28,7 +28,7 @@ class CategoryController extends AbstractController
         $category = $this->categoryRepository->findOneBy(['slug' => $slug]);
 
         if (!$category) {
-            throw $this->createNotFoundException('Category not found');
+            return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [], new Response('', 410));
         }
 
         // Categories: check if the parent exists before accessing its subcategories

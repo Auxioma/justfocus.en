@@ -31,7 +31,7 @@ class ArtilcesController extends AbstractController
         $article = $this->articlesRepository->findOneBy(['slug' => $slug, 'isOnline' => true]);
 
         if (!$article) {
-            throw $this->createNotFoundException('Article non trouvé');
+            return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [], new Response('', 410));
         }
 
         // Vérifier si l'utilisateur a visité l'article au cours de la dernière heure
