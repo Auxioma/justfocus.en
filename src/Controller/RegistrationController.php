@@ -15,6 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 
 class RegistrationController extends AbstractController
 {
@@ -23,6 +24,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register', priority: 10)]
+    #[cache(public: true, expires: '+1 hour')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -53,12 +55,17 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('registration/register.html.twig', [
+        $template = $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
+    #[cache(public: true, expires: '+1 hour')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 
 #[Route('/reset-password')]
 class ResetPasswordController extends AbstractController
@@ -35,6 +36,7 @@ class ResetPasswordController extends AbstractController
      * Display & process form to request a password reset.
      */
     #[Route('', name: 'app_forgot_password_request', priority: 10)]
+    #[cache(public: true, expires: '+1 hour')]
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -48,15 +50,20 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('reset_password/request.html.twig', [
+        $template =  $this->render('reset_password/request.html.twig', [
             'requestForm' => $form,
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 
     /**
      * Confirmation page after a user has requested a password reset.
      */
     #[Route('/check-email', name: 'app_check_email', priority: 10)]
+    #[cache(public: true, expires: '+1 hour')]
     public function checkEmail(): Response
     {
         // Generate a fake token if the user does not exist or someone hit this page directly.
@@ -65,15 +72,20 @@ class ResetPasswordController extends AbstractController
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
-        return $this->render('reset_password/check_email.html.twig', [
+        $template =  $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'app_reset_password', priority: 10)]
+    #[cache(public: true, expires: '+1 hour')]
     public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, ?string $token = null): Response
     {
         if ($token) {
@@ -124,9 +136,13 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        $template =  $this->render('reset_password/reset.html.twig', [
             'resetForm' => $form,
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse

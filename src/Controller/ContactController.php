@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 
 class ContactController extends AbstractController
 {
@@ -20,6 +21,7 @@ class ContactController extends AbstractController
     }
 
     #[Route('/contact', name: 'app_contact', priority: 10)]
+    #[cache(public: true, expires: '+1 hour')]
     public function index(Request $request): Response
     {
         $contact = new Contact();
@@ -65,8 +67,12 @@ class ContactController extends AbstractController
             return $this->redirectToRoute('app_contact', [], 301);
         }
 
-        return $this->render('contact/index.html.twig', [
+        $template = $this->render('contact/index.html.twig', [
             'form' => $form->createView(),
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 }
