@@ -31,7 +31,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'app_home')]
-    #[Cache(public: true, maxage: 3600, smaxage: 3600)]
+    #[cache(public: true, expires: '+1 hour')]
     public function index(): Response
     {
         // Fetch categorized articles
@@ -46,12 +46,16 @@ class HomeController extends AbstractController
         $bestofAndDiscover = $this->articleRepository->findBy(['isOnline' => true], ['visit' => 'DESC'], 4);
         $randomise = $this->articleRepository->RandomArticles();
 
-        return $this->render('home/index.html.twig', array_merge([
+        $template =  $this->render('home/index.html.twig', array_merge([
             'breaking' => $breaking,
             'slider' => $slider,
             'bestof' => $bestofAndDiscover,
             'discover' => $bestofAndDiscover,
             'randomise' => $randomise,
         ], $categorizedArticles));
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 }

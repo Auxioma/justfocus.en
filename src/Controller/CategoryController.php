@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 
 class CategoryController extends AbstractController
 {
@@ -23,6 +24,7 @@ class CategoryController extends AbstractController
 
     #[Route('/{categorie}/{slug}', name: 'app_sous_category', requirements: ['categorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 3)]
     #[Route('/{slug}', name: 'app_category', requirements: ['slug' => '[\w-]+'], priority: 5)]
+    #[cache(public: true, expires: '+1 hour')]
     public function index(string $slug, PaginatorInterface $paginator, Request $request): Response
     {
         $category = $this->categoryRepository->findOneBy(['slug' => $slug]);
@@ -67,7 +69,7 @@ class CategoryController extends AbstractController
             10
         );
 
-        return $this->render('category/index.html.twig', [
+        $template = $this->render('category/index.html.twig', [
             'pagination' => $pagination,
             'categories' => $categories,
             'breadcrumbCategoryName' => $breadcrumbCategoryName,
@@ -75,5 +77,9 @@ class CategoryController extends AbstractController
             'breadcrumbSousCategoryName' => $breadcrumbSousCategoryName ?? null,
             'breadcrumbSousCategorySlug' => $breadcrumbSousCategorySlug ?? null,
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 }

@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Repository\ArticlesRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 
 class ArtilcesController extends AbstractController
 {
@@ -25,6 +26,7 @@ class ArtilcesController extends AbstractController
 
     #[Route('/{articlecategorie}/{souscategorie}/{slug}.html', name: 'app_articles', requirements: ['articlecategorie' => '[\w-]+', 'souscategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 2)]
     #[Route('/{articlecategorie}/{slug}.html', name: 'app_articles_without_souscategory', requirements: ['articlecategorie' => '[\w-]+', 'slug' => '[\w-]+'], priority: 5)]
+    #[cache(public: true, expires: '+1 hour')]
     public function articles(string $slug, SessionInterface $session): Response
     {
         // Récupérer l'article à partir du slug
@@ -68,9 +70,13 @@ class ArtilcesController extends AbstractController
         }
 
         // Rendre la vue avec l'article et les catégories
-        return $this->render('category/articles.html.twig', [
+        $template =  $this->render('category/articles.html.twig', [
             'article' => $article,
             'categories' => $this->categoryRepository->findBy(['parent' => null, 'isOnline' => true]),
         ]);
+
+        $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');
+
+        return $template; 
     }
 }
