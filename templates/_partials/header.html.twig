@@ -29,14 +29,25 @@
 				<div class="col-auto">
 					<div class="header-links">
 						<ul>
-							<li class="d-none d-sm-inline-block">
-								<i class="far fa-user"></i>
-								<a href="{{ path('app_login') }}">Login</a>
-							</li>
-							<li class="d-none d-sm-inline-block">
-								<i class="far fa-user"></i>
-								<a href="{{ path('app_register') }}">register</a>
-							</li> 
+							{% if app.user %}
+								<li class="d-none d-sm-inline-block">
+									<i class="far fa-user"></i>
+									Bonjour {{ app.user.pseudo }}
+								</li>
+								<li class="d-none d-sm-inline-block">
+									<i class="far fa-user"></i>
+									<a href="{{ path('app_logout') }}">Logout</a>
+								</li>
+							{% else %}
+								<li class="d-none d-sm-inline-block">
+									<i class="far fa-user"></i>
+									<a href="{{ path('app_login') }}">Login</a>
+								</li>
+								<li class="d-none d-sm-inline-block">
+									<i class="far fa-user"></i>
+									<a href="{{ path('app_register') }}">register</a>
+								</li>
+							{% endif %}
 							<li>
 								<div class="social-links">
 									<a href="https://www.facebook.com/">
