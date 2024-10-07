@@ -49,7 +49,7 @@
 				<div class="col-xl-6 mt-4 mt-xl-0">
 					<div class="blog-style1 style-big">
 						<div class="blog-img">
-							<img loading="lazy" src="{{ slider[2].media|first.guid|default('images/default.webp') | imagine_filter('600x490') }}" height="600" width="490" alt="{{ slider[2].media|first.title|default('Default Title') }}">
+							<img loading="lazy" src="{{ slider[2].media|first.guid|default('images/default.webp') | imagine_filter('600x490') }}" height="600" width="490" alt="{{ slider[2].media|first.title|default('Default Title') }}" class="aux_big_home">
 							{{ categories.category_small(slider[2]) }}
 						</div>
 						<h3 class="box-title-30">

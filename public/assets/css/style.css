@@ -12909,5 +12909,9 @@ html.dark-theme .dark-theme > .blog-style3 {
   object-fit: cover;
 }
 
+.aux_big_home {
+  height: 600px!important;
+  object-fit: cover;
+}
 
 /*# sourceMappingURL=style.css.map */
