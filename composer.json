@@ -95,12 +95,10 @@
             "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts",
-            "npm purgecss --config purgecss.config.js"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "@auto-scripts",
-            "npm purgecss --config purgecss.config.js"
+            "@auto-scripts"
         ],
         "cs-fixer": [
             "php-cs-fixer fix --config=php-cs-fixer.php"
