@@ -1,5 +1,11 @@
 {
   "devDependencies": {
     "purgecss": "^6.0.0"
+  },
+  "dependencies": {
+    "clean-css": "^5.3.3"
+  },
+  "scripts": {
+    "purge-css": "npm purgecss --config purgecss.config.js"
   }
 }

@@ -1,7 +1,7 @@
-const { PurgeCSS } = require('purgecss'); // Import PurgeCSS
-
+const { PurgeCSS } = require('purgecss');
 const path = require('path');
 const fs = require('fs');
+const CleanCSS = require('clean-css'); // Importation de la bibliothèque de minification
 
 module.exports = {
   content: [
@@ -30,7 +30,7 @@ module.exports = {
       });
 
       purgeCSSResults.forEach(result => {
-        const outputFileName = path.basename(result.file);
+        const outputFileName = path.basename(result.file, '.css') + '.min.css'; // Génère un nom de fichier avec .min.css
         const outputPath = path.join(this.output, outputFileName); // Crée le chemin final correctement
 
         // Vérification si le répertoire de sortie existe, sinon le créer
@@ -38,9 +38,12 @@ module.exports = {
           fs.mkdirSync(this.output, { recursive: true });
         }
 
-        // Écriture des fichiers CSS purgés
-        fs.writeFileSync(outputPath, result.css, 'utf8');
-        console.log(`CSS purged and written to: ${outputPath}`);
+        // Minification du CSS purgé avec CleanCSS
+        const minifiedCSS = new CleanCSS({}).minify(result.css).styles;
+
+        // Écriture du fichier CSS minifié
+        fs.writeFileSync(outputPath, minifiedCSS, 'utf8');
+        console.log(`CSS purged and minified written to: ${outputPath}`);
       });
     } catch (error) {
       console.error('Error running PurgeCSS:', error);
@@ -48,5 +51,4 @@ module.exports = {
   }
 };
 
-// Pour exécuter PurgeCSS avec cette configuration, appelle la fonction runPurgeCSS :
 module.exports.runPurgeCSS();
