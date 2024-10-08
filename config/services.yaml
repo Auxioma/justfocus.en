@@ -22,3 +22,7 @@ services:
             
     App\Twig\ReadingExtension:
         tags: ['twig.extension']
+
+    App\Middleware\HtmlMinifyMiddleware:
+        decorates: 'http_kernel'
+
