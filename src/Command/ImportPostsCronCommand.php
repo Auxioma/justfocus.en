@@ -248,7 +248,7 @@ final class ImportPostsCronCommand extends Command
                         } else {
                             // Ajoute la nouvelle relation entre l'article et la catégorie
                             $article->addCategory($category);
-                            $output->writeln('New relation created between article ID '.$article->getId().' and category ID '.$catId.'.');
+                            $output->writeln('<fg=green>New relation created between article ID '.$article->getId().' and category ID '.$catId.'.</>');
                         }
                     }
                 }
