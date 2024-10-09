@@ -249,11 +249,16 @@ final class ImportPostsCronCommand extends Command
                             // Ajoute la nouvelle relation entre l'article et la catégorie
                             $article->addCategory($category);
                             $output->writeln('<fg=green>New relation created between article ID '.$article->getId().' and category ID '.$catId.'.</>');
+    
+                            // Persist the changes in EntityManager
+                            $this->entityManager->persist($article);
+                            $this->entityManager->flush();
                         }
                     }
                 }
-            }
+            }  
         }
     }
+    
     
 }
