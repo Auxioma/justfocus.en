@@ -1,34 +1,5 @@
 (function ($) {
     "use strict";
-    /*=================================
-        JS Index Here
-    ==================================*/
-    /*
-    01. On Load Function
-    02. Preloader
-    03. Mobile Menu Active
-    04. Sticky fix
-    05. Scroll To Top
-    06. Set Background Image Color & Mask
-    07. Global Slider
-    08. Custom Animaiton For Slider
-    09. Ajax Contact Form
-    10. Search Box Popup
-    11. Popup Sidemenu
-    12. Magnific Popup
-    13. Dark Mode Toggle
-    14. Indicator
-    15. Th Tab
-    16. Filter
-    17. Counter Up
-    18. Price Slider
-    00. Woocommerce Toggle
-    00. Right Click Disable
-    */
-    /*=================================
-        JS Index End
-    ==================================*/
-    /*
 
   /*---------- 01. On Load Function ----------*/
     $(window).on("load", function () {
@@ -422,94 +393,6 @@
         $(slick.$slides[currentSlide]).find('[data-ani]').addClass('th-animated');
     })
 
-
-    /*----------- 09. Ajax Contact Form ----------*/
-    var form = ".ajax-contact";
-    var invalidCls = "is-invalid";
-    var $email = '[name="email"]';
-    var $validation =
-        '[name="name"],[name="email"],[name="subject"],[name="number"],[name="message"]'; // Must be use (,) without any space
-    var formMessages = $(".form-messages");
-
-    function sendContact() {
-        var formData = $(form).serialize();
-        var valid;
-        valid = validateContact();
-        if (valid) {
-            jQuery
-                .ajax({
-                    url: $(form).attr("action"),
-                    data: formData,
-                    type: "POST",
-                })
-                .done(function (response) {
-                    // Make sure that the formMessages div has the 'success' class.
-                    formMessages.removeClass("error");
-                    formMessages.addClass("success");
-                    // Set the message text.
-                    formMessages.text(response);
-                    // Clear the form.
-                    $(
-                        form +
-                            ' input:not([type="submit"]),' +
-                            form +
-                            " textarea"
-                    ).val("");
-                })
-                .fail(function (data) {
-                    // Make sure that the formMessages div has the 'error' class.
-                    formMessages.removeClass("success");
-                    formMessages.addClass("error");
-                    // Set the message text.
-                    if (data.responseText !== "") {
-                        formMessages.html(data.responseText);
-                    } else {
-                        formMessages.html(
-                            "Oops! An error occured and your message could not be sent."
-                        );
-                    }
-                });
-        }
-    }
-
-    function validateContact() {
-        var valid = true;
-        var formInput;
-
-        function unvalid($validation) {
-            $validation = $validation.split(",");
-            for (var i = 0; i < $validation.length; i++) {
-                formInput = form + " " + $validation[i];
-                if (!$(formInput).val()) {
-                    $(formInput).addClass(invalidCls);
-                    valid = false;
-                } else {
-                    $(formInput).removeClass(invalidCls);
-                    valid = true;
-                }
-            }
-        }
-        unvalid($validation);
-
-        if (
-            !$($email).val() ||
-            !$($email)
-                .val()
-                .match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)
-        ) {
-            $($email).addClass(invalidCls);
-            valid = false;
-        } else {
-            $($email).removeClass(invalidCls);
-            valid = true;
-        }
-        return valid;
-    }
-
-    $(form).on("submit", function (element) {
-        element.preventDefault();
-        sendContact();
-    });
 
     /*---------- 10. Search Box Popup & Close Popup ----------*/
     function popupSarchBox($searchBox, $searchOpen, $searchCls, $toggleCls) {
