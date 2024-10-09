@@ -244,7 +244,7 @@ final class ImportPostsCronCommand extends Command
                     if ($category) {
                         // Vérifie si l'article est déjà lié à la catégorie
                         if ($article->getCategories()->contains($category)) {
-                            $output->writeln('Relation between article ID '.$article->getId().' and category ID '.$catId.' already exists.');
+                            $output->writeln('<fg=red>Relation between article ID '.$article->getId().' and category ID '.$catId.' already exists.</>');
                         } else {
                             // Ajoute la nouvelle relation entre l'article et la catégorie
                             $article->addCategory($category);
