@@ -22,7 +22,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class ImportPostsCronCommand extends Command
 {
     private const WORDPRESS_API_URL = 'https://justfocus.fr/wp-json/wp/v2/posts'; // URL de l'API WordPress à utiliser
-    private const PER_PAGE = 100; // Nombre d'articles à récupérer par page
+    private const PER_PAGE = 10; // Nombre d'articles à récupérer par page
 
     private HttpClientInterface $client; // Interface pour faire des requêtes HTTP
     private ArticlesRepository $articlesRepository; // Repository pour les articles
