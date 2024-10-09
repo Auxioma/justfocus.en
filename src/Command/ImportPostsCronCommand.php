@@ -56,7 +56,7 @@ final class ImportPostsCronCommand extends Command
         $output->writeln('Starting the import of posts from WordPress API...'); // Affiche un message de démarrage de l'importation
 
         $insertedCount = 0; // Compteur d'articles insérés
-        $maxInserts = 50; // Nombre maximum d'insertions
+        $maxInserts = 500000; // Nombre maximum d'insertions
 
         $page = 1; // Initialise la page à 1
 
@@ -87,6 +87,10 @@ final class ImportPostsCronCommand extends Command
                     $existingArticle = $this->articlesRepository->find($postData['id']); // Cherche si l'article existe déjà
 
                     if ($existingArticle) { // Vérifie si l'article existe
+
+                        // Je vais créer une fonction pour vérifier les relation entre les article et les catégories
+                        // date du jour
+                        $this->verifyArticleCategory($existingArticle, $postData, $output);
                         $output->writeln('Article with ID '.$postData['id'].' already exists. Skipping...'); // Affiche un message si l'article existe déjà
                         continue; // Passe à l'itération suivante
                     }
@@ -228,4 +232,28 @@ final class ImportPostsCronCommand extends Command
         // Sinon, renvoie la description tronquée sans espace trouvé
         return substr($truncated, 0, $maxLength).'...';
     }
+
+    private function verifyArticleCategory(Articles $article, array $postData, OutputInterface $output): void
+    {
+        // Set categories, ensure $postData['categories'] is iterable
+        if (isset($postData['categories']) && is_array($postData['categories'])) {
+            foreach ($postData['categories'] as $catId) {
+                if (is_int($catId)) {
+                    $category = $this->categoryRepository->find($catId);
+    
+                    if ($category) {
+                        // Vérifie si l'article est déjà lié à la catégorie
+                        if ($article->getCategories()->contains($category)) {
+                            $output->writeln('Relation between article ID '.$article->getId().' and category ID '.$catId.' already exists.');
+                        } else {
+                            // Ajoute la nouvelle relation entre l'article et la catégorie
+                            $article->addCategory($category);
+                            $output->writeln('New relation created between article ID '.$article->getId().' and category ID '.$catId.'.');
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }
