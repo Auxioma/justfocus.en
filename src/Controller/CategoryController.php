@@ -60,6 +60,17 @@ class CategoryController extends AbstractController
             }
         }
 
+        //  je vais récupéré le titre et la description de la catégorie ou la sous catégorie
+        if ('app_sous_category' === $request->attributes->get('_route')) {
+            $title = $category->getMetaTitle();
+            $description = $category->getDescription();
+        }
+
+        if ('app_category' === $request->attributes->get('_route')) {
+            $title = $category->getMetaTitle();
+            $description = $category->getDescription();
+        }
+
         // Paginate articles
         $articles = $this->articlesRepository->PaginationCategoryAndArticle($slug);
 
@@ -76,6 +87,8 @@ class CategoryController extends AbstractController
             'breadcrumbCategorySlug' => $breadcrumbCategorySlug,
             'breadcrumbSousCategoryName' => $breadcrumbSousCategoryName ?? null,
             'breadcrumbSousCategorySlug' => $breadcrumbSousCategorySlug ?? null,
+            'title' => $title,
+            'description' => $description,
         ]);
 
         $template->headers->set('Cache-Control', 'public, max-age=3600, must-revalidate');

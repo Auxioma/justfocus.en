@@ -2,9 +2,9 @@
 {% import '_partials/_macro/_url_articles.html.twig' as macros %}
 {% import '_partials/_macro/_categorie_small_with_url.html.twig' as categories %}
 
-{% block title %}{% if pagination|length > 0 and pagination|first.categories is defined and pagination|first.categories|length > 0 %}{{ pagination|first.categories[0].metaTitle }}{% else %}Just Focus{% endif %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
-{% block description %}{% if pagination|length > 0 and pagination|first.categories is defined and pagination|first.categories|length > 0 %}{{ pagination|first.categories[0].description }}{% else %}Just Focus{% endif %}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
 {% block keywords %}Just Focus{% endblock %}
 
 {% block body %}
