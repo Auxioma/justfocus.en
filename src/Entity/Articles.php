@@ -295,6 +295,13 @@ class Articles
         return $this;
     }
 
+    public function setIsOnline(bool $isOnline): static
+    {
+        $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
     public function getFirstMedia(): ?Media
     {
         return $this->media->first() ?: null;
